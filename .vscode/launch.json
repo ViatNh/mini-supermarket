@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Chạy Main (demo hóa đơn)",
+      "request": "launch",
+      "mainClass": "sieuthi.Main",
+      "vmArgs": "-Dfile.encoding=UTF-8",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "java",
+      "name": "Chạy KiemThuHoaDon",
+      "request": "launch",
+      "mainClass": "sieuthi.KiemThuHoaDon",
+      "vmArgs": "-Dfile.encoding=UTF-8",
+      "console": "integratedTerminal"
+    }
+  ]
+}
