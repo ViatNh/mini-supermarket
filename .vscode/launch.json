@@ -16,6 +16,14 @@
       "mainClass": "sieuthi.KiemThuHoaDon",
       "vmArgs": "-Dfile.encoding=UTF-8",
       "console": "integratedTerminal"
+    },
+    {
+      "type": "java",
+      "name": "Chạy KiemThuQuanLy (module Quản lý)",
+      "request": "launch",
+      "mainClass": "sieuthi.KiemThuQuanLy",
+      "vmArgs": "-Dfile.encoding=UTF-8",
+      "console": "integratedTerminal"
     }
   ]
 }
