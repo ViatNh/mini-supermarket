@@ -1,10 +1,10 @@
 package sieuthi.model;
 
 /**
- * Lớp trừu tượng đại diện cho Nhân viên toàn thời gian (Full-time).
+ * Lớp đại diện cho Nhân viên toàn thời gian (Full-time).
  * Kế thừa từ NhanVien theo sơ đồ Class_Structure.drawio.
  */
-public abstract class NhanVienFullTime extends NhanVien {
+public class NhanVienFullTime extends NhanVien {
     public static final int NGAY_CONG_CHUAN = 26;
 
     private int soNgayCong;
@@ -30,12 +30,14 @@ public abstract class NhanVienFullTime extends NhanVien {
     public void setHeSoLuong(double heSoLuong) { this.heSoLuong = Math.max(0, heSoLuong); }
 
     @Override
-    public abstract double tinhLuong();
+    public double tinhLuong() {
+        return LUONG_CO_BAN * heSoLuong * soNgayCong / NGAY_CONG_CHUAN;
+    }
 
     @Override
     public void hienThiThongTin() {
         super.hienThiThongTin();
         System.out.println("  Full-time | Ngày công: " + soNgayCong + "/" + NGAY_CONG_CHUAN
-                + " | Hệ số lương: " + heSoLuong);
+                + " | Hệ số lương: " + heSoLuong + " | Thực lĩnh: " + HoaDon.dinhDangTien(tinhLuong()));
     }
 }

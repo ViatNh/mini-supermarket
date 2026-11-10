@@ -1,0 +1,6 @@
+THUC_PHAM|SP01|Mì Hảo Hảo Tôm Chua Cay|Việt Nam|2026|Acecook|195|6000.0|2027-05-15|
+THUC_PHAM|SP02|Sữa tươi tiệt trùng Vinamilk 1L|Việt Nam|2026|Vinamilk|80|32000.0|2027-02-28|
+DO_UONG|SP03|Nước tinh khiết Aquafina 500ml|Việt Nam|2026|PepsiCo|200|10000.0|500|2027-11-10
+DO_UONG|SP04|Trà xanh Không Độ 455ml|Việt Nam|2026|Tân Hiệp Phát|120|12000.0|455|2027-08-20
+DO_DUNG|SP05|Ấm siêu tốc Inox Sunhouse 1.8L|Việt Nam|2025|Sunhouse|45|220000.0|Inox 304|12
+DO_DUNG|SP06|Chảo chống dính Sunhouse 26cm|Việt Nam|2026|Sunhouse|30|180000.0|Nhôm phủ chống dính|6

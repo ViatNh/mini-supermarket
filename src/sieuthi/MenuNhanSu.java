@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import manage.QuanLy;
+import sieuthi.manage.QuanLy;
 import sieuthi.model.*;
 
 /**

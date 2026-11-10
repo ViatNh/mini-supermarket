@@ -7,7 +7,7 @@
 set -e
 cd "$(dirname "$0")"
 mkdir -p bin
-javac -encoding UTF-8 -d bin $(find src manage -name "*.java")
+javac -encoding UTF-8 -d bin $(find src -name "*.java")
 if [ "$1" = "test" ]; then
   echo "=== 1. KIỂM THỬ HÓA ĐƠN ==="
   java -Dfile.encoding=UTF-8 -cp bin sieuthi.KiemThuHoaDon
@@ -17,6 +17,11 @@ if [ "$1" = "test" ]; then
   echo ""
   echo "=== 3. KIỂM THỬ QUẢN LÝ ==="
   java -Dfile.encoding=UTF-8 -cp bin sieuthi.KiemThuQuanLy
+  echo ""
+  echo "=== 4. KIỂM THỬ LƯU TRỮ VÀ TỒN KHO ==="
+  java -Dfile.encoding=UTF-8 -cp bin sieuthi.KiemThuHeThongVaLuuTru
+elif [ "$1" = "storage" ]; then
+  java -Dfile.encoding=UTF-8 -cp bin sieuthi.KiemThuHeThongVaLuuTru
 elif [ "$1" = "manage" ]; then
   java -Dfile.encoding=UTF-8 -cp bin sieuthi.KiemThuQuanLy
 elif [ "$1" = "product" ]; then

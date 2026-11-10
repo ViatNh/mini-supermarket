@@ -34,6 +34,19 @@ public class PhieuBaoHanh {
         this.trangThai = "Đã tiếp nhận";
     }
 
+    public PhieuBaoHanh(String maPhieuBH, HoaDon hoaDon, SanPham sanPham,
+                        KhachHang khachHang, LocalDate ngayBatDau, LocalDate ngayKetThuc,
+                        String moTaLoi, String trangThai) {
+        this.maPhieuBH = maPhieuBH;
+        this.hoaDon = hoaDon;
+        this.sanPham = sanPham;
+        this.khachHang = khachHang;
+        this.ngayBatDau = (ngayBatDau != null) ? ngayBatDau : LocalDate.now();
+        this.ngayKetThuc = (ngayKetThuc != null) ? ngayKetThuc : this.ngayBatDau.plusMonths(12);
+        this.moTaLoi = (moTaLoi != null) ? moTaLoi : "Bảo hành định kỳ";
+        this.trangThai = (trangThai != null) ? trangThai : "Đang hiệu lực";
+    }
+
     public String getMaPhieuBH() { return maPhieuBH; }
     public HoaDon getHoaDon() { return hoaDon; }
     public SanPham getSanPham() { return sanPham; }

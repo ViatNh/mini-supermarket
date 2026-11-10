@@ -7,11 +7,15 @@ public class ChiTietHoaDon {
     private final double donGia;
 
     public ChiTietHoaDon(SanPham sanPham, int soLuong) {
+        this(sanPham, soLuong, (sanPham != null) ? sanPham.tinhGia() : 0);
+    }
+
+    public ChiTietHoaDon(SanPham sanPham, int soLuong, double donGia) {
         if (sanPham == null) throw new IllegalArgumentException("Sản phẩm không được null");
         if (soLuong <= 0) throw new IllegalArgumentException("Số lượng phải > 0");
         this.sanPham = sanPham;
         this.soLuong = soLuong;
-        this.donGia = sanPham.tinhGia();
+        this.donGia = donGia;
     }
 
     public SanPham getSanPham() { return sanPham; }

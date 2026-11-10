@@ -1,4 +1,4 @@
-package manage;
+package sieuthi.manage;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,7 +8,7 @@ import sieuthi.model.KhachHang;
 
 /**
  * Lớp quản lý danh sách Khách hàng trong siêu thị mini.
- * Thực thi interface IQuanLy<KhachHang> theo sơ đồ Class_Structure.drawio.
+ * Thực thi interface IQuanLy<KhachHang> theo sơ đồ Class_Structure.drawio của thành viên Vinh.
  */
 public class QuanLyKhachHang implements IQuanLy<KhachHang> {
     private final List<KhachHang> dsKhachHang;
@@ -49,6 +49,10 @@ public class QuanLyKhachHang implements IQuanLy<KhachHang> {
         for (int i = 0; i < dsKhachHang.size(); i++) {
             KhachHang current = dsKhachHang.get(i);
             if (current.getMaKhachHang().equalsIgnoreCase(maKH.trim())) {
+                // Bảo lưu điểm tích lũy nếu đối tượng mới chưa có hoặc muốn giữ nguyên
+                if (kh.getDiemTichLuy() == 0 && current.getDiemTichLuy() > 0) {
+                    kh.setDiemTichLuy(current.getDiemTichLuy());
+                }
                 dsKhachHang.set(i, kh);
                 return true;
             }
@@ -111,18 +115,18 @@ public class QuanLyKhachHang implements IQuanLy<KhachHang> {
             System.out.println("======================================================================================================");
             return;
         }
-        System.out.printf("%-5s | %-12s | %-25s | %-12s | %-25s | %-8s%n",
-                "STT", "Mã KH", "Họ và tên", "Số ĐT", "Địa chỉ", "Điểm");
+        System.out.printf("%-5s | %-10s | %-25s | %-12s | %-12s | %s%n",
+                "STT", "Mã KH", "Họ tên", "Số ĐT", "Điểm tích lũy", "Địa chỉ");
         System.out.println("------------------------------------------------------------------------------------------------------");
         int stt = 1;
         for (KhachHang kh : dsKhachHang) {
-            System.out.printf("%-5d | %-12s | %-25s | %-12s | %-25s | %-8d%n",
+            System.out.printf("%-5d | %-10s | %-25s | %-12s | %-13d | %s%n",
                     stt++,
                     kh.getMaKhachHang(),
                     kh.getHoTen(),
                     kh.getSoDienThoai(),
-                    kh.getDiaChi(),
-                    kh.getDiemTichLuy());
+                    kh.getDiemTichLuy(),
+                    kh.getDiaChi());
         }
         System.out.println("======================================================================================================");
     }

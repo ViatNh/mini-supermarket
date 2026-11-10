@@ -75,6 +75,23 @@ public class HoaDon {
         return null;
     }
 
+    /**
+     * Dùng khi khôi phục hóa đơn đã lưu từ file lưu trữ (không kiểm tra tồn kho và không trừ tồn kho lại).
+     */
+    public void themChiTietLuuTru(SanPham sp, int soLuong, double donGia) {
+        if (sp == null || soLuong <= 0) return;
+        dsChiTiet.add(new ChiTietHoaDon(sp, soLuong, donGia));
+    }
+
+    /**
+     * Dùng khi khôi phục trạng thái thanh toán từ file lưu trữ.
+     */
+    public void thietLapTrangThaiThanhToan(ThuNgan thuNgan, IPhuongThucThanhToan phuongThuc, boolean daThanhToan) {
+        this.nguoiThanhToan = thuNgan;
+        this.phuongThucThanhToan = phuongThuc;
+        this.daThanhToan = daThanhToan;
+    }
+
     public boolean coSanPham(SanPham sp) {
         return timChiTiet(sp) != null;
     }

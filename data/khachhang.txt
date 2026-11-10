@@ -1,0 +1,5 @@
+KH01|Nguyễn Văn An|123 Lê Lợi, Q.1, TP.HCM|0901234567|168
+KH02|Trần Thị Bình|456 Hai Bà Trưng, Hà Nội|0912345678|320
+KH03|Lê Hoàng Cường|789 Nguyễn Huệ, Đà Nẵng|0987654321|50
+KH04|Phạm Thị Dung|12 Trần Hưng Đạo, Cần Thơ|0934567890|0
+KH05|Võ Minh Em|34 Pasteur, TP.HCM|0978123456|85

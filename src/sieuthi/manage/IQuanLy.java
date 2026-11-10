@@ -1,10 +1,10 @@
-package manage;
+package sieuthi.manage;
 
 /**
  * Interface định nghĩa các nghiệp vụ quản lý cơ bản (CRUD) cho một đối tượng kiểu T.
- * Cài đặt chuẩn theo sơ đồ lớp Class_Structure.drawio.
+ * Cài đặt chuẩn theo sơ đồ lớp Class_Structure.drawio của thành viên Vinh.
  *
- * @param <T> Kiểu thực thể cần quản lý (KhachHang, SanPham, HoaDon,...)
+ * @param <T> Kiểu thực thể cần quản lý (KhachHang, SanPham, HoaDon, NhapHang,...)
  */
 public interface IQuanLy<T> {
 

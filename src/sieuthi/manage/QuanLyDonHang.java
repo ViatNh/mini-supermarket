@@ -1,4 +1,4 @@
-package manage;
+package sieuthi.manage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import sieuthi.model.HoaDon;
 
 /**
  * Lớp quản lý danh sách Đơn hàng (Hóa đơn) trong siêu thị mini.
- * Thực thi interface IQuanLy<HoaDon> theo sơ đồ Class_Structure.drawio.
+ * Thực thi interface IQuanLy<HoaDon> theo sơ đồ Class_Structure.drawio của thành viên Vinh.
  */
 public class QuanLyDonHang implements IQuanLy<HoaDon> {
     private final List<HoaDon> dsDonHang;
@@ -179,4 +179,3 @@ public class QuanLyDonHang implements IQuanLy<HoaDon> {
         System.out.println("====================================================================================================================");
     }
 }
-
