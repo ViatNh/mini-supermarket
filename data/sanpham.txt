@@ -1,4 +1,4 @@
-THUC_PHAM|SP01|Mì Hảo Hảo Tôm Chua Cay|Việt Nam|2026|Acecook|150|5000.0|2027-05-15|
+THUC_PHAM|SP01|Mì Hảo Hảo Tôm Chua Cay|Việt Nam|2026|Acecook|165|6000.0|2027-05-15|
 THUC_PHAM|SP02|Sữa tươi tiệt trùng Vinamilk 1L|Việt Nam|2026|Vinamilk|80|32000.0|2027-02-28|
 DO_UONG|SP03|Nước tinh khiết Aquafina 500ml|Việt Nam|2026|PepsiCo|200|10000.0|500|2027-11-10
 DO_UONG|SP04|Trà xanh Không Độ 455ml|Việt Nam|2026|Tân Hiệp Phát|120|12000.0|455|2027-08-20
