@@ -1,16 +1,25 @@
 package sieuthi.model;
 
-/** Chỉ ThuNgan được thực hiện nghiệp vụ thu tiền theo quy định cửa hàng. */
+/**
+ * Lớp đại diện cho Thu ngân - kế thừa từ NhanVienFullTime.
+ * Chỉ ThuNgan được thực hiện nghiệp vụ thu tiền theo quy định cửa hàng.
+ */
 public class ThuNgan extends NhanVienFullTime {
-    private final String maQuay;
+    private String maQuay;
+
+    public ThuNgan() {
+        super();
+        this.maQuay = "";
+    }
 
     public ThuNgan(String maNhanVien, String hoTen, String diaChi, String soDienThoai,
                    int soNgayCong, double heSoLuong, String maQuay) {
         super(maNhanVien, hoTen, diaChi, soDienThoai, soNgayCong, heSoLuong);
-        this.maQuay = maQuay;
+        this.maQuay = (maQuay != null) ? maQuay.trim() : "";
     }
 
     public String getMaQuay() { return maQuay; }
+    public void setMaQuay(String maQuay) { this.maQuay = maQuay; }
 
     @Override
     public double tinhLuong() {
@@ -20,7 +29,7 @@ public class ThuNgan extends NhanVienFullTime {
     @Override
     public void hienThiThongTin() {
         super.hienThiThongTin();
-        System.out.println("  Thu ngân | Quầy: " + maQuay);
+        System.out.println("  Thu ngân | Quầy: " + maQuay + " | Thực lĩnh: " + HoaDon.dinhDangTien(tinhLuong()));
     }
 
     /**

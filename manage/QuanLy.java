@@ -17,6 +17,14 @@ public class QuanLy extends NhanVienFullTime {
     private final QuanLySanPham qlSanPham;
     private final QuanLyDonHang qlDonHang;
 
+    public QuanLy() {
+        super();
+        this.phuCap = 0;
+        this.qlKhachHang = new QuanLyKhachHang();
+        this.qlSanPham = new QuanLySanPham();
+        this.qlDonHang = new QuanLyDonHang();
+    }
+
     public QuanLy(String maNhanVien, String hoTen, String diaChi, String soDienThoai,
                   int soNgayCong, double heSoLuong, double phuCap) {
         this(maNhanVien, hoTen, diaChi, soDienThoai, soNgayCong, heSoLuong, phuCap,
@@ -96,4 +104,3 @@ public class QuanLy extends NhanVienFullTime {
         return qlDonHang;
     }
 }
-

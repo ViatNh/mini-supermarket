@@ -4,18 +4,28 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Lớp trừu tượng đại diện cho Nhân viên siêu thị.
+ * Kế thừa từ Person theo sơ đồ Class_Structure.drawio.
+ */
 public abstract class NhanVien extends Person {
     public static final double LUONG_CO_BAN = 5_000_000;
 
-    private final String maNhanVien;
+    private String maNhanVien;
     private final List<CaLam> dsCaLam = new ArrayList<>();
 
-    protected NhanVien(String maNhanVien, String hoTen, String diaChi, String soDienThoai) {
+    public NhanVien() {
+        super();
+        this.maNhanVien = "";
+    }
+
+    public NhanVien(String maNhanVien, String hoTen, String diaChi, String soDienThoai) {
         super(hoTen, diaChi, soDienThoai);
-        this.maNhanVien = maNhanVien;
+        this.maNhanVien = (maNhanVien != null) ? maNhanVien.trim() : "";
     }
 
     public String getMaNhanVien() { return maNhanVien; }
+    public void setMaNhanVien(String maNhanVien) { this.maNhanVien = maNhanVien; }
 
     public List<CaLam> getDsCaLam() {
         return Collections.unmodifiableList(dsCaLam);
@@ -23,6 +33,7 @@ public abstract class NhanVien extends Person {
 
     /**
      * Thêm ca làm cho nhân viên, kiểm tra trùng ca trước khi thêm.
+     *
      * @param ca Ca làm cần thêm
      * @return true nếu thêm thành công, false nếu bị trùng ca làm
      */

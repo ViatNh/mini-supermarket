@@ -3,9 +3,18 @@
   "configurations": [
     {
       "type": "java",
-      "name": "Chạy Main (demo hóa đơn)",
+      "name": "Chạy Main (Demo tổng hợp)",
       "request": "launch",
       "mainClass": "sieuthi.Main",
+      "vmArgs": "-Dfile.encoding=UTF-8",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "java",
+      "name": "Chạy Main (Menu tương tác)",
+      "request": "launch",
+      "mainClass": "sieuthi.Main",
+      "args": "menu",
       "vmArgs": "-Dfile.encoding=UTF-8",
       "console": "integratedTerminal"
     },
@@ -19,9 +28,17 @@
     },
     {
       "type": "java",
-      "name": "Chạy KiemThuQuanLy (module Quản lý)",
+      "name": "Chạy KiemThuQuanLy",
       "request": "launch",
       "mainClass": "sieuthi.KiemThuQuanLy",
+      "vmArgs": "-Dfile.encoding=UTF-8",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "java",
+      "name": "Chạy KiemThuSanPham",
+      "request": "launch",
+      "mainClass": "sieuthi.KiemThuSanPham",
       "vmArgs": "-Dfile.encoding=UTF-8",
       "console": "integratedTerminal"
     }

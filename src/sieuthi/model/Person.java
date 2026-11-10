@@ -1,23 +1,64 @@
 package sieuthi.model;
 
-/** Lớp trừu tượng chung cho KhachHang và NhanVien. */
+import java.util.Scanner;
+
+/**
+ * Lớp trừu tượng Person đại diện cho con người trong hệ thống siêu thị.
+ * Cài đặt theo sơ đồ Class_Structure.drawio và tích hợp đầy đủ từ nhánh Person.
+ */
 public abstract class Person {
     private String hoTen;
     private String diaChi;
     private String soDienThoai;
 
-    protected Person(String hoTen, String diaChi, String soDienThoai) {
+    public Person() {
+        this.hoTen = "";
+        this.diaChi = "";
+        this.soDienThoai = "";
+    }
+
+    public Person(String hoTen, String diaChi, String soDienThoai) {
         this.hoTen = hoTen;
         this.diaChi = diaChi;
         this.soDienThoai = soDienThoai;
     }
 
+    // --- Standard Getters & Setters ---
     public String getHoTen() { return hoTen; }
-    public String getDiaChi() { return diaChi; }
-    public String getSoDienThoai() { return soDienThoai; }
     public void setHoTen(String hoTen) { this.hoTen = hoTen; }
+
+    public String getDiaChi() { return diaChi; }
     public void setDiaChi(String diaChi) { this.diaChi = diaChi; }
+
+    public String getSoDienThoai() { return soDienThoai; }
     public void setSoDienThoai(String soDienThoai) { this.soDienThoai = soDienThoai; }
+
+    // --- Alias Getters & Setters để tương thích code nhánh Person ---
+    public String getHoten() { return this.hoTen; }
+    public void setHoten(String hoten) { this.hoTen = hoten; }
+
+    public String getsoDienThoai() { return this.soDienThoai; }
+    public void setsoDienThoai(String soDienThoai) { this.soDienThoai = soDienThoai; }
+
+    /**
+     * Nhập thông tin người từ bàn phím bằng Scanner.
+     */
+    public void nhap() {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Mời nhập họ tên: ");
+        this.hoTen = sc.nextLine();
+        System.out.print("Mời nhập địa chỉ: ");
+        this.diaChi = sc.nextLine();
+        System.out.print("Mời nhập số điện thoại: ");
+        this.soDienThoai = sc.nextLine();
+    }
+
+    /**
+     * Xuất chuỗi định dạng thông tin.
+     */
+    public String xuat() {
+        return "Họ tên: " + this.hoTen + " /Địa chỉ: " + this.diaChi + " /Số điện thoại: " + this.soDienThoai;
+    }
 
     public abstract void hienThiThongTin();
 }

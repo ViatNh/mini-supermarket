@@ -3,11 +3,20 @@ package sieuthi.model;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+/**
+ * Lớp đại diện cho Thực phẩm trong siêu thị.
+ * Kế thừa từ SanPham theo sơ đồ Class_Structure.drawio.
+ */
 public class ThucPham extends SanPham {
     private static final int SO_NGAY_CAN_DATE = 3;
     private static final double TI_LE_GIAM_CAN_DATE = 0.3;
 
-    private final LocalDate hanSuDung;
+    private LocalDate hanSuDung;
+
+    public ThucPham() {
+        super();
+        this.hanSuDung = LocalDate.now().plusDays(30);
+    }
 
     public ThucPham(String ma, String ten, String nuocSX, int namSX, String hangSX,
                     int tonKho, double giaGoc, LocalDate hanSuDung) {
@@ -16,6 +25,7 @@ public class ThucPham extends SanPham {
     }
 
     public LocalDate getHanSuDung() { return hanSuDung; }
+    public void setHanSuDung(LocalDate hanSuDung) { this.hanSuDung = hanSuDung; }
 
     @Override
     public boolean conHanSuDung() {
