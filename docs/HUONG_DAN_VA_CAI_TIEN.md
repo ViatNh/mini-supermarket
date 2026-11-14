@@ -32,7 +32,6 @@ mini-supermarket/
 │   └── sanpham.txt          # Dữ liệu sản phẩm & tồn kho thực tế (5+ bản ghi)
 ├── docs/                    # Tài liệu dự án & Sơ đồ UML
 │   ├── Class_Structure.drawio
-│   ├── SieuThiMini.drawio
 │   └── HUONG_DAN_VA_CAI_TIEN.md
 ├── src/
 │   └── sieuthi/
@@ -104,12 +103,16 @@ mini-supermarket/
 - Trong phiên bản code ban đầu, các bạn khác chưa cài đặt 4 lớp trên của Nhàn, dẫn đến việc sản phẩm có tồn kho mà không rõ nguồn gốc nhập từ đâu và vi phạm yêu cầu: *"Số lượng (stock) chỉ được phép dựa vào nhập hàng và xuất hàng chứ không được phép sửa thủ công"*.
 - Mối quan hệ giữa `NhapHang` và `ChiTietNhapHang` trong sơ đồ là quan hệ Composition (hình thoi đen): Chi tiết nhập hàng gắn liền với phiếu nhập, điều này rất chính xác về mặt nghiệp vụ.
 
-#### C. Cải tiến đã thực hiện
-- Đã cài đặt hoàn chỉnh 4 lớp theo đúng sơ đồ của Nhàn:
-  + `NhaCungCap`: Đại diện cho đối tác cung ứng, có phương thức `cungCapSanPham()`.
-  + `ChiTietNhapHang`: Lưu `SanPham`, `soLuong`, `donGiaNhap` và phương thức `tinhThanhTien()`.
-  + `NhapHang`: Ghi nhận giao dịch nhập hàng, kết nối với `NhaCungCap`, `NhanVien` lập phiếu và danh sách `ChiTietNhapHang`. Cung cấp phương thức `themChiTietVaCapNhatTonKho()` để trực tiếp gia tăng tồn kho hợp lệ.
-  + `KhoHang`: Quản lý tập trung biến động xuất/nhập tồn kho.
+#### C. Cải tiến đã thực hiện trong sơ đồ Class_Structure.drawio
+- Đã cài đặt và đồng bộ hoàn chỉnh giữa Sơ đồ và Mã nguồn:
+  + Bổ sung lớp `QuanLyNhapHang` implements `IQuanLy<NhapHang>` quản lý `dsNhapHang: List<NhapHang>`, có quan hệ aggregation với `NhapHang`.
+  + Cập nhật lớp `QuanLy`: bổ sung thuộc tính `- qlNhapHang: QuanLyNhapHang`, phương thức `+ quanLyNhapHang(): QuanLyNhapHang`, và chuẩn hóa kiểu trả về của `phanCongCa(nv: NhanVien, ca: CaLam): boolean`.
+  + Bổ sung vào `HoaDon`: thuộc tính `- daThanhToan: boolean`, các phương thức cốt lõi `+ tinhTienPhaiTra(): double`, `+ themChiTiet(sp: SanPham, soLuong: int): void`, `+ hoanTatThanhToan(...)`.
+  + Bổ sung vào `NhapHang`: phương thức `+ themChiTietVaCapNhatTonKho(...)` và thuộc tính `- nguoiLap: NhanVien`.
+  + Bổ sung vào `NhaCungCap`: thuộc tính `- diaChi: String`.
+  + Bổ sung vào `NhanVien`: thuộc tính `- dsCaLam: List<CaLam>` và phương thức `+ themCaLam(ca: CaLam): boolean`.
+  + Bổ sung vào `SanPham`: các phương thức quản lý tồn kho `+ tangTonKho(...)`, `+ giamTonKho(...)`, `+ conHanSuDung(): boolean`.
+  + Đã xóa file `SieuThiMini.drawio` bị trùng lặp, quy về một file thiết kế chuẩn duy nhất: `docs/Class_Structure.drawio`.
 
 #### D. Bài học kinh nghiệm cho Nhàn
 1. **Tính nhất quán giữa Thiết kế và Hiện thực (Architecture Conformance)**: Khi vẽ UML xong, cần họp nhóm để giải thích rõ vai trò của từng lớp cho các thành viên phụ trách code tương ứng, tránh việc thiết kế có lớp nhưng lập trình viên lại bỏ qua.
