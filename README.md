@@ -1,6 +1,6 @@
 # Siêu thị mini – phần Hóa đơn (Java)
 
-Cài đặt theo sơ đồ lớp `docs/SieuThiMini.drawio`: **HoaDon, ChiTietHoaDon, IPhuongThucThanhToan (TienMat / TheNganHang / ChuyenKhoan), PhieuBaoHanh**, cùng các lớp phụ thuộc tối thiểu để chạy được (Person, KhachHang, NhanVien, NhanVienFullTime, ThuNgan, SanPham, ThucPham, DoUong, DoDung, IBaoHanh, KhuyenMai, IApDungKhuyenMai).
+Cài đặt theo sơ đồ lớp `docs/Class_Structure.drawio`: **HoaDon, ChiTietHoaDon, IPhuongThucThanhToan (TienMat / TheNganHang / ChuyenKhoan), PhieuBaoHanh**, cùng các lớp phụ thuộc tối thiểu để chạy được (Person, KhachHang, NhanVien, NhanVienFullTime, ThuNgan, SanPham, ThucPham, DoUong, DoDung, IBaoHanh, KhuyenMai, IApDungKhuyenMai).
 
 > Các lớp phụ thuộc là bản tối thiểu theo đúng sơ đồ. Nếu thành viên khác đã viết bản đầy đủ của lớp nào (vd. `SanPham`, `KhachHang`), hãy **dùng bản của họ** và chỉ giữ lại các hàm mà `HoaDon` đang gọi (xem mục "Hợp nhất code").
 
