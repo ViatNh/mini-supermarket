@@ -45,6 +45,6 @@ public class ThucPham extends SanPham {
     @Override
     public void hienThiThongTin() {
         super.hienThiThongTin();
-        System.out.println("  Thực phẩm | HSD: " + hanSuDung);
+        System.out.println("  Thuc pham | HSD: " + hanSuDung);
     }
 }

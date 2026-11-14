@@ -133,14 +133,14 @@ public class QuanLyNhapHang implements IQuanLy<NhapHang> {
 
     @Override
     public void hienThiDanhSach() {
-        System.out.println("============================================= DANH SÁCH PHIẾU NHẬP HÀNG =============================================");
+        System.out.println("============================================= DANH SACH PHIEU NHAP HANG =============================================");
         if (dsNhapHang.isEmpty()) {
-            System.out.println("  (Danh sách phiếu nhập hàng đang trống)");
+            System.out.println("  (Danh sach phieu nhap hang dang trong)");
             System.out.println("=====================================================================================================================");
             return;
         }
         System.out.printf("%-5s | %-10s | %-12s | %-20s | %-30s | %-16s%n",
-                "STT", "Mã PN", "Ngày nhập", "Người tiếp nhận", "Nhà cung cấp", "Tổng tiền nhập");
+                "STT", "Ma PN", "Ngay nhap", "Nguoi tiep nhan", "Nha cung cap", "Tong tien nhap");
         System.out.println("---------------------------------------------------------------------------------------------------------------------");
         int stt = 1;
         for (NhapHang nh : dsNhapHang) {

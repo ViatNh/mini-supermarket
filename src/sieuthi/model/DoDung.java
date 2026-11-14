@@ -48,6 +48,6 @@ public class DoDung extends SanPham implements IBaoHanh {
     @Override
     public void hienThiThongTin() {
         super.hienThiThongTin();
-        System.out.println("  Đồ dùng | Chất liệu: " + chatLieu + " | Bảo hành: " + thoiHanBaoHanh + " tháng");
+        System.out.println("  Do dung | Chat lieu: " + chatLieu + " | Bao hanh: " + thoiHanBaoHanh + " thang");
     }
 }

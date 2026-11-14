@@ -1,5 +1,5 @@
-NCC01|Công ty CP Acecook Việt Nam|02838154064|KCN Tân Bình, P. Tây Thạnh, Q. Tân Phú, TP.HCM
-NCC02|Công ty TNHH Suntory PepsiCo Việt Nam|02838219468|88 Đồng Khởi, Q.1, TP.HCM
-NCC03|Tập đoàn Sunhouse Group|02437366676|139 Nguyễn Thái Học, Ba Đình, Hà Nội
-NCC04|Công ty CP Sữa Việt Nam (Vinamilk)|02854155555|10 Tân Trào, P. Tân Phú, Q.7, TP.HCM
-NCC05|Công ty TNHH Unilever Việt Nam|02854135686|A2-3 KCN Tây Bắc Củ Chi, TP.HCM
+NCC01|Cong ty CP Acecook Viet Nam|02838154064|KCN Tan Binh, P. Tay Thanh, Q. Tan Phu, TP.HCM
+NCC02|Cong ty TNHH Suntory PepsiCo Viet Nam|02838219468|88 Dong Khoi, Q.1, TP.HCM
+NCC03|Tap doan Sunhouse Group|02437366676|139 Nguyen Thai Hoc, Ba Dinh, Ha Noi
+NCC04|Cong ty CP Sua Viet Nam (Vinamilk)|02854155555|10 Tan Trao, P. Tan Phu, Q.7, TP.HCM
+NCC05|Cong ty TNHH Unilever Viet Nam|02854135686|A2-3 KCN Tay Bac Cu Chi, TP.HCM

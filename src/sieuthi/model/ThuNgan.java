@@ -29,7 +29,7 @@ public class ThuNgan extends NhanVienFullTime {
     @Override
     public void hienThiThongTin() {
         super.hienThiThongTin();
-        System.out.println("  Thu ngân | Quầy: " + maQuay + " | Thực lĩnh: " + HoaDon.dinhDangTien(tinhLuong()));
+        System.out.println("  Thu ngan | Quay: " + maQuay + " | Thuc linh: " + HoaDon.dinhDangTien(tinhLuong()));
     }
 
     /**

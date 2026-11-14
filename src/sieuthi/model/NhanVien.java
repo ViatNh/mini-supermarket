@@ -52,6 +52,6 @@ public abstract class NhanVien extends Person {
 
     @Override
     public void hienThiThongTin() {
-        System.out.println("Nhân viên: " + maNhanVien + " | " + getHoTen() + " | " + getSoDienThoai());
+        System.out.println("Nhan vien: " + maNhanVien + " | " + getHoTen() + " | " + getSoDienThoai());
     }
 }

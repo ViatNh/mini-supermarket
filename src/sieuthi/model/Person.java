@@ -45,11 +45,11 @@ public abstract class Person {
      */
     public void nhap() {
         Scanner sc = new Scanner(System.in);
-        System.out.print("Mời nhập họ tên: ");
+        System.out.print("Moi nhap ho ten: ");
         this.hoTen = sc.nextLine();
-        System.out.print("Mời nhập địa chỉ: ");
+        System.out.print("Moi nhap dia chi: ");
         this.diaChi = sc.nextLine();
-        System.out.print("Mời nhập số điện thoại: ");
+        System.out.print("Moi nhap so dien thoai: ");
         this.soDienThoai = sc.nextLine();
     }
 
@@ -57,7 +57,7 @@ public abstract class Person {
      * Xuất chuỗi định dạng thông tin.
      */
     public String xuat() {
-        return "Họ tên: " + this.hoTen + " /Địa chỉ: " + this.diaChi + " /Số điện thoại: " + this.soDienThoai;
+        return "Ho ten: " + this.hoTen + " / Dia chi: " + this.diaChi + " / So dien thoai: " + this.soDienThoai;
     }
 
     public abstract void hienThiThongTin();

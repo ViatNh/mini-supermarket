@@ -16,13 +16,13 @@ public class PhieuBaoHanh {
     public PhieuBaoHanh(String maPhieuBH, HoaDon hoaDon, SanPham sanPham,
                         KhachHang khachHang, String moTaLoi) {
         if (!hoaDon.isDaThanhToan()) {
-            throw new IllegalStateException("Hóa đơn chưa thanh toán, không thể tạo phiếu bảo hành");
+            throw new IllegalStateException("Hoa don chua thanh toan, khong the tao phieu bao hanh");
         }
         if (!hoaDon.coSanPham(sanPham)) {
-            throw new IllegalArgumentException("Sản phẩm không có trong hóa đơn " + hoaDon.getMaHoaDon());
+            throw new IllegalArgumentException("San pham khong co trong hoa don " + hoaDon.getMaHoaDon());
         }
         if (!(sanPham instanceof IBaoHanh)) {
-            throw new IllegalArgumentException("Sản phẩm " + sanPham.getTenSanPham() + " không có bảo hành");
+            throw new IllegalArgumentException("San pham " + sanPham.getTenSanPham() + " khong co bao hanh");
         }
         this.maPhieuBH = maPhieuBH;
         this.hoaDon = hoaDon;
@@ -31,7 +31,7 @@ public class PhieuBaoHanh {
         this.ngayBatDau = hoaDon.getNgayLap();
         this.ngayKetThuc = ngayBatDau.plusMonths(((IBaoHanh) sanPham).layThoiHanBaoHanh());
         this.moTaLoi = moTaLoi;
-        this.trangThai = "Đã tiếp nhận";
+        this.trangThai = "Da tiep nhan";
     }
 
     public PhieuBaoHanh(String maPhieuBH, HoaDon hoaDon, SanPham sanPham,
@@ -43,8 +43,8 @@ public class PhieuBaoHanh {
         this.khachHang = khachHang;
         this.ngayBatDau = (ngayBatDau != null) ? ngayBatDau : LocalDate.now();
         this.ngayKetThuc = (ngayKetThuc != null) ? ngayKetThuc : this.ngayBatDau.plusMonths(12);
-        this.moTaLoi = (moTaLoi != null) ? moTaLoi : "Bảo hành định kỳ";
-        this.trangThai = (trangThai != null) ? trangThai : "Đang hiệu lực";
+        this.moTaLoi = (moTaLoi != null) ? moTaLoi : "Bao hanh dinh ky";
+        this.trangThai = (trangThai != null) ? trangThai : "Dang hieu luc";
     }
 
     public String getMaPhieuBH() { return maPhieuBH; }
@@ -65,11 +65,11 @@ public class PhieuBaoHanh {
     }
 
     public void hienThiThongTin() {
-        System.out.println("Phiếu BH " + maPhieuBH + " | Hóa đơn " + hoaDon.getMaHoaDon()
+        System.out.println("Phieu BH " + maPhieuBH + " | Hoa don " + hoaDon.getMaHoaDon()
                 + " | " + sanPham.getTenSanPham()
-                + " | " + (khachHang == null ? "Khách vãng lai" : khachHang.getHoTen())
+                + " | " + (khachHang == null ? "Khach vang lai" : khachHang.getHoTen())
                 + " | " + ngayBatDau + " -> " + ngayKetThuc
-                + " | " + (kiemTraConHan() ? "Còn hạn" : "Hết hạn")
-                + " | Lỗi: " + moTaLoi + " | Trạng thái: " + trangThai);
+                + " | " + (kiemTraConHan() ? "Con han" : "Het han")
+                + " | Loi: " + moTaLoi + " | Trang thai: " + trangThai);
     }
 }

@@ -11,10 +11,10 @@ public class KhuyenMai implements IApDungKhuyenMai {
 
     public KhuyenMai(String maKhuyenMai, double tiLeGiam, LocalDate ngayBatDau, LocalDate ngayKetThuc) {
         if (tiLeGiam < 0 || tiLeGiam > 1) {
-            throw new IllegalArgumentException("Tỉ lệ giảm phải nằm trong [0, 1]");
+            throw new IllegalArgumentException("Ti le giam phai nam trong [0, 1]");
         }
         if (ngayKetThuc.isBefore(ngayBatDau)) {
-            throw new IllegalArgumentException("Ngày kết thúc phải sau ngày bắt đầu");
+            throw new IllegalArgumentException("Ngay ket thuc phai sau ngay bat dau");
         }
         this.maKhuyenMai = maKhuyenMai;
         this.tiLeGiam = tiLeGiam;

@@ -24,7 +24,7 @@ public class HoaDon {
 
     public HoaDon(String maHoaDon, LocalDate ngayLap, NhanVien nguoiLap,
                   KhachHang khachHang, KhuyenMai khuyenMai) {
-        if (nguoiLap == null) throw new IllegalArgumentException("Hóa đơn phải có người lập");
+        if (nguoiLap == null) throw new IllegalArgumentException("Hoa don phai co nguoi lap");
         this.maHoaDon = maHoaDon;
         this.ngayLap = ngayLap;
         this.nguoiLap = nguoiLap;
@@ -47,18 +47,18 @@ public class HoaDon {
 
     /** Thêm sản phẩm vào hóa đơn; nếu đã có thì cộng dồn số lượng. */
     public void themChiTiet(SanPham sp, int soLuong) {
-        if (daThanhToan) throw new IllegalStateException("Hóa đơn đã thanh toán, không thể sửa");
-        if (sp == null) throw new IllegalArgumentException("Sản phẩm không được null");
-        if (soLuong <= 0) throw new IllegalArgumentException("Số lượng phải > 0");
+        if (daThanhToan) throw new IllegalStateException("Hoa don da thanh toan, khong the sua");
+        if (sp == null) throw new IllegalArgumentException("San pham khong duoc null");
+        if (soLuong <= 0) throw new IllegalArgumentException("So luong phai > 0");
         if (!sp.conHanSuDung()) {
-            throw new IllegalStateException("Sản phẩm đã hết hạn: " + sp.getTenSanPham());
+            throw new IllegalStateException("San pham da het han: " + sp.getTenSanPham());
         }
 
         ChiTietHoaDon daCo = timChiTiet(sp);
         int daChon = (daCo == null) ? 0 : daCo.getSoLuong();
         if (daChon + soLuong > sp.getSoLuongTonKho()) {
-            throw new IllegalStateException("Không đủ tồn kho cho " + sp.getTenSanPham()
-                    + " (còn " + sp.getSoLuongTonKho() + ")");
+            throw new IllegalStateException("Khong du ton kho cho " + sp.getTenSanPham()
+                    + " (con " + sp.getSoLuongTonKho() + ")");
         }
 
         if (daCo != null) {
@@ -120,7 +120,7 @@ public class HoaDon {
 
     /** Được ThuNgan gọi sau khi phương thức thanh toán đã chấp nhận. */
     public void hoanTatThanhToan(ThuNgan thuNgan, IPhuongThucThanhToan phuongThuc) {
-        if (daThanhToan) throw new IllegalStateException("Hóa đơn đã thanh toán");
+        if (daThanhToan) throw new IllegalStateException("Hoa don da thanh toan");
         for (ChiTietHoaDon ct : dsChiTiet) {
             ct.getSanPham().giamTonKho(ct.getSoLuong());
         }
@@ -133,14 +133,14 @@ public class HoaDon {
     public static String dinhDangTien(double soTien) {
         NumberFormat nf = NumberFormat.getInstance(Locale.forLanguageTag("vi-VN"));
         nf.setMaximumFractionDigits(0);
-        return nf.format(soTien) + " đ";
+        return nf.format(soTien) + " VND";
     }
 
     public void hienThiHoaDon() {
-        System.out.println("==================== HÓA ĐƠN " + maHoaDon + " ====================");
-        System.out.println("Ngày lập   : " + ngayLap);
-        System.out.println("Người lập  : " + nguoiLap.getHoTen());
-        System.out.println("Khách hàng : " + (khachHang == null ? "Khách vãng lai" : khachHang.getHoTen()));
+        System.out.println("==================== HOA DON " + maHoaDon + " ====================");
+        System.out.println("Ngay lap   : " + ngayLap);
+        System.out.println("Nguoi lap  : " + nguoiLap.getHoTen());
+        System.out.println("Khach hang : " + (khachHang == null ? "Khach vang lai" : khachHang.getHoTen()));
         System.out.println("---------------------------------------------------");
         int stt = 1;
         for (ChiTietHoaDon ct : dsChiTiet) {
@@ -150,14 +150,14 @@ public class HoaDon {
                     + "  = " + dinhDangTien(ct.tinhThanhTien()));
         }
         System.out.println("---------------------------------------------------");
-        System.out.println("Tổng tiền hàng: " + dinhDangTien(tinhTongTien()));
-        System.out.println("Khuyến mãi    : -" + dinhDangTien(tinhTienGiam()));
-        System.out.println("PHẢI TRẢ      : " + dinhDangTien(tinhTienPhaiTra()));
+        System.out.println("Tong tien hang: " + dinhDangTien(tinhTongTien()));
+        System.out.println("Khuyen mai    : -" + dinhDangTien(tinhTienGiam()));
+        System.out.println("PHAI TRA      : " + dinhDangTien(tinhTienPhaiTra()));
         if (daThanhToan) {
-            System.out.println("Trạng thái    : ĐÃ THANH TOÁN (" + phuongThucThanhToan.getClass().getSimpleName()
-                    + ", thu ngân " + nguoiThanhToan.getHoTen() + ")");
+            System.out.println("Trang thai    : DA THANH TOAN (" + phuongThucThanhToan.getClass().getSimpleName()
+                    + ", thu ngan " + nguoiThanhToan.getHoTen() + ")");
         } else {
-            System.out.println("Trạng thái    : CHƯA THANH TOÁN");
+            System.out.println("Trang thai    : CHUA THANH TOAN");
         }
         System.out.println("===================================================");
     }

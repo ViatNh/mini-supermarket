@@ -37,7 +37,7 @@ public class NhanVienFullTime extends NhanVien {
     @Override
     public void hienThiThongTin() {
         super.hienThiThongTin();
-        System.out.println("  Full-time | Ngày công: " + soNgayCong + "/" + NGAY_CONG_CHUAN
-                + " | Hệ số lương: " + heSoLuong + " | Thực lĩnh: " + HoaDon.dinhDangTien(tinhLuong()));
+        System.out.println("  Full-time | Ngay cong: " + soNgayCong + "/" + NGAY_CONG_CHUAN
+                + " | He so luong: " + heSoLuong + " | Thuc linh: " + HoaDon.dinhDangTien(tinhLuong()));
     }
 }

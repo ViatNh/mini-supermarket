@@ -1,5 +1,5 @@
-PBH001|HD002|SP05|KH02|2026-11-06|2027-11-06|Ấm không vào điện|Đang xử lý
-PBH002|HD005|SP06|KH05|2026-11-09|2027-05-09|Tróc lớp chống dính|Đã tiếp nhận
-PBH003|HD002|SP05|KH02|2026-11-06|2027-11-06|Bảo hành nút bấm|Đã hoàn thành
-PBH004|HD005|SP06|KH05|2026-11-09|2027-05-09|Kiểm tra tay cầm lỏng|Đã tiếp nhận
-PBH005|HD002|SP05|KH02|2026-11-06|2027-11-06|Bảo dưỡng định kỳ|Đã hoàn thành
+PBH001|HD002|SP05|KH02|2026-11-06|2027-11-06|Am khong vao dien|Dang xu ly
+PBH002|HD005|SP06|KH05|2026-11-09|2027-05-09|Troc lop chong dinh|Da tiep nhan
+PBH003|HD002|SP05|KH02|2026-11-06|2027-11-06|Bao hanh nut bam|Da hoan thanh
+PBH004|HD005|SP06|KH05|2026-11-09|2027-05-09|Kiem tra tay cam long|Da tiep nhan
+PBH005|HD002|SP05|KH02|2026-11-06|2027-11-06|Bao duong dinh ky|Da hoan thanh

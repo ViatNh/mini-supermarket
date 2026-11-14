@@ -42,6 +42,6 @@ public class DoUong extends SanPham {
     @Override
     public void hienThiThongTin() {
         super.hienThiThongTin();
-        System.out.println("  Đồ uống | " + dungTichMl + "ml | HSD: " + hanSuDung);
+        System.out.println("  Do uong | " + dungTichMl + "ml | HSD: " + hanSuDung);
     }
 }

@@ -35,7 +35,7 @@ public class NhanVienPartTime extends NhanVien {
     @Override
     public void hienThiThongTin() {
         super.hienThiThongTin();
-        System.out.println("  Part-time | Số giờ làm: " + soGioLam + "h | Lương/giờ: "
-                + HoaDon.dinhDangTien(luongTheoGio) + " | Thực lĩnh: " + HoaDon.dinhDangTien(tinhLuong()));
+        System.out.println("  Part-time | So gio lam: " + soGioLam + "h | Luong/gio: "
+                + HoaDon.dinhDangTien(luongTheoGio) + " | Thuc linh: " + HoaDon.dinhDangTien(tinhLuong()));
     }
 }

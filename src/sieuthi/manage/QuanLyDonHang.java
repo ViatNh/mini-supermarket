@@ -154,19 +154,19 @@ public class QuanLyDonHang implements IQuanLy<HoaDon> {
 
     @Override
     public void hienThiDanhSach() {
-        System.out.println("================================================ DANH SÁCH ĐƠN HÀNG ================================================");
+        System.out.println("================================================ DANH SACH DON HANG ================================================");
         if (dsDonHang.isEmpty()) {
-            System.out.println("  (Danh sách đơn hàng đang trống)");
+            System.out.println("  (Danh sach don hang dang trong)");
             System.out.println("====================================================================================================================");
             return;
         }
         System.out.printf("%-5s | %-10s | %-12s | %-20s | %-20s | %-14s | %-14s%n",
-                "STT", "Mã HĐ", "Ngày lập", "Người lập", "Khách hàng", "Thành tiền", "Trạng thái");
+                "STT", "Ma HD", "Ngay lap", "Nguoi lap", "Khach hang", "Thanh tien", "Trang thai");
         System.out.println("--------------------------------------------------------------------------------------------------------------------");
         int stt = 1;
         for (HoaDon hd : dsDonHang) {
-            String tenKH = (hd.getKhachHang() != null) ? hd.getKhachHang().getHoTen() : "Khách vãng lai";
-            String trangThai = hd.isDaThanhToan() ? "Đã thanh toán" : "Chưa thanh toán";
+            String tenKH = (hd.getKhachHang() != null) ? hd.getKhachHang().getHoTen() : "Khach vang lai";
+            String trangThai = hd.isDaThanhToan() ? "Da thanh toan" : "Chua thanh toan";
             System.out.printf("%-5d | %-10s | %-12s | %-20s | %-20s | %-14s | %-14s%n",
                     stt++,
                     hd.getMaHoaDon(),

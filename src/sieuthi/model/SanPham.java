@@ -26,7 +26,7 @@ public abstract class SanPham {
     public SanPham(String maSanPham, String tenSanPham, String nuocSanXuat, int namSanXuat,
                    String hangSanXuat, int soLuongTonKho, double giaGoc) {
         if (giaGoc < 0 || soLuongTonKho < 0) {
-            throw new IllegalArgumentException("Giá và tồn kho không được âm");
+            throw new IllegalArgumentException("Gia va ton kho khong duoc am");
         }
         this.maSanPham = (maSanPham != null) ? maSanPham.trim() : "";
         this.tenSanPham = tenSanPham;
@@ -54,13 +54,13 @@ public abstract class SanPham {
 
     public int getSoLuongTonKho() { return soLuongTonKho; }
     public void setSoLuongTonKho(int soLuongTonKho) {
-        if (soLuongTonKho < 0) throw new IllegalArgumentException("Số lượng tồn kho không được âm");
+        if (soLuongTonKho < 0) throw new IllegalArgumentException("So luong ton kho khong duoc am");
         this.soLuongTonKho = soLuongTonKho;
     }
 
     public double getGiaGoc() { return giaGoc; }
     public void setGiaGoc(double giaGoc) {
-        if (giaGoc < 0) throw new IllegalArgumentException("Giá gốc không được âm");
+        if (giaGoc < 0) throw new IllegalArgumentException("Gia goc khong duoc am");
         this.giaGoc = giaGoc;
     }
 
@@ -71,19 +71,19 @@ public abstract class SanPham {
     public boolean conHanSuDung() { return true; }
 
     public void tangTonKho(int soLuong) {
-        if (soLuong < 0) throw new IllegalArgumentException("Số lượng không được âm");
+        if (soLuong < 0) throw new IllegalArgumentException("So luong khong duoc am");
         soLuongTonKho += soLuong;
     }
 
     public void giamTonKho(int soLuong) {
         if (soLuong < 0 || soLuong > soLuongTonKho) {
-            throw new IllegalStateException("Không đủ tồn kho cho sản phẩm " + tenSanPham);
+            throw new IllegalStateException("Khong du ton kho cho san pham " + tenSanPham);
         }
         soLuongTonKho -= soLuong;
     }
 
     public void hienThiThongTin() {
         System.out.println(maSanPham + " | " + tenSanPham + " | " + hangSanXuat + " (" + nuocSanXuat
-                + ", " + namSanXuat + ") | Tồn: " + soLuongTonKho + " | Giá bán: " + HoaDon.dinhDangTien(tinhGia()));
+                + ", " + namSanXuat + ") | Ton: " + soLuongTonKho + " | Gia ban: " + HoaDon.dinhDangTien(tinhGia()));
     }
 }

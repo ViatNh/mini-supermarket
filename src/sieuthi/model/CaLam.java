@@ -25,13 +25,13 @@ public class CaLam {
 
     public CaLam(String maCa, LocalDate ngayLam, LocalTime gioBatDau, LocalTime gioKetThuc) {
         if (maCa == null || maCa.trim().isEmpty()) {
-            throw new IllegalArgumentException("Mã ca không được để trống");
+            throw new IllegalArgumentException("Ma ca khong duoc de trong");
         }
         if (ngayLam == null || gioBatDau == null || gioKetThuc == null) {
-            throw new IllegalArgumentException("Ngày làm và giờ làm không được null");
+            throw new IllegalArgumentException("Ngay lam va gio lam khong duoc null");
         }
         if (!gioKetThuc.isAfter(gioBatDau)) {
-            throw new IllegalArgumentException("Giờ kết thúc phải sau giờ bắt đầu");
+            throw new IllegalArgumentException("Gio ket thuc phai sau gio bat dau");
         }
         this.maCa = maCa.trim();
         this.ngayLam = ngayLam;
@@ -76,21 +76,21 @@ public class CaLam {
      */
     public void nhapCaLam() {
         Scanner sc = new Scanner(System.in);
-        System.out.print("Nhập mã ca: ");
+        System.out.print("Nhap ma ca: ");
         this.maCa = sc.nextLine();
 
-        System.out.print("Nhập ngày làm (định dạng yyyy-MM-dd): ");
+        System.out.print("Nhap ngay lam (dinh dang yyyy-MM-dd): ");
         this.ngayLam = LocalDate.parse(sc.nextLine(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-        System.out.print("Nhập giờ bắt đầu (định dạng HH:mm): ");
+        System.out.print("Nhap gio bat dau (dinh dang HH:mm): ");
         this.gioBatDau = LocalTime.parse(sc.nextLine(), DateTimeFormatter.ofPattern("HH:mm"));
 
-        System.out.print("Nhập giờ kết thúc (định dạng HH:mm): ");
+        System.out.print("Nhap gio ket thuc (dinh dang HH:mm): ");
         this.gioKetThuc = LocalTime.parse(sc.nextLine(), DateTimeFormatter.ofPattern("HH:mm"));
     }
 
     public void hienThiThongTin() {
-        System.out.println("Ca làm: " + maCa + " | Ngày: " + ngayLam + " | Giờ: " + gioBatDau + " - " + gioKetThuc);
+        System.out.println("Ca lam: " + maCa + " | Ngay: " + ngayLam + " | Gio: " + gioBatDau + " - " + gioKetThuc);
     }
 
     @Override
@@ -108,6 +108,6 @@ public class CaLam {
 
     @Override
     public String toString() {
-        return "CaLam[Mã: " + maCa + " | Ngày: " + ngayLam + " | " + gioBatDau + " - " + gioKetThuc + "]";
+        return "CaLam[Ma: " + maCa + " | Ngay: " + ngayLam + " | " + gioBatDau + " - " + gioKetThuc + "]";
     }
 }

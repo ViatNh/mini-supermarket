@@ -42,10 +42,10 @@ public class DuLieuHeThong {
     private final List<NhaCungCap> dsNhaCungCap = new ArrayList<>();
     private final List<KhuyenMai> dsKhuyenMai = new ArrayList<>();
     private final List<PhieuBaoHanh> dsPhieuBaoHanh = new ArrayList<>();
-    private final KhoHang khoHang = new KhoHang("KHO01", "Kho Tổng Siêu Thị Mini");
+    private final KhoHang khoHang = new KhoHang("KHO01", "Kho Tong Sieu Thi Mini");
 
     public DuLieuHeThong(QuanLy quanLy) {
-        this.quanLy = (quanLy != null) ? quanLy : new QuanLy("QL01", "Phạm Văn Quản Lý", "Hà Nội", "0988888888", 26, 2.0, 3_000_000);
+        this.quanLy = (quanLy != null) ? quanLy : new QuanLy("QL01", "Pham Van Quan Ly", "Ha Noi", "0988888888", 26, 2.0, 3_000_000);
     }
 
     public QuanLy getQuanLy() {
@@ -152,19 +152,19 @@ public class DuLieuHeThong {
         }
 
         khoiTaoFileNeuChuaCo(FILE_KHACH_HANG, List.of(
-                "KH01|Nguyễn Văn An|123 Lê Lợi, Q.1, TP.HCM|0901234567|150",
-                "KH02|Trần Thị Bình|456 Hai Bà Trưng, Hà Nội|0912345678|320",
-                "KH03|Lê Hoàng Cường|789 Nguyễn Huệ, Đà Nẵng|0987654321|50",
-                "KH04|Phạm Thị Dung|12 Trần Hưng Đạo, Cần Thơ|0934567890|0",
-                "KH05|Võ Minh Em|34 Pasteur, TP.HCM|0978123456|85"
+                "KH01|Nguyen Van An|123 Le Loi, Q.1, TP.HCM|0901234567|150",
+                "KH02|Tran Thi Binh|456 Hai Ba Trung, Ha Noi|0912345678|320",
+                "KH03|Le Hoang Cuong|789 Nguyen Hue, Da Nang|0987654321|50",
+                "KH04|Pham Thi Dung|12 Tran Hung Dao, Can Tho|0934567890|0",
+                "KH05|Vo Minh Em|34 Pasteur, TP.HCM|0978123456|85"
         ));
 
         khoiTaoFileNeuChuaCo(FILE_NHAN_VIEN, List.of(
-                "QUAN_LY|QL01|Phạm Văn Quản Lý|101 Cầu Giấy, Hà Nội|0988888888|26|2.0|3000000.0",
-                "THU_NGAN|TN01|Trần Thị Thu Ngân|202 Nam Kỳ Khởi Nghĩa, TP.HCM|0923456789|26|1.5|Quầy 01",
-                "THU_NGAN|TN02|Nguyễn Thu Hà|15 Lý Thường Kiệt, TP.HCM|0934111222|24|1.4|Quầy 02",
-                "FULL_TIME|FT01|Lê Văn Kiểm Kho|88 Cách Mạng Tháng 8, TP.HCM|0945666777|26|1.6|0.0",
-                "PART_TIME|PT01|Đỗ Sinh Viên|50 Võ Văn Ngân, TP.Thủ Đức|0933333333|45|30000.0|0.0"
+                "QUAN_LY|QL01|Pham Van Quan Ly|101 Cau Giay, Ha Noi|0988888888|26|2.0|3000000.0",
+                "THU_NGAN|TN01|Tran Thi Thu Ngan|202 Nam Ky Khoi Nghia, TP.HCM|0923456789|26|1.5|Quay 01",
+                "THU_NGAN|TN02|Nguyen Thu Ha|15 Ly Thuong Kiet, TP.HCM|0934111222|24|1.4|Quay 02",
+                "FULL_TIME|FT01|Le Van Kiem Kho|88 Cach Mang Thang 8, TP.HCM|0945666777|26|1.6|0.0",
+                "PART_TIME|PT01|Do Sinh Vien|50 Vo Van Ngan, TP.Thu Duc|0933333333|45|30000.0|0.0"
         ));
 
         khoiTaoFileNeuChuaCo(FILE_CA_LAM, List.of(
@@ -176,21 +176,21 @@ public class DuLieuHeThong {
         ));
 
         khoiTaoFileNeuChuaCo(FILE_NHA_CUNG_CAP, List.of(
-                "NCC01|Công ty CP Acecook Việt Nam|02838154064|KCN Tân Bình, P. Tây Thạnh, Q. Tân Phú, TP.HCM",
-                "NCC02|Công ty TNHH Suntory PepsiCo Việt Nam|02838219468|88 Đồng Khởi, Q.1, TP.HCM",
-                "NCC03|Tập đoàn Sunhouse Group|02437366676|139 Nguyễn Thái Học, Ba Đình, Hà Nội",
-                "NCC04|Công ty CP Sữa Việt Nam (Vinamilk)|02854155555|10 Tân Trào, P. Tân Phú, Q.7, TP.HCM",
-                "NCC05|Công ty TNHH Unilever Việt Nam|02854135686|A2-3 KCN Tây Bắc Củ Chi, TP.HCM"
+                "NCC01|Cong ty CP Acecook Viet Nam|02838154064|KCN Tan Binh, P. Tay Thanh, Q. Tan Phu, TP.HCM",
+                "NCC02|Cong ty TNHH Suntory PepsiCo Viet Nam|02838219468|88 Dong Khoi, Q.1, TP.HCM",
+                "NCC03|Tap doan Sunhouse Group|02437366676|139 Nguyen Thai Hoc, Ba Dinh, Ha Noi",
+                "NCC04|Cong ty CP Sua Viet Nam (Vinamilk)|02854155555|10 Tan Trao, P. Tan Phu, Q.7, TP.HCM",
+                "NCC05|Cong ty TNHH Unilever Viet Nam|02854135686|A2-3 KCN Tay Bac Cu Chi, TP.HCM"
         ));
 
         // Tồn kho mẫu = Tổng số lượng nhập trừ đi tổng số lượng đã bán qua hóa đơn
         khoiTaoFileNeuChuaCo(FILE_SAN_PHAM, List.of(
-                "THUC_PHAM|SP01|Mì Hảo Hảo Tôm Chua Cay|Việt Nam|2026|Acecook|150|5000.0|2027-05-15|",
-                "THUC_PHAM|SP02|Sữa tươi tiệt trùng Vinamilk 1L|Việt Nam|2026|Vinamilk|80|32000.0|2027-02-28|",
-                "DO_UONG|SP03|Nước tinh khiết Aquafina 500ml|Việt Nam|2026|PepsiCo|200|10000.0|500|2027-11-10",
-                "DO_UONG|SP04|Trà xanh Không Độ 455ml|Việt Nam|2026|Tân Hiệp Phát|120|12000.0|455|2027-08-20",
-                "DO_DUNG|SP05|Ấm siêu tốc Inox Sunhouse 1.8L|Việt Nam|2025|Sunhouse|45|220000.0|Inox 304|12",
-                "DO_DUNG|SP06|Chảo chống dính Sunhouse 26cm|Việt Nam|2026|Sunhouse|30|180000.0|Nhôm phủ chống dính|6"
+                "THUC_PHAM|SP01|Mi Hao Hao Tom Chua Cay|Viet Nam|2026|Acecook|150|5000.0|2027-05-15|",
+                "THUC_PHAM|SP02|Sua tuoi tiet trung Vinamilk 1L|Viet Nam|2026|Vinamilk|80|32000.0|2027-02-28|",
+                "DO_UONG|SP03|Nuoc tinh khiet Aquafina 500ml|Viet Nam|2026|PepsiCo|200|10000.0|500|2027-11-10",
+                "DO_UONG|SP04|Tra xanh Khong Do 455ml|Viet Nam|2026|Tan Hiep Phat|120|12000.0|455|2027-08-20",
+                "DO_DUNG|SP05|Am sieu toc Inox Sunhouse 1.8L|Viet Nam|2025|Sunhouse|45|220000.0|Inox 304|12",
+                "DO_DUNG|SP06|Chao chong dinh Sunhouse 26cm|Viet Nam|2026|Sunhouse|30|180000.0|Nhom phu chong dinh|6"
         ));
 
         khoiTaoFileNeuChuaCo(FILE_KHUYEN_MAI, List.of(
@@ -218,11 +218,11 @@ public class DuLieuHeThong {
         ));
 
         khoiTaoFileNeuChuaCo(FILE_PHIEU_BAO_HANH, List.of(
-                "PBH001|HD002|SP05|KH02|2026-11-06|2027-11-06|Ấm không vào điện|Đang xử lý",
-                "PBH002|HD005|SP06|KH05|2026-11-09|2027-05-09|Tróc lớp chống dính|Đã tiếp nhận",
-                "PBH003|HD002|SP05|KH02|2026-11-06|2027-11-06|Bảo hành nút bấm|Đã hoàn thành",
-                "PBH004|HD005|SP06|KH05|2026-11-09|2027-05-09|Kiểm tra tay cầm lỏng|Đã tiếp nhận",
-                "PBH005|HD002|SP05|KH02|2026-11-06|2027-11-06|Bảo dưỡng định kỳ|Đã hoàn thành"
+                "PBH001|HD002|SP05|KH02|2026-11-06|2027-11-06|Am khong vao dien|Dang xu ly",
+                "PBH002|HD005|SP06|KH05|2026-11-09|2027-05-09|Troc lop chong dinh|Da tiep nhan",
+                "PBH003|HD002|SP05|KH02|2026-11-06|2027-11-06|Bao hanh nut bam|Da hoan thanh",
+                "PBH004|HD005|SP06|KH05|2026-11-09|2027-05-09|Kiem tra tay cam long|Da tiep nhan",
+                "PBH005|HD002|SP05|KH02|2026-11-06|2027-11-06|Bao duong dinh ky|Da hoan thanh"
         ));
     }
 
@@ -301,7 +301,7 @@ public class DuLieuHeThong {
                     case "THU_NGAN" -> {
                         int ngayCong = (p.length > 5) ? Integer.parseInt(p[5].trim()) : 26;
                         double heSo = (p.length > 6) ? Double.parseDouble(p[6].trim()) : 1.0;
-                        String quay = (p.length > 7) ? p[7].trim() : "Quầy 01";
+                        String quay = (p.length > 7) ? p[7].trim() : "Quay 01";
                         ThuNgan tn = new ThuNgan(ma, ten, diaChi, sdt, ngayCong, heSo, quay);
                         themNhanVien(tn);
                     }
@@ -424,7 +424,7 @@ public class DuLieuHeThong {
 
                 NhaCungCap ncc = timNhaCungCap(maNCC);
                 NhanVien nguoiLap = timNhanVien(maNguoiLap);
-                if (ncc == null) ncc = new NhaCungCap(maNCC, "Nhà cung cấp " + maNCC, "", "");
+                if (ncc == null) ncc = new NhaCungCap(maNCC, "Nha cung cap " + maNCC, "", "");
                 if (nguoiLap == null) nguoiLap = quanLy;
 
                 NhapHang nh = new NhapHang(maNH, ngayNhap, ncc, nguoiLap);
@@ -488,7 +488,7 @@ public class DuLieuHeThong {
 
                 // Xử lý phương thức thanh toán & thu ngân
                 NhanVien nvTN = timNhanVien(maTN);
-                ThuNgan tn = (nvTN instanceof ThuNgan thuNgan) ? thuNgan : new ThuNgan(maTN, "Thu ngân " + maTN, "", "", 26, 1.0, "Q01");
+                ThuNgan tn = (nvTN instanceof ThuNgan thuNgan) ? thuNgan : new ThuNgan(maTN, "Thu ngan " + maTN, "", "", 26, 1.0, "Q01");
 
                 IPhuongThucThanhToan pt = new TienMat();
                 if (ptStr.startsWith("ChuyenKhoan")) {
@@ -788,7 +788,7 @@ public class DuLieuHeThong {
                 }
             }
         } catch (Exception e) {
-            System.err.println("Lỗi đọc file " + duongDan + ": " + e.getMessage());
+            System.err.println("Loi doc file " + duongDan + ": " + e.getMessage());
         }
         return lines;
     }
@@ -805,7 +805,7 @@ public class DuLieuHeThong {
                 bw.newLine();
             }
         } catch (Exception e) {
-            System.err.println("Lỗi ghi file " + duongDan + ": " + e.getMessage());
+            System.err.println("Loi ghi file " + duongDan + ": " + e.getMessage());
         }
     }
 }

@@ -8,29 +8,29 @@ powershell -NoProfile -Command "$lines = (Get-ChildItem -Path src -Filter *.java
 javac --release 17 -encoding UTF-8 -d bin @sources.txt
 if errorlevel 1 (
   if exist sources.txt del sources.txt
-  echo [LỖI] Biên dịch thất bại!
+  echo [LOI] Bien dich that bai!
   exit /b 1
 )
 if exist sources.txt del sources.txt
 
 if "%1"=="test" (
   echo ==================================================
-  echo           1. KIỂM THỬ HÓA ĐƠN
+  echo           1. KIEM THU HOA DON
   echo ==================================================
   java -Dfile.encoding=UTF-8 -cp bin sieuthi.KiemThuHoaDon
   echo.
   echo ==================================================
-  echo           2. KIỂM THỬ SẢN PHẨM
+  echo           2. KIEM THU SAN PHAM
   echo ==================================================
   java -Dfile.encoding=UTF-8 -cp bin sieuthi.KiemThuSanPham
   echo.
   echo ==================================================
-  echo           3. KIỂM THỬ QUẢN LÝ
+  echo           3. KIEM THU QUAN LY
   echo ==================================================
   java -Dfile.encoding=UTF-8 -cp bin sieuthi.KiemThuQuanLy
   echo.
   echo ==================================================
-  echo           4. KIỂM THỬ LƯU TRỮ VÀ TỒN KHO
+  echo           4. KIEM THU LUU TRU VA TON KHO
   echo ==================================================
   java -Dfile.encoding=UTF-8 -cp bin sieuthi.KiemThuHeThongVaLuuTru
 ) else if "%1"=="storage" (

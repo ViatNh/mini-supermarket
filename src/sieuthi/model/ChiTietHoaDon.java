@@ -11,8 +11,8 @@ public class ChiTietHoaDon {
     }
 
     public ChiTietHoaDon(SanPham sanPham, int soLuong, double donGia) {
-        if (sanPham == null) throw new IllegalArgumentException("Sản phẩm không được null");
-        if (soLuong <= 0) throw new IllegalArgumentException("Số lượng phải > 0");
+        if (sanPham == null) throw new IllegalArgumentException("San pham khong duoc null");
+        if (soLuong <= 0) throw new IllegalArgumentException("So luong phai > 0");
         this.sanPham = sanPham;
         this.soLuong = soLuong;
         this.donGia = donGia;

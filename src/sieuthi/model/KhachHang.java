@@ -56,7 +56,7 @@ public class KhachHang extends Person {
 
     @Override
     public void hienThiThongTin() {
-        System.out.println("Khách hàng: " + maKhachHang + " | " + getHoTen()
-                + " | " + getSoDienThoai() + " | Điểm tích lũy: " + diemTichLuy);
+        System.out.println("Khach hang: " + maKhachHang + " | " + getHoTen()
+                + " | " + getSoDienThoai() + " | Diem tich luy: " + diemTichLuy);
     }
 }

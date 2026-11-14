@@ -10,12 +10,12 @@ public class KhoHang {
 
     public KhoHang() {
         this.maKho = "KHO01";
-        this.tenKho = "Kho Trung Tâm Siêu Thị Mini";
+        this.tenKho = "Kho Trung Tam Sieu Thi Mini";
     }
 
     public KhoHang(String maKho, String tenKho) {
         this.maKho = (maKho != null) ? maKho.trim() : "KHO01";
-        this.tenKho = (tenKho != null) ? tenKho.trim() : "Kho Hàng";
+        this.tenKho = (tenKho != null) ? tenKho.trim() : "Kho Hang";
     }
 
     public String getMaKho() {
@@ -44,7 +44,7 @@ public class KhoHang {
      */
     public void capNhatTonKho(SanPham sp, int soLuong) {
         if (sp == null) {
-            throw new IllegalArgumentException("Sản phẩm không được null");
+            throw new IllegalArgumentException("San pham khong duoc null");
         }
         if (soLuong > 0) {
             sp.tangTonKho(soLuong);
@@ -54,6 +54,6 @@ public class KhoHang {
     }
 
     public void hienThiThongTin() {
-        System.out.println("Mã kho: " + maKho + " | Tên kho: " + tenKho);
+        System.out.println("Ma kho: " + maKho + " | Ten kho: " + tenKho);
     }
 }

@@ -140,46 +140,46 @@ public class QuanLySanPham implements IQuanLy<SanPham> {
      * @param nguong Ngưỡng tồn kho tối thiểu cần cảnh báo
      */
     public void hienThiCanhBaoHetHang(int nguong) {
-        System.out.println("============================== CẢNH BÁO TỒN KHO THẤP (<= " + nguong + ") ==============================");
+        System.out.println("============================== CANH BAO TON KHO THAP (<= " + nguong + ") ==============================");
         boolean coCanhBao = false;
         for (SanPham sp : dsSanPham) {
             if (sp.getSoLuongTonKho() <= nguong) {
                 coCanhBao = true;
-                System.out.printf("  [!] Mã: %-8s | Tên: %-30s | Tồn kho hiện tại: %-4d | Giá bán: %s%n",
+                System.out.printf("  [!] Ma: %-8s | Ten: %-30s | Ton kho hien tai: %-4d | Gia ban: %s%n",
                         sp.getMaSanPham(), sp.getTenSanPham(), sp.getSoLuongTonKho(),
                         HoaDon.dinhDangTien(sp.tinhGia()));
             }
         }
         if (!coCanhBao) {
-            System.out.println("  (Tất cả sản phẩm trong kho đều đảm bảo số lượng an toàn)");
+            System.out.println("  (Tat ca san pham trong kho deu dam bao so luong an toan)");
         }
         System.out.println("=========================================================================================");
     }
 
     @Override
     public void hienThiDanhSach() {
-        System.out.println("================================================= DANH SÁCH SẢN PHẨM =================================================");
+        System.out.println("================================================= DANH SACH SAN PHAM =================================================");
         if (dsSanPham.isEmpty()) {
-            System.out.println("  (Danh sách sản phẩm đang trống)");
+            System.out.println("  (Danh sach san pham dang trong)");
             System.out.println("======================================================================================================================");
             return;
         }
         System.out.printf("%-5s | %-8s | %-10s | %-30s | %-12s | %-8s | %-13s | %s%n",
-                "STT", "Mã SP", "Phân loại", "Tên sản phẩm", "Hãng SX", "Tồn kho", "Giá bán", "Thông tin chi tiết");
+                "STT", "Ma SP", "Phan loai", "Ten san pham", "Hang SX", "Ton kho", "Gia ban", "Thong tin chi tiet");
         System.out.println("----------------------------------------------------------------------------------------------------------------------");
         int stt = 1;
         for (SanPham sp : dsSanPham) {
-            String phanLoai = "Khác";
+            String phanLoai = "Khac";
             String thongTinRieng = "";
             if (sp instanceof ThucPham tp) {
-                phanLoai = "Thực phẩm";
-                thongTinRieng = "HSD: " + tp.getHanSuDung() + (tp.conHanSuDung() ? "" : " (HẾT HẠN)");
+                phanLoai = "Thuc pham";
+                thongTinRieng = "HSD: " + tp.getHanSuDung() + (tp.conHanSuDung() ? "" : " (HET HAN)");
             } else if (sp instanceof DoUong du) {
-                phanLoai = "Đồ uống";
+                phanLoai = "Do uong";
                 thongTinRieng = du.getDungTichMl() + "ml | HSD: " + du.getHanSuDung();
             } else if (sp instanceof DoDung dd) {
-                phanLoai = "Đồ dùng";
-                thongTinRieng = dd.getChatLieu() + " | BH: " + dd.layThoiHanBaoHanh() + " tháng";
+                phanLoai = "Do dung";
+                thongTinRieng = dd.getChatLieu() + " | BH: " + dd.layThoiHanBaoHanh() + " thang";
             }
             System.out.printf("%-5d | %-8s | %-10s | %-30s | %-12s | %-8d | %-13s | %s%n",
                     stt++,

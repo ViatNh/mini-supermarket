@@ -109,14 +109,14 @@ public class QuanLyKhachHang implements IQuanLy<KhachHang> {
 
     @Override
     public void hienThiDanhSach() {
-        System.out.println("======================================== DANH SÁCH KHÁCH HÀNG ========================================");
+        System.out.println("======================================== DANH SACH KHACH HANG ========================================");
         if (dsKhachHang.isEmpty()) {
-            System.out.println("  (Danh sách khách hàng đang trống)");
+            System.out.println("  (Danh sach khach hang dang trong)");
             System.out.println("======================================================================================================");
             return;
         }
         System.out.printf("%-5s | %-10s | %-25s | %-12s | %-12s | %s%n",
-                "STT", "Mã KH", "Họ tên", "Số ĐT", "Điểm tích lũy", "Địa chỉ");
+                "STT", "Ma KH", "Ho ten", "So DT", "Diem tich luy", "Dia chi");
         System.out.println("------------------------------------------------------------------------------------------------------");
         int stt = 1;
         for (KhachHang kh : dsKhachHang) {

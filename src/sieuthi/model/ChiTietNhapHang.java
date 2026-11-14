@@ -16,13 +16,13 @@ public class ChiTietNhapHang {
 
     public ChiTietNhapHang(SanPham sanPham, int soLuong, double donGiaNhap) {
         if (sanPham == null) {
-            throw new IllegalArgumentException("Sản phẩm không được null");
+            throw new IllegalArgumentException("San pham khong duoc null");
         }
         if (soLuong <= 0) {
-            throw new IllegalArgumentException("Số lượng nhập phải lớn hơn 0");
+            throw new IllegalArgumentException("So luong nhap phai lon hon 0");
         }
         if (donGiaNhap < 0) {
-            throw new IllegalArgumentException("Đơn giá nhập không được âm");
+            throw new IllegalArgumentException("Don gia nhap khong duoc am");
         }
         this.sanPham = sanPham;
         this.soLuong = soLuong;
@@ -35,7 +35,7 @@ public class ChiTietNhapHang {
 
     public void setSanPham(SanPham sanPham) {
         if (sanPham == null) {
-            throw new IllegalArgumentException("Sản phẩm không được null");
+            throw new IllegalArgumentException("San pham khong duoc null");
         }
         this.sanPham = sanPham;
     }
@@ -46,7 +46,7 @@ public class ChiTietNhapHang {
 
     public void setSoLuong(int soLuong) {
         if (soLuong <= 0) {
-            throw new IllegalArgumentException("Số lượng nhập phải lớn hơn 0");
+            throw new IllegalArgumentException("So luong nhap phai lon hon 0");
         }
         this.soLuong = soLuong;
     }
@@ -57,7 +57,7 @@ public class ChiTietNhapHang {
 
     public void setDonGiaNhap(double donGiaNhap) {
         if (donGiaNhap < 0) {
-            throw new IllegalArgumentException("Đơn giá nhập không được âm");
+            throw new IllegalArgumentException("Don gia nhap khong duoc am");
         }
         this.donGiaNhap = donGiaNhap;
     }
@@ -73,7 +73,7 @@ public class ChiTietNhapHang {
 
     public void tangSoLuong(int them) {
         if (them <= 0) {
-            throw new IllegalArgumentException("Số lượng cộng dồn phải lớn hơn 0");
+            throw new IllegalArgumentException("So luong cong don phai lon hon 0");
         }
         this.soLuong += them;
     }

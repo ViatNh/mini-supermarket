@@ -46,7 +46,7 @@ public class QuanLy extends NhanVienFullTime {
                   QuanLyDonHang qlDonHang, QuanLyNhapHang qlNhapHang) {
         super(maNhanVien, hoTen, diaChi, soDienThoai, soNgayCong, heSoLuong);
         if (phuCap < 0) {
-            throw new IllegalArgumentException("Phụ cấp không được âm");
+            throw new IllegalArgumentException("Phu cap khong duoc am");
         }
         this.phuCap = phuCap;
         this.qlKhachHang = (qlKhachHang != null) ? qlKhachHang : new QuanLyKhachHang();
@@ -61,7 +61,7 @@ public class QuanLy extends NhanVienFullTime {
 
     public void setPhuCap(double phuCap) {
         if (phuCap < 0) {
-            throw new IllegalArgumentException("Phụ cấp không được âm");
+            throw new IllegalArgumentException("Phu cap khong duoc am");
         }
         this.phuCap = phuCap;
     }
@@ -77,8 +77,8 @@ public class QuanLy extends NhanVienFullTime {
     @Override
     public void hienThiThongTin() {
         super.hienThiThongTin();
-        System.out.println("  Chức vụ: Quản lý | Phụ cấp: " + HoaDon.dinhDangTien(phuCap)
-                + " | Thực lĩnh: " + HoaDon.dinhDangTien(tinhLuong()));
+        System.out.println("  Chuc vu: Quan ly | Phu cap: " + HoaDon.dinhDangTien(phuCap)
+                + " | Thuc linh: " + HoaDon.dinhDangTien(tinhLuong()));
     }
 
     /**
@@ -90,18 +90,18 @@ public class QuanLy extends NhanVienFullTime {
      */
     public boolean phanCongCa(NhanVien nv, CaLam ca) {
         if (nv == null || ca == null) {
-            System.out.println("Lỗi: Thông tin nhân viên hoặc ca làm không hợp lệ!");
+            System.out.println("Loi: Thong tin nhan vien hoac ca lam khong hop le!");
             return false;
         }
         boolean thanhCong = nv.themCaLam(ca);
         if (thanhCong) {
-            System.out.println("-> Phân công thành công: Ca " + ca.getMaCa()
+            System.out.println("-> Phan cong thanh cong: Ca " + ca.getMaCa()
                     + " (" + ca.getNgayLam() + " " + ca.getGioBatDau() + "-" + ca.getGioKetThuc() + ")"
-                    + " cho nhân viên " + nv.getHoTen() + " (" + nv.getMaNhanVien() + ")");
+                    + " cho nhan vien " + nv.getHoTen() + " (" + nv.getMaNhanVien() + ")");
             return true;
         } else {
-            System.out.println("-> Phân công THẤT BẠI: Nhân viên " + nv.getHoTen()
-                    + " đã có ca làm bị trùng thời gian vào ngày " + ca.getNgayLam() + "!");
+            System.out.println("-> Phan cong THAT BAI: Nhan vien " + nv.getHoTen()
+                    + " da co ca lam bi trung thoi gian vao ngay " + ca.getNgayLam() + "!");
             return false;
         }
     }

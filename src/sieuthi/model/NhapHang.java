@@ -26,13 +26,13 @@ public class NhapHang {
 
     public NhapHang(String maNhapHang, LocalDate ngayNhap, NhaCungCap nhaCungCap, NhanVien nguoiLap) {
         if (maNhapHang == null || maNhapHang.trim().isEmpty()) {
-            throw new IllegalArgumentException("Mã nhập hàng không được rỗng");
+            throw new IllegalArgumentException("Ma nhap hang khong duoc rong");
         }
         if (nhaCungCap == null) {
-            throw new IllegalArgumentException("Nhà cung cấp không được null");
+            throw new IllegalArgumentException("Nha cung cap khong duoc null");
         }
         if (nguoiLap == null) {
-            throw new IllegalArgumentException("Người lập phiếu nhập không được null");
+            throw new IllegalArgumentException("Nguoi lap phieu nhap khong duoc null");
         }
         this.maNhapHang = maNhapHang.trim();
         this.ngayNhap = (ngayNhap != null) ? ngayNhap : LocalDate.now();
@@ -87,13 +87,13 @@ public class NhapHang {
      */
     public void themChiTietVaCapNhatTonKho(SanPham sp, int soLuong, double donGiaNhap) {
         if (sp == null) {
-            throw new IllegalArgumentException("Sản phẩm không được null");
+            throw new IllegalArgumentException("San pham khong duoc null");
         }
         if (soLuong <= 0) {
-            throw new IllegalArgumentException("Số lượng nhập phải lớn hơn 0");
+            throw new IllegalArgumentException("So luong nhap phai lon hon 0");
         }
         if (donGiaNhap < 0) {
-            throw new IllegalArgumentException("Đơn giá nhập không được âm");
+            throw new IllegalArgumentException("Don gia nhap khong duoc am");
         }
 
         // Tăng tồn kho của sản phẩm
@@ -148,13 +148,13 @@ public class NhapHang {
     }
 
     public void hienThiPhieuNhap() {
-        System.out.println("==================== PHIẾU NHẬP HÀNG " + maNhapHang + " ====================");
-        System.out.println("Ngày nhập     : " + ngayNhap);
-        System.out.println("Người tiếp nhận: " + (nguoiLap != null ? nguoiLap.getHoTen() : "N/A"));
-        System.out.println("Nhà cung cấp  : " + (nhaCungCap != null ? nhaCungCap.getTenNhaCungCap() : "N/A"));
+        System.out.println("==================== PHIEU NHAP HANG " + maNhapHang + " ====================");
+        System.out.println("Ngay nhap      : " + ngayNhap);
+        System.out.println("Nguoi tiep nhan: " + (nguoiLap != null ? nguoiLap.getHoTen() : "N/A"));
+        System.out.println("Nha cung cap   : " + (nhaCungCap != null ? nhaCungCap.getTenNhaCungCap() : "N/A"));
         System.out.println("----------------------------------------------------------------------");
         System.out.printf("%-5s | %-10s | %-25s | %-8s | %-14s | %-14s%n",
-                "STT", "Mã SP", "Tên sản phẩm", "SL nhập", "Giá nhập", "Thành tiền");
+                "STT", "Ma SP", "Ten san pham", "SL nhap", "Gia nhap", "Thanh tien");
         System.out.println("----------------------------------------------------------------------");
         int stt = 1;
         for (ChiTietNhapHang ct : dsChiTiet) {
@@ -167,7 +167,7 @@ public class NhapHang {
                     HoaDon.dinhDangTien(ct.tinhThanhTien()));
         }
         System.out.println("----------------------------------------------------------------------");
-        System.out.println("TỔNG TIỀN NHẬP: " + HoaDon.dinhDangTien(tinhTongTien()));
+        System.out.println("TONG TIEN NHAP: " + HoaDon.dinhDangTien(tinhTongTien()));
         System.out.println("======================================================================");
     }
 }

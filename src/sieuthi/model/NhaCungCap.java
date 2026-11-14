@@ -64,10 +64,10 @@ public class NhaCungCap {
      */
     public void cungCapSanPham(SanPham sp, int soLuong) {
         if (sp == null) {
-            throw new IllegalArgumentException("Sản phẩm không được null");
+            throw new IllegalArgumentException("San pham khong duoc null");
         }
         if (soLuong <= 0) {
-            throw new IllegalArgumentException("Số lượng cung cấp phải lớn hơn 0");
+            throw new IllegalArgumentException("So luong cung cap phai lon hon 0");
         }
         sp.tangTonKho(soLuong);
     }
@@ -79,6 +79,6 @@ public class NhaCungCap {
 
     @Override
     public String toString() {
-        return maNhaCungCap + " - " + tenNhaCungCap + " (SĐT: " + soDienThoai + ")";
+        return maNhaCungCap + " - " + tenNhaCungCap + " (SDT: " + soDienThoai + ")";
     }
 }
