@@ -4,6 +4,7 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
@@ -41,6 +42,57 @@ public class Main {
             return scanner.nextLine().trim();
         }
         return "";
+    }
+
+    private static LocalDate parseNgayResilient(String input) {
+        if (input == null || input.trim().isEmpty()) return null;
+        String s = input.trim();
+        String[] patterns = {"yyyy-MM-dd", "dd-MM-yyyy", "yyyy/MM/dd", "dd/MM/yyyy", "d-M-yyyy", "d/M/yyyy"};
+        for (String p : patterns) {
+            try {
+                return LocalDate.parse(s, DateTimeFormatter.ofPattern(p));
+            } catch (DateTimeParseException ignored) {}
+        }
+        return null;
+    }
+
+    private static LocalDate nhapNgayHopLe(String thongBao, boolean choPhepDeTrong, LocalDate macDinh) {
+        while (true) {
+            System.out.print(thongBao);
+            String s = docDong();
+            if (s.isEmpty()) {
+                if (choPhepDeTrong) return macDinh;
+                System.out.println("Loi: Khong duoc de trong!");
+                continue;
+            }
+            if (s.equalsIgnoreCase("huy")) return null;
+            LocalDate d = parseNgayResilient(s);
+            if (d != null) return d;
+            System.out.println("Loi: Dinh dang ngay khong hop le (go yyyy-MM-dd hoac dd-MM-yyyy, go 'huy' de thoat)!");
+        }
+    }
+
+    private static LocalTime parseGioResilient(String input) {
+        if (input == null || input.trim().isEmpty()) return null;
+        String s = input.trim();
+        String[] patterns = {"HH:mm", "H:mm", "HH:mm:ss", "H:m"};
+        for (String p : patterns) {
+            try {
+                return LocalTime.parse(s, DateTimeFormatter.ofPattern(p));
+            } catch (DateTimeParseException ignored) {}
+        }
+        return null;
+    }
+
+    private static LocalTime nhapGioHopLe(String thongBao) {
+        while (true) {
+            System.out.print(thongBao);
+            String s = docDong();
+            if (s.equalsIgnoreCase("huy")) return null;
+            LocalTime t = parseGioResilient(s);
+            if (t != null) return t;
+            System.out.println("Loi: Dinh dang gio khong hop le (vi du: 07:30 hoac 7:30, go 'huy' de thoat)!");
+        }
     }
 
     // =========================================================================
@@ -256,8 +308,10 @@ public class Main {
 
         System.out.print("Ten san pham: ");
         String ten = docDong();
-        System.out.print("Nuoc san xuat: ");
+        System.out.print("Nuoc san xuat (mac dinh Viet Nam): ");
         String nuoc = docDong();
+        if (nuoc.isEmpty()) nuoc = "Viet Nam";
+
         System.out.print("Hang san xuat: ");
         String hang = docDong();
 
@@ -280,24 +334,32 @@ public class Main {
         SanPham spMoi = null;
         switch (loai) {
             case "1" -> {
-                System.out.print("Han su dung (yyyy-MM-dd): ");
-                String hsdStr = docDong();
-                LocalDate hsd = hsdStr.isEmpty() ? LocalDate.now().plusMonths(6) : LocalDate.parse(hsdStr);
+                LocalDate hsd = nhapNgayHopLe("Han su dung (yyyy-MM-dd hoac dd-MM-yyyy): ", true, LocalDate.now().plusMonths(6));
                 spMoi = new ThucPham(ma, ten, nuoc, namSX, hang, 0, giaGoc, hsd);
             }
             case "2" -> {
-                System.out.print("Dung tich (ml): ");
-                int ml = Integer.parseInt(docDong());
-                System.out.print("Han su dung (yyyy-MM-dd): ");
-                String hsdStr = docDong();
-                LocalDate hsd = hsdStr.isEmpty() ? LocalDate.now().plusMonths(12) : LocalDate.parse(hsdStr);
+                int ml = 500;
+                try {
+                    System.out.print("Dung tich (ml, mac dinh 500): ");
+                    String dtStr = docDong();
+                    if (!dtStr.isEmpty()) ml = Integer.parseInt(dtStr);
+                } catch (NumberFormatException ignored) {}
+
+                LocalDate hsd = nhapNgayHopLe("Han su dung (yyyy-MM-dd hoac dd-MM-yyyy): ", true, LocalDate.now().plusMonths(12));
                 spMoi = new DoUong(ma, ten, nuoc, namSX, hang, 0, giaGoc, ml, hsd);
             }
             case "3" -> {
                 System.out.print("Chat lieu: ");
                 String chatLieu = docDong();
-                System.out.print("Thoi han bao hanh (thang): ");
-                int bh = Integer.parseInt(docDong());
+                if (chatLieu.isEmpty()) chatLieu = "Inox";
+
+                int bh = 12;
+                try {
+                    System.out.print("Thoi han bao hanh (thang, mac dinh 12): ");
+                    String bhStr = docDong();
+                    if (!bhStr.isEmpty()) bh = Integer.parseInt(bhStr);
+                } catch (NumberFormatException ignored) {}
+
                 spMoi = new DoDung(ma, ten, nuoc, namSX, hang, 0, giaGoc, chatLieu, bh);
             }
             default -> {
@@ -321,7 +383,7 @@ public class Main {
             return;
         }
 
-        System.out.println("Dang sua san pham: " + cu.getTenSanPham());
+        System.out.println("Dang sua san pham: " + cu.getTenSanPham() + " (An Enter de giu nguyen thong tin cu)");
         System.out.print("Ten san pham moi (" + cu.getTenSanPham() + "): ");
         String ten = docDong();
         if (ten.isEmpty()) ten = cu.getTenSanPham();
@@ -343,25 +405,28 @@ public class Main {
 
         SanPham spMoi = null;
         if (cu instanceof ThucPham tp) {
-            System.out.print("Han su dung moi (" + tp.getHanSuDung() + "): ");
-            String hsdStr = docDong();
-            LocalDate hsd = hsdStr.isEmpty() ? tp.getHanSuDung() : LocalDate.parse(hsdStr);
+            LocalDate hsd = nhapNgayHopLe("Han su dung moi (" + tp.getHanSuDung() + "): ", true, tp.getHanSuDung());
             spMoi = new ThucPham(ma, ten, nuoc, cu.getNamSanXuat(), hang, cu.getSoLuongTonKho(), gia, hsd);
         } else if (cu instanceof DoUong du) {
             System.out.print("Dung tich moi (" + du.getDungTichMl() + "ml): ");
             String dtStr = docDong();
-            int dt = dtStr.isEmpty() ? du.getDungTichMl() : Integer.parseInt(dtStr);
-            System.out.print("Han su dung moi (" + du.getHanSuDung() + "): ");
-            String hsdStr = docDong();
-            LocalDate hsd = hsdStr.isEmpty() ? du.getHanSuDung() : LocalDate.parse(hsdStr);
+            int dt = du.getDungTichMl();
+            if (!dtStr.isEmpty()) {
+                try { dt = Integer.parseInt(dtStr); } catch (NumberFormatException ignored) {}
+            }
+            LocalDate hsd = nhapNgayHopLe("Han su dung moi (" + du.getHanSuDung() + "): ", true, du.getHanSuDung());
             spMoi = new DoUong(ma, ten, nuoc, cu.getNamSanXuat(), hang, cu.getSoLuongTonKho(), gia, dt, hsd);
         } else if (cu instanceof DoDung dd) {
             System.out.print("Chat lieu moi (" + dd.getChatLieu() + "): ");
             String cl = docDong();
             if (cl.isEmpty()) cl = dd.getChatLieu();
+
             System.out.print("Bao hanh moi (" + dd.layThoiHanBaoHanh() + " thang): ");
             String bhStr = docDong();
-            int bh = bhStr.isEmpty() ? dd.layThoiHanBaoHanh() : Integer.parseInt(bhStr);
+            int bh = dd.layThoiHanBaoHanh();
+            if (!bhStr.isEmpty()) {
+                try { bh = Integer.parseInt(bhStr); } catch (NumberFormatException ignored) {}
+            }
             spMoi = new DoDung(ma, ten, nuoc, cu.getNamSanXuat(), hang, cu.getSoLuongTonKho(), gia, cl, bh);
         }
 
@@ -500,7 +565,7 @@ public class Main {
             System.out.println("1. Danh sach hoa don");
             System.out.println("2. Lap hoa don ban hang");
             System.out.println("3. Xem chi tiet hoa don");
-            System.out.println("4. Danh sach phieu bao hanh");
+            System.out.println("4. Quan ly phieu bao hanh");
             System.out.println("0. Quay lai");
             System.out.print("Chon [0-4]: ");
 
@@ -518,7 +583,24 @@ public class Main {
                         System.out.println("Khong tim thay hoa don: " + ma);
                     }
                 }
-                case "4" -> {
+                case "4" -> menuQuanLyBaoHanh();
+                case "0" -> { return; }
+                default -> System.out.println("Lua chon khong hop le!");
+            }
+        }
+    }
+
+    private static void menuQuanLyBaoHanh() {
+        while (true) {
+            System.out.println("\n--- QUAN LY PHIEU BAO HANH ---");
+            System.out.println("1. Danh sach phieu bao hanh");
+            System.out.println("2. Cap nhat trang thai phieu bao hanh");
+            System.out.println("0. Quay lai");
+            System.out.print("Chon [0-2]: ");
+
+            String c = docDong();
+            switch (c) {
+                case "1" -> {
                     System.out.println("============================================ DANH SACH PHIEU BAO HANH ============================================");
                     if (storage.getDsPhieuBaoHanh().isEmpty()) {
                         System.out.println("  (Chua co phieu bao hanh nao)");
@@ -528,6 +610,33 @@ public class Main {
                         }
                     }
                     System.out.println("==================================================================================================================");
+                }
+                case "2" -> {
+                    System.out.print("Nhap ma phieu bao hanh can cap nhat: ");
+                    String ma = docDong();
+                    PhieuBaoHanh pbh = storage.timPhieuBaoHanh(ma);
+                    if (pbh == null) {
+                        System.out.println("Khong tim thay phieu bao hanh: " + ma);
+                        break;
+                    }
+                    System.out.println("Phieu hien tai: " + pbh.getMaPhieuBH() + " | Trang thai: " + pbh.getTrangThai());
+                    System.out.println("Chon trang thai moi:");
+                    System.out.println("  1. Da tiep nhan");
+                    System.out.println("  2. Dang xu ly");
+                    System.out.println("  3. Da hoan thanh");
+                    System.out.println("  4. Tu choi bao hanh");
+                    System.out.print("Chon [1-4] hoac nhap truc tiep: ");
+                    String ttChon = docDong();
+                    String ttMoi = switch (ttChon) {
+                        case "1" -> "Da tiep nhan";
+                        case "2" -> "Dang xu ly";
+                        case "3" -> "Da hoan thanh";
+                        case "4" -> "Tu choi bao hanh";
+                        default -> ttChon.isEmpty() ? pbh.getTrangThai() : ttChon;
+                    };
+                    pbh.capNhatTrangThai(ttMoi);
+                    storage.luuPhieuBaoHanh();
+                    System.out.println("Cap nhat trang thai phieu bao hanh thanh cong: " + ttMoi);
                 }
                 case "0" -> { return; }
                 default -> System.out.println("Lua chon khong hop le!");
@@ -634,6 +743,8 @@ public class Main {
         String ptChon = docDong();
 
         IPhuongThucThanhToan phuongThuc = new TienMat();
+        double tongPhaiTra = hd.tinhTienPhaiTra();
+
         if ("2".equals(ptChon)) {
             String maGD = "CK" + System.currentTimeMillis();
             phuongThuc = new ChuyenKhoan(maGD);
@@ -641,6 +752,27 @@ public class Main {
             System.out.print("Nhap so the (16 chu so): ");
             String soThe = docDong();
             phuongThuc = new TheNganHang(soThe);
+        } else {
+            // Thanh toan tien mat - ho tro nhap tien khach dua va tinh tien thoi lai
+            System.out.println("Tong tien can thanh toan: " + HoaDon.dinhDangTien(tongPhaiTra));
+            double tienKhachDua = 0;
+            while (true) {
+                System.out.print("Tien khach dua (VND): ");
+                String kdStr = docDong();
+                try {
+                    tienKhachDua = Double.parseDouble(kdStr);
+                    if (tienKhachDua < tongPhaiTra) {
+                        System.out.println("Loi: So tien khach dua nho hon tong hoa don (" + HoaDon.dinhDangTien(tongPhaiTra) + ")!");
+                        continue;
+                    }
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.println("Loi: So tien nhap vao khong hop le!");
+                }
+            }
+            double tienThoi = tienKhachDua - tongPhaiTra;
+            System.out.println("-> Tien thoi lai cho khach: " + HoaDon.dinhDangTien(tienThoi));
+            phuongThuc = new TienMat();
         }
 
         boolean ttThanhCong = thuNgan.thanhToanHoaDon(hd, phuongThuc);
@@ -681,8 +813,9 @@ public class Main {
             System.out.println("2. Them nhan vien moi");
             System.out.println("3. Danh sach ca lam viec");
             System.out.println("4. Phan cong ca lam");
+            System.out.println("5. Xoa ca lam viec");
             System.out.println("0. Quay lai");
-            System.out.print("Chon [0-4]: ");
+            System.out.print("Chon [0-5]: ");
 
             String chon = docDong();
             switch (chon) {
@@ -695,45 +828,47 @@ public class Main {
                     System.out.println("=============================================================================================================");
                 }
                 case "2" -> themNhanVienConsole();
-                case "3" -> {
-                    System.out.println("=================================== DANH SACH CA LAM VIEC ===================================");
-                    System.out.printf("%-8s | %-12s | %-15s | %s%n", "Ma ca", "Ngay lam", "Khung gio", "Nhan vien phu trach");
-                    System.out.println("---------------------------------------------------------------------------------------------");
-                    for (CaLam ca : storage.getDsCaLam()) {
-                        String tenNV = "Chua phan cong";
-                        for (NhanVien nv : storage.getDsNhanVien()) {
-                            if (nv.getDsCaLam().contains(ca)) {
-                                tenNV = nv.getHoTen() + " (" + nv.getMaNhanVien() + ")";
-                                break;
-                            }
-                        }
-                        if (quanLy.getDsCaLam().contains(ca)) {
-                            tenNV = quanLy.getHoTen() + " (" + quanLy.getMaNhanVien() + ")";
-                        }
-                        System.out.printf("%-8s | %-12s | %-15s | %s%n",
-                                ca.getMaCa(), ca.getNgayLam(), ca.getGioBatDau() + " - " + ca.getGioKetThuc(), tenNV);
-                    }
-                    System.out.println("=============================================================================================");
-                }
+                case "3" -> hienThiDanhSachCaLamConsole();
                 case "4" -> phanCongCaConsole();
+                case "5" -> xoaCaLamConsole();
                 case "0" -> { return; }
                 default -> System.out.println("Lua chon khong hop le!");
             }
         }
     }
 
+    private static void hienThiDanhSachCaLamConsole() {
+        System.out.println("=================================== DANH SACH CA LAM VIEC ===================================");
+        System.out.printf("%-8s | %-12s | %-15s | %s%n", "Ma ca", "Ngay lam", "Khung gio", "Nhan vien phu trach");
+        System.out.println("---------------------------------------------------------------------------------------------");
+        for (CaLam ca : storage.getDsCaLam()) {
+            String tenNV = "Chua phan cong";
+            for (NhanVien nv : storage.getDsNhanVien()) {
+                if (nv.getDsCaLam().contains(ca)) {
+                    tenNV = nv.getHoTen() + " (" + nv.getMaNhanVien() + ")";
+                    break;
+                }
+            }
+            if (quanLy.getDsCaLam().contains(ca)) {
+                tenNV = quanLy.getHoTen() + " (" + quanLy.getMaNhanVien() + ")";
+            }
+            System.out.printf("%-8s | %-12s | %-15s | %s%n",
+                    ca.getMaCa(), ca.getNgayLam(), ca.getGioBatDau() + " - " + ca.getGioKetThuc(), tenNV);
+        }
+        System.out.println("=============================================================================================");
+    }
+
     private static void themNhanVienConsole() {
         System.out.println("\n-- Them nhan vien moi --");
-        System.out.println("1. Thu ngan");
-        System.out.println("2. Nhan vien Part-time");
-        System.out.println("3. Nhan vien Full-time");
-        System.out.print("Chon loai [1-3]: ");
+        System.out.println("1. Nhan vien Part-time");
+        System.out.println("2. Nhan vien Full-time");
+        System.out.print("Chon loai [1-2]: ");
         String loai = docDong();
 
         System.out.print("Ma nhan vien: ");
         String ma = docDong();
-        if (storage.timNhanVien(ma) != null) {
-            System.out.println("Ma nhan vien da ton tai!");
+        if (ma.isEmpty() || storage.timNhanVien(ma) != null) {
+            System.out.println("Ma nhan vien khong hop le hoac da ton tai!");
             return;
         }
 
@@ -747,19 +882,47 @@ public class Main {
         NhanVien nv = null;
         switch (loai) {
             case "1" -> {
-                System.out.print("Ma quay thu ngan: ");
-                String quay = docDong();
-                nv = new ThuNgan(ma, ten, dc, sdt, 26, 1.2, quay);
-            }
-            case "2" -> {
                 System.out.print("Luong theo gio (VND): ");
-                double luong = Double.parseDouble(docDong());
+                double luong = 30000;
+                try {
+                    String lStr = docDong();
+                    if (!lStr.isEmpty()) luong = Double.parseDouble(lStr);
+                } catch (NumberFormatException ignored) {}
                 nv = new NhanVienPartTime(ma, ten, dc, sdt, 0, luong);
             }
-            case "3" -> {
-                System.out.print("He so luong: ");
-                double heSo = Double.parseDouble(docDong());
-                nv = new NhanVienFullTime(ma, ten, dc, sdt, 26, heSo);
+            case "2" -> {
+                System.out.println("Chon vi tri cu the:");
+                System.out.println("  1. Quan ly");
+                System.out.println("  2. Thu ngan");
+                System.out.println("  3. Nhan vien Full-time khac (Kiem kho / Hau can)");
+                System.out.print("Chon vi tri [1-3]: ");
+                String vt = docDong();
+                switch (vt) {
+                    case "1" -> {
+                        System.out.print("He so luong (mac dinh 2.0): ");
+                        String hsStr = docDong();
+                        double heSo = hsStr.isEmpty() ? 2.0 : Double.parseDouble(hsStr);
+                        System.out.print("Phu cap trach nhiem (VND, mac dinh 3,000,000): ");
+                        String pcStr = docDong();
+                        double phuCap = pcStr.isEmpty() ? 3_000_000 : Double.parseDouble(pcStr);
+                        nv = new QuanLy(ma, ten, dc, sdt, 26, heSo, phuCap);
+                    }
+                    case "2" -> {
+                        System.out.print("Ma quay thu ngan (mac dinh Quay 01): ");
+                        String quay = docDong();
+                        if (quay.isEmpty()) quay = "Quay 01";
+                        System.out.print("He so luong (mac dinh 1.2): ");
+                        String hsStr = docDong();
+                        double heSo = hsStr.isEmpty() ? 1.2 : Double.parseDouble(hsStr);
+                        nv = new ThuNgan(ma, ten, dc, sdt, 26, heSo, quay);
+                    }
+                    default -> {
+                        System.out.print("He so luong (mac dinh 1.0): ");
+                        String hsStr = docDong();
+                        double heSo = hsStr.isEmpty() ? 1.0 : Double.parseDouble(hsStr);
+                        nv = new NhanVienFullTime(ma, ten, dc, sdt, 26, heSo);
+                    }
+                }
             }
             default -> {
                 System.out.println("Loai nhan vien khong hop le!");
@@ -785,19 +948,82 @@ public class Main {
 
         System.out.print("Ma ca lam: ");
         String maCa = docDong();
-        System.out.print("Ngay lam (yyyy-MM-dd): ");
-        LocalDate ngay = LocalDate.parse(docDong());
-        System.out.print("Gio bat dau (HH:mm): ");
-        LocalTime bd = LocalTime.parse(docDong());
-        System.out.print("Gio ket thuc (HH:mm): ");
-        LocalTime kt = LocalTime.parse(docDong());
+        if (maCa.isEmpty()) {
+            System.out.println("Ma ca khong duoc de trong!");
+            return;
+        }
+
+        CaLam caHienTai = storage.timCaLam(maCa);
+        if (caHienTai != null) {
+            System.out.println("Thong bao: Ma ca " + maCa + " da ton tai trong he thong ("
+                    + caHienTai.getNgayLam() + " " + caHienTai.getGioBatDau() + " - " + caHienTai.getGioKetThuc() + ").");
+            System.out.print("Ban co muon phan cong lai nhan vien nay cho ca do khong? (c/k): ");
+            String xn = docDong();
+            if (!xn.equalsIgnoreCase("c")) {
+                System.out.println("Huy thao tac phan cong.");
+                return;
+            }
+            // Go khoi cac nhan vien cu
+            for (NhanVien n : storage.getDsNhanVien()) {
+                n.xoaCaLam(caHienTai);
+            }
+            if (quanLy != null) {
+                quanLy.xoaCaLam(caHienTai);
+            }
+            if (quanLy.phanCongCa(nv, caHienTai)) {
+                storage.luuCaLam();
+                storage.luuNhanVien();
+                System.out.println("Phan cong lai ca lam cho " + nv.getHoTen() + " thanh cong.");
+            } else {
+                System.out.println("Khong the phan cong (trung gio lam cua nhan vien nay)!");
+            }
+            return;
+        }
+
+        LocalDate ngay = nhapNgayHopLe("Ngay lam (yyyy-MM-dd hoac dd-MM-yyyy): ", false, null);
+        if (ngay == null) {
+            System.out.println("Huy thao tac phan cong ca lam.");
+            return;
+        }
+
+        LocalTime bd = nhapGioHopLe("Gio bat dau (HH:mm hoac H:mm, vi du 07:30 hoac 7:30): ");
+        if (bd == null) {
+            System.out.println("Huy thao tac phan cong ca lam.");
+            return;
+        }
+
+        LocalTime kt = nhapGioHopLe("Gio ket thuc (HH:mm hoac H:mm, vi du 12:00): ");
+        if (kt == null) {
+            System.out.println("Huy thao tac phan cong ca lam.");
+            return;
+        }
+
+        if (!kt.isAfter(bd)) {
+            System.out.println("Loi: Gio ket thuc phai sau gio bat dau!");
+            return;
+        }
 
         CaLam caMoi = new CaLam(maCa, ngay, bd, kt);
         boolean phanCongOK = quanLy.phanCongCa(nv, caMoi);
         if (phanCongOK) {
             storage.themCaLam(caMoi);
             storage.luuCaLam();
+            storage.luuNhanVien();
             System.out.println("Phan cong ca lam thanh cong.");
+        } else {
+            System.out.println("Phan cong that bai (trung ca lam voi ca khac cua nhan vien)!");
+        }
+    }
+
+    private static void xoaCaLamConsole() {
+        System.out.print("Nhap ma ca lam can xoa: ");
+        String maCa = docDong();
+        if (storage.xoaCaLam(maCa)) {
+            storage.luuCaLam();
+            storage.luuNhanVien();
+            System.out.println("Xoa ca lam thanh cong: " + maCa);
+        } else {
+            System.out.println("Khong tim thay ca lam: " + maCa);
         }
     }
 
@@ -846,8 +1072,14 @@ public class Main {
                 }
                 case "4" -> {
                     System.out.println("\n-- TINH HINH TON KHO --");
+                    System.out.print("Nhap nguong ton kho toi thieu de canh bao (mac dinh 50): ");
+                    String ngStr = docDong();
+                    int nguong = 50;
+                    try {
+                        if (!ngStr.isEmpty()) nguong = Integer.parseInt(ngStr);
+                    } catch (NumberFormatException ignored) {}
                     quanLy.quanLySanPham().hienThiDanhSach();
-                    quanLy.quanLySanPham().hienThiCanhBaoHetHang(50);
+                    quanLy.quanLySanPham().hienThiCanhBaoHetHang(nguong);
                 }
                 case "0" -> { return; }
                 default -> System.out.println("Lua chon khong hop le!");
@@ -856,20 +1088,12 @@ public class Main {
     }
 
     private static LocalDate[] nhapKhoangNgay() {
-        try {
-            System.out.print("Tu ngay (yyyy-MM-dd): ");
-            String tuStr = docDong();
-            LocalDate tu = tuStr.isEmpty() ? LocalDate.now().minusMonths(1) : LocalDate.parse(tuStr);
-
-            System.out.print("Den ngay (yyyy-MM-dd): ");
-            String denStr = docDong();
-            LocalDate den = denStr.isEmpty() ? LocalDate.now() : LocalDate.parse(denStr);
-
-            return new LocalDate[]{tu, den};
-        } catch (DateTimeParseException e) {
-            System.out.println("Dinh dang ngay khong dung (phai la yyyy-MM-dd)!");
-            return null;
-        }
+        System.out.println("Nhap khoang ngay thong ke (go Enter de lay mac dinh):");
+        LocalDate tu = nhapNgayHopLe("Tu ngay (yyyy-MM-dd hoac dd-MM-yyyy, mac dinh 1 thang truoc): ", true, LocalDate.now().minusMonths(1));
+        if (tu == null) return null;
+        LocalDate den = nhapNgayHopLe("Den ngay (yyyy-MM-dd hoac dd-MM-yyyy, mac dinh hom nay): ", true, LocalDate.now());
+        if (den == null) return null;
+        return new LocalDate[]{tu, den};
     }
 
     // =========================================================================

@@ -48,6 +48,11 @@ public abstract class NhanVien extends Person {
         return true;
     }
 
+    public boolean xoaCaLam(CaLam ca) {
+        if (ca == null) return false;
+        return dsCaLam.remove(ca);
+    }
+
     public abstract double tinhLuong();
 
     @Override

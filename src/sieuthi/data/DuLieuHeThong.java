@@ -86,6 +86,19 @@ public class DuLieuHeThong {
         return dsCaLam.add(ca);
     }
 
+    public boolean xoaCaLam(String ma) {
+        if (ma == null) return false;
+        CaLam ca = timCaLam(ma);
+        if (ca == null) return false;
+        for (NhanVien nv : dsNhanVien) {
+            nv.xoaCaLam(ca);
+        }
+        if (quanLy != null) {
+            quanLy.xoaCaLam(ca);
+        }
+        return dsCaLam.remove(ca);
+    }
+
     public boolean themNhaCungCap(NhaCungCap ncc) {
         if (ncc == null || timNhaCungCap(ncc.getMaNhaCungCap()) != null) return false;
         return dsNhaCungCap.add(ncc);
