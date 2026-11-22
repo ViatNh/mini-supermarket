@@ -1,35 +1,49 @@
 package sieuthi.manage;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import sieuthi.model.HoaDon;
 import sieuthi.model.NhapHang;
 
 /**
- * Lớp quản lý danh sách Phiếu Nhập Hàng trong siêu thị mini.
- * Thực thi interface IQuanLy<NhapHang> theo sơ đồ Class_Structure.drawio.
- * Đóng vai trò hạt nhân trong quy trình kiểm soát nguồn gốc và số lượng tồn kho của siêu thị.
+ * Lop quan ly danh sach Phieu Nhap Hang trong sieu thi mini.
+ * Cai dat bang mang doi tuong dong (NhapHang[]) khong dung Collection.
  */
 public class QuanLyNhapHang implements IQuanLy<NhapHang> {
-    private final List<NhapHang> dsNhapHang;
+    private static final int SUC_CHUA_MAC_DINH = 10;
+    private NhapHang[] dsNhapHang;
+    private int soLuong;
 
     public QuanLyNhapHang() {
-        this.dsNhapHang = new ArrayList<>();
+        this.dsNhapHang = new NhapHang[SUC_CHUA_MAC_DINH];
+        this.soLuong = 0;
     }
 
-    public QuanLyNhapHang(List<NhapHang> dsNhapHang) {
-        this.dsNhapHang = (dsNhapHang != null) ? new ArrayList<>(dsNhapHang) : new ArrayList<>();
+    public QuanLyNhapHang(NhapHang[] dsNhapHang) {
+        if (dsNhapHang != null) {
+            this.dsNhapHang = new NhapHang[Math.max(dsNhapHang.length, SUC_CHUA_MAC_DINH)];
+            this.soLuong = dsNhapHang.length;
+            System.arraycopy(dsNhapHang, 0, this.dsNhapHang, 0, dsNhapHang.length);
+        } else {
+            this.dsNhapHang = new NhapHang[SUC_CHUA_MAC_DINH];
+            this.soLuong = 0;
+        }
     }
 
-    public List<NhapHang> getDsNhapHang() {
-        return Collections.unmodifiableList(dsNhapHang);
+    public NhapHang[] getDsNhapHang() {
+        NhapHang[] res = new NhapHang[soLuong];
+        System.arraycopy(dsNhapHang, 0, res, 0, soLuong);
+        return res;
     }
 
+    @Override
     public int getSoLuong() {
-        return dsNhapHang.size();
+        return soLuong;
+    }
+
+    private void tangKichThuocMang() {
+        NhapHang[] moi = new NhapHang[dsNhapHang.length * 2];
+        System.arraycopy(dsNhapHang, 0, moi, 0, soLuong);
+        dsNhapHang = moi;
     }
 
     @Override
@@ -40,7 +54,11 @@ public class QuanLyNhapHang implements IQuanLy<NhapHang> {
         if (timKiemTheoMa(nh.getMaNhapHang()) != null) {
             return false;
         }
-        return dsNhapHang.add(nh);
+        if (soLuong >= dsNhapHang.length) {
+            tangKichThuocMang();
+        }
+        dsNhapHang[soLuong++] = nh;
+        return true;
     }
 
     @Override
@@ -48,10 +66,9 @@ public class QuanLyNhapHang implements IQuanLy<NhapHang> {
         if (maNH == null || nh == null) {
             return false;
         }
-        for (int i = 0; i < dsNhapHang.size(); i++) {
-            NhapHang current = dsNhapHang.get(i);
-            if (current.getMaNhapHang().equalsIgnoreCase(maNH.trim())) {
-                dsNhapHang.set(i, nh);
+        for (int i = 0; i < soLuong; i++) {
+            if (dsNhapHang[i].getMaNhapHang().equalsIgnoreCase(maNH.trim())) {
+                dsNhapHang[i] = nh;
                 return true;
             }
         }
@@ -63,9 +80,14 @@ public class QuanLyNhapHang implements IQuanLy<NhapHang> {
         if (maNH == null) {
             return false;
         }
-        NhapHang nh = timKiemTheoMa(maNH);
-        if (nh != null) {
-            return dsNhapHang.remove(nh);
+        for (int i = 0; i < soLuong; i++) {
+            if (dsNhapHang[i].getMaNhapHang().equalsIgnoreCase(maNH.trim())) {
+                for (int j = i; j < soLuong - 1; j++) {
+                    dsNhapHang[j] = dsNhapHang[j + 1];
+                }
+                dsNhapHang[--soLuong] = null;
+                return true;
+            }
         }
         return false;
     }
@@ -75,20 +97,16 @@ public class QuanLyNhapHang implements IQuanLy<NhapHang> {
         if (maNH == null) {
             return null;
         }
-        for (NhapHang nh : dsNhapHang) {
-            if (nh.getMaNhapHang() != null && nh.getMaNhapHang().equalsIgnoreCase(maNH.trim())) {
-                return nh;
+        for (int i = 0; i < soLuong; i++) {
+            if (dsNhapHang[i].getMaNhapHang() != null && dsNhapHang[i].getMaNhapHang().equalsIgnoreCase(maNH.trim())) {
+                return dsNhapHang[i];
             }
         }
         return null;
     }
 
     /**
-     * Thống kê tổng chi phí nhập hàng từ ngày đến ngày (bao gồm cả 2 ngày).
-     *
-     * @param tu  Ngày bắt đầu
-     * @param den Ngày kết thúc
-     * @return Tổng chi phí nhập hàng (VNĐ)
+     * Thong ke tong chi phi nhap hang tu ngay den ngay.
      */
     public double thongKeChiPhiNhap(LocalDate tu, LocalDate den) {
         if (tu == null || den == null) {
@@ -102,7 +120,8 @@ public class QuanLyNhapHang implements IQuanLy<NhapHang> {
         }
 
         double tongChiPhi = 0;
-        for (NhapHang nh : dsNhapHang) {
+        for (int i = 0; i < soLuong; i++) {
+            NhapHang nh = dsNhapHang[i];
             LocalDate ngay = nh.getNgayNhap();
             if (ngay != null && !ngay.isBefore(start) && !ngay.isAfter(end)) {
                 tongChiPhi += nh.tinhTongTien();
@@ -111,49 +130,49 @@ public class QuanLyNhapHang implements IQuanLy<NhapHang> {
         return tongChiPhi;
     }
 
-    /**
-     * Lọc danh sách đơn nhập hàng theo nhà cung cấp.
-     *
-     * @param maNCC Mã nhà cung cấp
-     * @return Danh sách phiếu nhập từ nhà cung cấp đó
-     */
-    public List<NhapHang> locTheoNhaCungCap(String maNCC) {
-        List<NhapHang> ketQua = new ArrayList<>();
-        if (maNCC == null || maNCC.trim().isEmpty()) {
-            return ketQua;
-        }
-        String target = maNCC.trim();
-        for (NhapHang nh : dsNhapHang) {
-            if (nh.getNhaCungCap() != null && target.equalsIgnoreCase(nh.getNhaCungCap().getMaNhaCungCap())) {
-                ketQua.add(nh);
+    public NhapHang[] locTheoNhaCungCap(String maNCC) {
+        if (maNCC == null || maNCC.trim().isEmpty()) return new NhapHang[0];
+        int dem = 0;
+        for (int i = 0; i < soLuong; i++) {
+            NhapHang nh = dsNhapHang[i];
+            if (nh.getNhaCungCap() != null && nh.getNhaCungCap().getMaNhaCungCap().equalsIgnoreCase(maNCC.trim())) {
+                dem++;
             }
         }
-        return ketQua;
+        NhapHang[] res = new NhapHang[dem];
+        int idx = 0;
+        for (int i = 0; i < soLuong; i++) {
+            NhapHang nh = dsNhapHang[i];
+            if (nh.getNhaCungCap() != null && nh.getNhaCungCap().getMaNhaCungCap().equalsIgnoreCase(maNCC.trim())) {
+                res[idx++] = nh;
+            }
+        }
+        return res;
     }
 
     @Override
     public void hienThiDanhSach() {
-        System.out.println("============================================= DANH SACH PHIEU NHAP HANG =============================================");
-        if (dsNhapHang.isEmpty()) {
+        System.out.println("============================================== DANH SACH PHIEU NHAP HANG ==============================================");
+        if (soLuong == 0) {
             System.out.println("  (Danh sach phieu nhap hang dang trong)");
-            System.out.println("=====================================================================================================================");
+            System.out.println("=======================================================================================================================");
             return;
         }
-        System.out.printf("%-5s | %-10s | %-12s | %-20s | %-30s | %-16s%n",
-                "STT", "Ma PN", "Ngay nhap", "Nguoi tiep nhan", "Nha cung cap", "Tong tien nhap");
-        System.out.println("---------------------------------------------------------------------------------------------------------------------");
-        int stt = 1;
-        for (NhapHang nh : dsNhapHang) {
+        System.out.printf("%-5s | %-10s | %-12s | %-30s | %-20s | %s%n",
+                "STT", "Ma PN", "Ngay nhap", "Nha cung cap", "Nguoi lap", "Tong chi phi");
+        System.out.println("-----------------------------------------------------------------------------------------------------------------------");
+        for (int i = 0; i < soLuong; i++) {
+            NhapHang nh = dsNhapHang[i];
             String tenNCC = (nh.getNhaCungCap() != null) ? nh.getNhaCungCap().getTenNhaCungCap() : "N/A";
-            String nguoiLap = (nh.getNguoiLap() != null) ? nh.getNguoiLap().getHoTen() : "N/A";
-            System.out.printf("%-5d | %-10s | %-12s | %-20s | %-30s | %-16s%n",
-                    stt++,
+            String tenNguoiLap = (nh.getNguoiLap() != null) ? nh.getNguoiLap().getHoTen() : "N/A";
+            System.out.printf("%-5d | %-10s | %-12s | %-30s | %-20s | %s%n",
+                    (i + 1),
                     nh.getMaNhapHang(),
                     nh.getNgayNhap(),
-                    nguoiLap,
                     tenNCC,
+                    tenNguoiLap,
                     HoaDon.dinhDangTien(nh.tinhTongTien()));
         }
-        System.out.println("=====================================================================================================================");
+        System.out.println("=======================================================================================================================");
     }
 }

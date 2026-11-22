@@ -1,33 +1,48 @@
 package sieuthi.manage;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import sieuthi.model.HoaDon;
 
 /**
- * Lớp quản lý danh sách Đơn hàng (Hóa đơn) trong siêu thị mini.
- * Thực thi interface IQuanLy<HoaDon> theo sơ đồ Class_Structure.drawio của thành viên Vinh.
+ * Lop quan ly danh sach Hoa Don (Don Hang) trong sieu thi mini.
+ * Cai dat bang mang doi tuong dong (HoaDon[]) khong dung Collection.
  */
 public class QuanLyDonHang implements IQuanLy<HoaDon> {
-    private final List<HoaDon> dsDonHang;
+    private static final int SUC_CHUA_MAC_DINH = 10;
+    private HoaDon[] dsDonHang;
+    private int soLuong;
 
     public QuanLyDonHang() {
-        this.dsDonHang = new ArrayList<>();
+        this.dsDonHang = new HoaDon[SUC_CHUA_MAC_DINH];
+        this.soLuong = 0;
     }
 
-    public QuanLyDonHang(List<HoaDon> dsDonHang) {
-        this.dsDonHang = (dsDonHang != null) ? new ArrayList<>(dsDonHang) : new ArrayList<>();
+    public QuanLyDonHang(HoaDon[] dsDonHang) {
+        if (dsDonHang != null) {
+            this.dsDonHang = new HoaDon[Math.max(dsDonHang.length, SUC_CHUA_MAC_DINH)];
+            this.soLuong = dsDonHang.length;
+            System.arraycopy(dsDonHang, 0, this.dsDonHang, 0, dsDonHang.length);
+        } else {
+            this.dsDonHang = new HoaDon[SUC_CHUA_MAC_DINH];
+            this.soLuong = 0;
+        }
     }
 
-    public List<HoaDon> getDsDonHang() {
-        return Collections.unmodifiableList(dsDonHang);
+    public HoaDon[] getDsDonHang() {
+        HoaDon[] res = new HoaDon[soLuong];
+        System.arraycopy(dsDonHang, 0, res, 0, soLuong);
+        return res;
     }
 
+    @Override
     public int getSoLuong() {
-        return dsDonHang.size();
+        return soLuong;
+    }
+
+    private void tangKichThuocMang() {
+        HoaDon[] moi = new HoaDon[dsDonHang.length * 2];
+        System.arraycopy(dsDonHang, 0, moi, 0, soLuong);
+        dsDonHang = moi;
     }
 
     @Override
@@ -35,11 +50,14 @@ public class QuanLyDonHang implements IQuanLy<HoaDon> {
         if (hd == null || hd.getMaHoaDon() == null || hd.getMaHoaDon().trim().isEmpty()) {
             return false;
         }
-        // Kiểm tra trùng mã hóa đơn
         if (timKiemTheoMa(hd.getMaHoaDon()) != null) {
             return false;
         }
-        return dsDonHang.add(hd);
+        if (soLuong >= dsDonHang.length) {
+            tangKichThuocMang();
+        }
+        dsDonHang[soLuong++] = hd;
+        return true;
     }
 
     @Override
@@ -47,10 +65,9 @@ public class QuanLyDonHang implements IQuanLy<HoaDon> {
         if (maHD == null || hd == null) {
             return false;
         }
-        for (int i = 0; i < dsDonHang.size(); i++) {
-            HoaDon current = dsDonHang.get(i);
-            if (current.getMaHoaDon().equalsIgnoreCase(maHD.trim())) {
-                dsDonHang.set(i, hd);
+        for (int i = 0; i < soLuong; i++) {
+            if (dsDonHang[i].getMaHoaDon().equalsIgnoreCase(maHD.trim())) {
+                dsDonHang[i] = hd;
                 return true;
             }
         }
@@ -62,9 +79,14 @@ public class QuanLyDonHang implements IQuanLy<HoaDon> {
         if (maHD == null) {
             return false;
         }
-        HoaDon hd = timKiemTheoMa(maHD);
-        if (hd != null) {
-            return dsDonHang.remove(hd);
+        for (int i = 0; i < soLuong; i++) {
+            if (dsDonHang[i].getMaHoaDon().equalsIgnoreCase(maHD.trim())) {
+                for (int j = i; j < soLuong - 1; j++) {
+                    dsDonHang[j] = dsDonHang[j + 1];
+                }
+                dsDonHang[--soLuong] = null;
+                return true;
+            }
         }
         return false;
     }
@@ -74,21 +96,17 @@ public class QuanLyDonHang implements IQuanLy<HoaDon> {
         if (maHD == null) {
             return null;
         }
-        for (HoaDon hd : dsDonHang) {
-            if (hd.getMaHoaDon() != null && hd.getMaHoaDon().equalsIgnoreCase(maHD.trim())) {
-                return hd;
+        for (int i = 0; i < soLuong; i++) {
+            if (dsDonHang[i].getMaHoaDon() != null && dsDonHang[i].getMaHoaDon().equalsIgnoreCase(maHD.trim())) {
+                return dsDonHang[i];
             }
         }
         return null;
     }
 
     /**
-     * Thống kê tổng doanh thu thực tế từ ngày đến ngày (bao gồm cả 2 ngày).
-     * Chỉ tính những hóa đơn ĐÃ THANH TOÁN thành công (theo số tiền thực tế khách đã trả: tinhTienPhaiTra()).
-     *
-     * @param tu  Ngày bắt đầu
-     * @param den Ngày kết thúc
-     * @return Tổng doanh thu (VNĐ)
+     * Thong ke tong doanh thu thuc te tu ngay den ngay.
+     * Chi tinh cac hoa don da thanh toan (tinhTienPhaiTra()).
      */
     public double thongKeDoanhThu(LocalDate tu, LocalDate den) {
         if (tu == null || den == null) {
@@ -102,7 +120,8 @@ public class QuanLyDonHang implements IQuanLy<HoaDon> {
         }
 
         double tongDoanhThu = 0;
-        for (HoaDon hd : dsDonHang) {
+        for (int i = 0; i < soLuong; i++) {
+            HoaDon hd = dsDonHang[i];
             LocalDate ngay = hd.getNgayLap();
             if (ngay != null && !ngay.isBefore(start) && !ngay.isAfter(end)) {
                 if (hd.isDaThanhToan()) {
@@ -113,40 +132,37 @@ public class QuanLyDonHang implements IQuanLy<HoaDon> {
         return tongDoanhThu;
     }
 
-    /**
-     * Lọc danh sách hóa đơn theo ngày lập.
-     *
-     * @param ngay Ngày cần lọc
-     * @return Danh sách các hóa đơn lập trong ngày đó
-     */
-    public List<HoaDon> locDonHangTheoNgay(LocalDate ngay) {
-        List<HoaDon> ketQua = new ArrayList<>();
-        if (ngay == null) {
-            return ketQua;
+    public HoaDon[] locDonHangTheoNgay(LocalDate ngay) {
+        if (ngay == null) return new HoaDon[0];
+        int dem = 0;
+        for (int i = 0; i < soLuong; i++) {
+            if (ngay.equals(dsDonHang[i].getNgayLap())) dem++;
         }
-        for (HoaDon hd : dsDonHang) {
-            if (ngay.equals(hd.getNgayLap())) {
-                ketQua.add(hd);
+        HoaDon[] ketQua = new HoaDon[dem];
+        int idx = 0;
+        for (int i = 0; i < soLuong; i++) {
+            if (ngay.equals(dsDonHang[i].getNgayLap())) {
+                ketQua[idx++] = dsDonHang[i];
             }
         }
         return ketQua;
     }
 
-    /**
-     * Lọc danh sách hóa đơn theo mã khách hàng.
-     *
-     * @param maKH Mã khách hàng
-     * @return Danh sách hóa đơn của khách hàng đó
-     */
-    public List<HoaDon> locDonHangTheoKhachHang(String maKH) {
-        List<HoaDon> ketQua = new ArrayList<>();
-        if (maKH == null || maKH.trim().isEmpty()) {
-            return ketQua;
+    public HoaDon[] locDonHangTheoKhachHang(String maKH) {
+        if (maKH == null || maKH.trim().isEmpty()) return new HoaDon[0];
+        int dem = 0;
+        for (int i = 0; i < soLuong; i++) {
+            HoaDon hd = dsDonHang[i];
+            if (hd.getKhachHang() != null && hd.getKhachHang().getMaKhachHang().equalsIgnoreCase(maKH.trim())) {
+                dem++;
+            }
         }
-        String target = maKH.trim();
-        for (HoaDon hd : dsDonHang) {
-            if (hd.getKhachHang() != null && target.equalsIgnoreCase(hd.getKhachHang().getMaKhachHang())) {
-                ketQua.add(hd);
+        HoaDon[] ketQua = new HoaDon[dem];
+        int idx = 0;
+        for (int i = 0; i < soLuong; i++) {
+            HoaDon hd = dsDonHang[i];
+            if (hd.getKhachHang() != null && hd.getKhachHang().getMaKhachHang().equalsIgnoreCase(maKH.trim())) {
+                ketQua[idx++] = hd;
             }
         }
         return ketQua;
@@ -154,28 +170,28 @@ public class QuanLyDonHang implements IQuanLy<HoaDon> {
 
     @Override
     public void hienThiDanhSach() {
-        System.out.println("================================================ DANH SACH DON HANG ================================================");
-        if (dsDonHang.isEmpty()) {
-            System.out.println("  (Danh sach don hang dang trong)");
-            System.out.println("====================================================================================================================");
+        System.out.println("================================================== DANH SACH HOA DON ==================================================");
+        if (soLuong == 0) {
+            System.out.println("  (Danh sach hoa don dang trong)");
+            System.out.println("=======================================================================================================================");
             return;
         }
-        System.out.printf("%-5s | %-10s | %-12s | %-20s | %-20s | %-14s | %-14s%n",
-                "STT", "Ma HD", "Ngay lap", "Nguoi lap", "Khach hang", "Thanh tien", "Trang thai");
-        System.out.println("--------------------------------------------------------------------------------------------------------------------");
-        int stt = 1;
-        for (HoaDon hd : dsDonHang) {
-            String tenKH = (hd.getKhachHang() != null) ? hd.getKhachHang().getHoTen() : "Khach vang lai";
+        System.out.printf("%-5s | %-8s | %-12s | %-10s | %-20s | %-15s | %s%n",
+                "STT", "Ma HD", "Ngay lap", "Ma KH", "Nguoi lap", "Thanh tien", "Trang thai");
+        System.out.println("-----------------------------------------------------------------------------------------------------------------------");
+        for (int i = 0; i < soLuong; i++) {
+            HoaDon hd = dsDonHang[i];
+            String tenKH = (hd.getKhachHang() != null) ? hd.getKhachHang().getMaKhachHang() : "Vang lai";
             String trangThai = hd.isDaThanhToan() ? "Da thanh toan" : "Chua thanh toan";
-            System.out.printf("%-5d | %-10s | %-12s | %-20s | %-20s | %-14s | %-14s%n",
-                    stt++,
+            System.out.printf("%-5d | %-8s | %-12s | %-10s | %-20s | %-15s | %s%n",
+                    (i + 1),
                     hd.getMaHoaDon(),
                     hd.getNgayLap(),
-                    hd.getNguoiLap().getHoTen(),
                     tenKH,
+                    hd.getNguoiLap().getHoTen(),
                     HoaDon.dinhDangTien(hd.tinhTienPhaiTra()),
                     trangThai);
         }
-        System.out.println("====================================================================================================================");
+        System.out.println("=======================================================================================================================");
     }
 }

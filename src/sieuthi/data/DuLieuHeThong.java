@@ -10,19 +10,14 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import sieuthi.manage.QuanLy;
 import sieuthi.model.*;
 
 /**
- * Lớp chịu trách nhiệm lưu trữ và truy xuất toàn bộ dữ liệu của siêu thị từ các file text (.txt).
- * Đảm bảo:
- * 1. Dữ liệu được lưu trữ vĩnh viễn trên ổ đĩa trong thư mục "data/".
- * 2. Mỗi file có ít nhất 5 dữ liệu mẫu đầy đủ, chân thực.
- * 3. Hỗ trợ đọc ghi tự động và an toàn (chuẩn UTF-8, phân cách bằng '|').
+ * Lop chiu trach nhiem luu tru va truy xuat toan bo du lieu cua sieu thi tu cac file text (.txt).
+ * Su dung hoan toan mang doi tuong dong (array []) theo dung quy dinh do an OOP,
+ * KHONG su dung ArrayList, Vector, LinkedList hay bat ky Collection Framework nao.
  */
 public class DuLieuHeThong {
     private static final String THU_MUC_DATA = "data";
@@ -37,11 +32,21 @@ public class DuLieuHeThong {
     private static final String FILE_PHIEU_BAO_HANH = "data/phieubaohanh.txt";
 
     private final QuanLy quanLy;
-    private final List<NhanVien> dsNhanVien = new ArrayList<>();
-    private final List<CaLam> dsCaLam = new ArrayList<>();
-    private final List<NhaCungCap> dsNhaCungCap = new ArrayList<>();
-    private final List<KhuyenMai> dsKhuyenMai = new ArrayList<>();
-    private final List<PhieuBaoHanh> dsPhieuBaoHanh = new ArrayList<>();
+    private NhanVien[] dsNhanVien = new NhanVien[10];
+    private int soNhanVien = 0;
+
+    private CaLam[] dsCaLam = new CaLam[10];
+    private int soCaLam = 0;
+
+    private NhaCungCap[] dsNhaCungCap = new NhaCungCap[10];
+    private int soNhaCungCap = 0;
+
+    private KhuyenMai[] dsKhuyenMai = new KhuyenMai[10];
+    private int soKhuyenMai = 0;
+
+    private PhieuBaoHanh[] dsPhieuBaoHanh = new PhieuBaoHanh[10];
+    private int soPhieuBaoHanh = 0;
+
     private final KhoHang khoHang = new KhoHang("KHO01", "Kho Tong Sieu Thi Mini");
 
     public DuLieuHeThong(QuanLy quanLy) {
@@ -52,24 +57,34 @@ public class DuLieuHeThong {
         return quanLy;
     }
 
-    public List<NhanVien> getDsNhanVien() {
-        return Collections.unmodifiableList(dsNhanVien);
+    public NhanVien[] getDsNhanVien() {
+        NhanVien[] res = new NhanVien[soNhanVien];
+        System.arraycopy(dsNhanVien, 0, res, 0, soNhanVien);
+        return res;
     }
 
-    public List<CaLam> getDsCaLam() {
-        return Collections.unmodifiableList(dsCaLam);
+    public CaLam[] getDsCaLam() {
+        CaLam[] res = new CaLam[soCaLam];
+        System.arraycopy(dsCaLam, 0, res, 0, soCaLam);
+        return res;
     }
 
-    public List<NhaCungCap> getDsNhaCungCap() {
-        return Collections.unmodifiableList(dsNhaCungCap);
+    public NhaCungCap[] getDsNhaCungCap() {
+        NhaCungCap[] res = new NhaCungCap[soNhaCungCap];
+        System.arraycopy(dsNhaCungCap, 0, res, 0, soNhaCungCap);
+        return res;
     }
 
-    public List<KhuyenMai> getDsKhuyenMai() {
-        return Collections.unmodifiableList(dsKhuyenMai);
+    public KhuyenMai[] getDsKhuyenMai() {
+        KhuyenMai[] res = new KhuyenMai[soKhuyenMai];
+        System.arraycopy(dsKhuyenMai, 0, res, 0, soKhuyenMai);
+        return res;
     }
 
-    public List<PhieuBaoHanh> getDsPhieuBaoHanh() {
-        return Collections.unmodifiableList(dsPhieuBaoHanh);
+    public PhieuBaoHanh[] getDsPhieuBaoHanh() {
+        PhieuBaoHanh[] res = new PhieuBaoHanh[soPhieuBaoHanh];
+        System.arraycopy(dsPhieuBaoHanh, 0, res, 0, soPhieuBaoHanh);
+        return res;
     }
 
     public KhoHang getKhoHang() {
@@ -78,85 +93,124 @@ public class DuLieuHeThong {
 
     public boolean themNhanVien(NhanVien nv) {
         if (nv == null || timNhanVien(nv.getMaNhanVien()) != null) return false;
-        return dsNhanVien.add(nv);
+        if (soNhanVien >= dsNhanVien.length) {
+            NhanVien[] moi = new NhanVien[dsNhanVien.length * 2];
+            System.arraycopy(dsNhanVien, 0, moi, 0, soNhanVien);
+            dsNhanVien = moi;
+        }
+        dsNhanVien[soNhanVien++] = nv;
+        return true;
     }
 
     public boolean themCaLam(CaLam ca) {
         if (ca == null || timCaLam(ca.getMaCa()) != null) return false;
-        return dsCaLam.add(ca);
+        if (soCaLam >= dsCaLam.length) {
+            CaLam[] moi = new CaLam[dsCaLam.length * 2];
+            System.arraycopy(dsCaLam, 0, moi, 0, soCaLam);
+            dsCaLam = moi;
+        }
+        dsCaLam[soCaLam++] = ca;
+        return true;
     }
 
     public boolean xoaCaLam(String ma) {
         if (ma == null) return false;
         CaLam ca = timCaLam(ma);
         if (ca == null) return false;
-        for (NhanVien nv : dsNhanVien) {
-            nv.xoaCaLam(ca);
+        for (int i = 0; i < soNhanVien; i++) {
+            dsNhanVien[i].xoaCaLam(ca);
         }
         if (quanLy != null) {
             quanLy.xoaCaLam(ca);
         }
-        return dsCaLam.remove(ca);
+        for (int i = 0; i < soCaLam; i++) {
+            if (dsCaLam[i].getMaCa().equalsIgnoreCase(ma.trim())) {
+                for (int j = i; j < soCaLam - 1; j++) {
+                    dsCaLam[j] = dsCaLam[j + 1];
+                }
+                dsCaLam[--soCaLam] = null;
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean themNhaCungCap(NhaCungCap ncc) {
         if (ncc == null || timNhaCungCap(ncc.getMaNhaCungCap()) != null) return false;
-        return dsNhaCungCap.add(ncc);
+        if (soNhaCungCap >= dsNhaCungCap.length) {
+            NhaCungCap[] moi = new NhaCungCap[dsNhaCungCap.length * 2];
+            System.arraycopy(dsNhaCungCap, 0, moi, 0, soNhaCungCap);
+            dsNhaCungCap = moi;
+        }
+        dsNhaCungCap[soNhaCungCap++] = ncc;
+        return true;
     }
 
     public boolean themKhuyenMai(KhuyenMai km) {
         if (km == null || timKhuyenMai(km.getMaKhuyenMai()) != null) return false;
-        return dsKhuyenMai.add(km);
+        if (soKhuyenMai >= dsKhuyenMai.length) {
+            KhuyenMai[] moi = new KhuyenMai[dsKhuyenMai.length * 2];
+            System.arraycopy(dsKhuyenMai, 0, moi, 0, soKhuyenMai);
+            dsKhuyenMai = moi;
+        }
+        dsKhuyenMai[soKhuyenMai++] = km;
+        return true;
     }
 
     public boolean themPhieuBaoHanh(PhieuBaoHanh pbh) {
         if (pbh == null || timPhieuBaoHanh(pbh.getMaPhieuBH()) != null) return false;
-        return dsPhieuBaoHanh.add(pbh);
+        if (soPhieuBaoHanh >= dsPhieuBaoHanh.length) {
+            PhieuBaoHanh[] moi = new PhieuBaoHanh[dsPhieuBaoHanh.length * 2];
+            System.arraycopy(dsPhieuBaoHanh, 0, moi, 0, soPhieuBaoHanh);
+            dsPhieuBaoHanh = moi;
+        }
+        dsPhieuBaoHanh[soPhieuBaoHanh++] = pbh;
+        return true;
     }
 
     public NhanVien timNhanVien(String ma) {
         if (ma == null) return null;
         if (quanLy != null && ma.equalsIgnoreCase(quanLy.getMaNhanVien())) return quanLy;
-        for (NhanVien nv : dsNhanVien) {
-            if (nv.getMaNhanVien().equalsIgnoreCase(ma.trim())) return nv;
+        for (int i = 0; i < soNhanVien; i++) {
+            if (dsNhanVien[i].getMaNhanVien().equalsIgnoreCase(ma.trim())) return dsNhanVien[i];
         }
         return null;
     }
 
     public CaLam timCaLam(String ma) {
         if (ma == null) return null;
-        for (CaLam c : dsCaLam) {
-            if (c.getMaCa().equalsIgnoreCase(ma.trim())) return c;
+        for (int i = 0; i < soCaLam; i++) {
+            if (dsCaLam[i].getMaCa().equalsIgnoreCase(ma.trim())) return dsCaLam[i];
         }
         return null;
     }
 
     public NhaCungCap timNhaCungCap(String ma) {
         if (ma == null) return null;
-        for (NhaCungCap ncc : dsNhaCungCap) {
-            if (ncc.getMaNhaCungCap().equalsIgnoreCase(ma.trim())) return ncc;
+        for (int i = 0; i < soNhaCungCap; i++) {
+            if (dsNhaCungCap[i].getMaNhaCungCap().equalsIgnoreCase(ma.trim())) return dsNhaCungCap[i];
         }
         return null;
     }
 
     public KhuyenMai timKhuyenMai(String ma) {
         if (ma == null) return null;
-        for (KhuyenMai km : dsKhuyenMai) {
-            if (km.getMaKhuyenMai().equalsIgnoreCase(ma.trim())) return km;
+        for (int i = 0; i < soKhuyenMai; i++) {
+            if (dsKhuyenMai[i].getMaKhuyenMai().equalsIgnoreCase(ma.trim())) return dsKhuyenMai[i];
         }
         return null;
     }
 
     public PhieuBaoHanh timPhieuBaoHanh(String ma) {
         if (ma == null) return null;
-        for (PhieuBaoHanh pbh : dsPhieuBaoHanh) {
-            if (pbh.getMaPhieuBH().equalsIgnoreCase(ma.trim())) return pbh;
+        for (int i = 0; i < soPhieuBaoHanh; i++) {
+            if (dsPhieuBaoHanh[i].getMaPhieuBH().equalsIgnoreCase(ma.trim())) return dsPhieuBaoHanh[i];
         }
         return null;
     }
 
     /**
-     * Khởi tạo thư mục data và các file mẫu nếu chưa tồn tại.
+     * Khoi tao thu muc data va cac file mau neu chua ton tai.
      */
     public void khoiTaoDuLieuMacDinhNeuChuaCo() {
         File dir = new File(THU_MUC_DATA);
@@ -164,82 +218,81 @@ public class DuLieuHeThong {
             dir.mkdirs();
         }
 
-        khoiTaoFileNeuChuaCo(FILE_KHACH_HANG, List.of(
+        khoiTaoFileNeuChuaCo(FILE_KHACH_HANG, new String[]{
                 "KH01|Nguyen Van An|123 Le Loi, Q.1, TP.HCM|0901234567|150",
                 "KH02|Tran Thi Binh|456 Hai Ba Trung, Ha Noi|0912345678|320",
                 "KH03|Le Hoang Cuong|789 Nguyen Hue, Da Nang|0987654321|50",
                 "KH04|Pham Thi Dung|12 Tran Hung Dao, Can Tho|0934567890|0",
                 "KH05|Vo Minh Em|34 Pasteur, TP.HCM|0978123456|85"
-        ));
+        });
 
-        khoiTaoFileNeuChuaCo(FILE_NHAN_VIEN, List.of(
+        khoiTaoFileNeuChuaCo(FILE_NHAN_VIEN, new String[]{
                 "QUAN_LY|QL01|Pham Van Quan Ly|101 Cau Giay, Ha Noi|0988888888|26|2.0|3000000.0",
                 "THU_NGAN|TN01|Tran Thi Thu Ngan|202 Nam Ky Khoi Nghia, TP.HCM|0923456789|26|1.5|Quay 01",
                 "THU_NGAN|TN02|Nguyen Thu Ha|15 Ly Thuong Kiet, TP.HCM|0934111222|24|1.4|Quay 02",
                 "FULL_TIME|FT01|Le Van Kiem Kho|88 Cach Mang Thang 8, TP.HCM|0945666777|26|1.6|0.0",
                 "PART_TIME|PT01|Do Sinh Vien|50 Vo Van Ngan, TP.Thu Duc|0933333333|45|30000.0|0.0"
-        ));
+        });
 
-        khoiTaoFileNeuChuaCo(FILE_CA_LAM, List.of(
+        khoiTaoFileNeuChuaCo(FILE_CA_LAM, new String[]{
                 "CA01|2026-11-10|07:30|12:00|TN01",
                 "CA02|2026-11-10|12:30|17:30|TN02",
                 "CA03|2026-11-10|17:30|22:00|PT01",
                 "CA04|2026-11-11|07:30|16:30|FT01",
                 "CA05|2026-11-11|08:00|17:00|QL01"
-        ));
+        });
 
-        khoiTaoFileNeuChuaCo(FILE_NHA_CUNG_CAP, List.of(
+        khoiTaoFileNeuChuaCo(FILE_NHA_CUNG_CAP, new String[]{
                 "NCC01|Cong ty CP Acecook Viet Nam|02838154064|KCN Tan Binh, P. Tay Thanh, Q. Tan Phu, TP.HCM",
                 "NCC02|Cong ty TNHH Suntory PepsiCo Viet Nam|02838219468|88 Dong Khoi, Q.1, TP.HCM",
                 "NCC03|Tap doan Sunhouse Group|02437366676|139 Nguyen Thai Hoc, Ba Dinh, Ha Noi",
                 "NCC04|Cong ty CP Sua Viet Nam (Vinamilk)|02854155555|10 Tan Trao, P. Tan Phu, Q.7, TP.HCM",
                 "NCC05|Cong ty TNHH Unilever Viet Nam|02854135686|A2-3 KCN Tay Bac Cu Chi, TP.HCM"
-        ));
+        });
 
-        // Tồn kho mẫu = Tổng số lượng nhập trừ đi tổng số lượng đã bán qua hóa đơn
-        khoiTaoFileNeuChuaCo(FILE_SAN_PHAM, List.of(
+        khoiTaoFileNeuChuaCo(FILE_SAN_PHAM, new String[]{
                 "THUC_PHAM|SP01|Mi Hao Hao Tom Chua Cay|Viet Nam|2026|Acecook|150|5000.0|2027-05-15|",
                 "THUC_PHAM|SP02|Sua tuoi tiet trung Vinamilk 1L|Viet Nam|2026|Vinamilk|80|32000.0|2027-02-28|",
                 "DO_UONG|SP03|Nuoc tinh khiet Aquafina 500ml|Viet Nam|2026|PepsiCo|200|10000.0|500|2027-11-10",
                 "DO_UONG|SP04|Tra xanh Khong Do 455ml|Viet Nam|2026|Tan Hiep Phat|120|12000.0|455|2027-08-20",
                 "DO_DUNG|SP05|Am sieu toc Inox Sunhouse 1.8L|Viet Nam|2025|Sunhouse|45|220000.0|Inox 304|12",
                 "DO_DUNG|SP06|Chao chong dinh Sunhouse 26cm|Viet Nam|2026|Sunhouse|30|180000.0|Nhom phu chong dinh|6"
-        ));
+        });
 
-        khoiTaoFileNeuChuaCo(FILE_KHUYEN_MAI, List.of(
+        khoiTaoFileNeuChuaCo(FILE_KHUYEN_MAI, new String[]{
                 "KM01|0.10|2026-11-01|2026-11-30",
                 "KM02|0.15|2026-11-10|2026-11-15",
                 "KM03|0.05|2026-10-01|2026-12-31",
                 "KM04|0.20|2026-11-20|2026-11-25",
                 "KM_HETHAN|0.25|2026-01-01|2026-02-01"
-        ));
+        });
 
-        khoiTaoFileNeuChuaCo(FILE_NHAP_HANG, List.of(
+        khoiTaoFileNeuChuaCo(FILE_NHAP_HANG, new String[]{
                 "NH001|2026-11-01|NCC01|QL01|SP01:110:3500.0",
                 "NH002|2026-11-02|NCC02|QL01|SP03:207:6000.0;SP04:123:8000.0",
                 "NH003|2026-11-03|NCC03|FT01|SP05:46:150000.0;SP06:31:120000.0",
                 "NH004|2026-11-05|NCC04|QL01|SP02:82:24000.0",
                 "NH005|2026-11-08|NCC01|FT01|SP01:51:3600.0"
-        ));
+        });
 
-        khoiTaoFileNeuChuaCo(FILE_HOA_DON, List.of(
+        khoiTaoFileNeuChuaCo(FILE_HOA_DON, new String[]{
                 "HD001|2026-11-05|TN01|KH01|KM01|true|TienMat|TN01|SP01:5:5000.0;SP03:2:10000.0",
                 "HD002|2026-11-06|TN01|KH02|KM02|true|ChuyenKhoan:CK99812|TN01|SP05:1:220000.0;SP02:2:32000.0",
                 "HD003|2026-11-07|TN02|KH03|KM03|true|TheNganHang:9704123456789012|TN02|SP04:3:12000.0;SP01:4:5000.0",
                 "HD004|2026-11-08|TN01|KH04||true|TienMat|TN01|SP03:5:10000.0",
                 "HD005|2026-11-09|TN02|KH05|KM01|true|ChuyenKhoan:CK88421|TN02|SP06:1:180000.0;SP01:2:5000.0"
-        ));
+        });
 
-        khoiTaoFileNeuChuaCo(FILE_PHIEU_BAO_HANH, List.of(
+        khoiTaoFileNeuChuaCo(FILE_PHIEU_BAO_HANH, new String[]{
                 "PBH001|HD002|SP05|KH02|2026-11-06|2027-11-06|Am khong vao dien|Dang xu ly",
                 "PBH002|HD005|SP06|KH05|2026-11-09|2027-05-09|Troc lop chong dinh|Da tiep nhan",
                 "PBH003|HD002|SP05|KH02|2026-11-06|2027-11-06|Bao hanh nut bam|Da hoan thanh",
                 "PBH004|HD005|SP06|KH05|2026-11-09|2027-05-09|Kiem tra tay cam long|Da tiep nhan",
                 "PBH005|HD002|SP05|KH02|2026-11-06|2027-11-06|Bao duong dinh ky|Da hoan thanh"
-        ));
+        });
     }
 
-    private void khoiTaoFileNeuChuaCo(String duongDan, List<String> dongMacDinh) {
+    private void khoiTaoFileNeuChuaCo(String duongDan, String[] dongMacDinh) {
         File file = new File(duongDan);
         if (!file.exists() || file.length() == 0) {
             ghiTatCaDong(duongDan, dongMacDinh);
@@ -264,7 +317,7 @@ public class DuLieuHeThong {
     }
 
     private void docKhachHang() {
-        List<String> lines = docTatCaDong(FILE_KHACH_HANG);
+        String[] lines = docTatCaDong(FILE_KHACH_HANG);
         for (String line : lines) {
             String[] p = line.split("\\|", -1);
             if (p.length >= 4) {
@@ -284,7 +337,7 @@ public class DuLieuHeThong {
     }
 
     private void docNhanVien() {
-        List<String> lines = docTatCaDong(FILE_NHAN_VIEN);
+        String[] lines = docTatCaDong(FILE_NHAN_VIEN);
         for (String line : lines) {
             String[] p = line.split("\\|", -1);
             if (p.length >= 5) {
@@ -313,16 +366,10 @@ public class DuLieuHeThong {
                     }
                     case "THU_NGAN" -> {
                         int ngayCong = (p.length > 5) ? Integer.parseInt(p[5].trim()) : 26;
-                        double heSo = (p.length > 6) ? Double.parseDouble(p[6].trim()) : 1.0;
-                        String quay = (p.length > 7) ? p[7].trim() : "Quay 01";
-                        ThuNgan tn = new ThuNgan(ma, ten, diaChi, sdt, ngayCong, heSo, quay);
+                        double heSo = (p.length > 6) ? Double.parseDouble(p[6].trim()) : 1.2;
+                        String maQuay = (p.length > 7) ? p[7].trim() : "Quay 01";
+                        ThuNgan tn = new ThuNgan(ma, ten, diaChi, sdt, ngayCong, heSo, maQuay);
                         themNhanVien(tn);
-                    }
-                    case "PART_TIME" -> {
-                        int gioLam = (p.length > 5) ? Integer.parseInt(p[5].trim()) : 0;
-                        double luongGio = (p.length > 6) ? Double.parseDouble(p[6].trim()) : 30_000;
-                        NhanVienPartTime pt = new NhanVienPartTime(ma, ten, diaChi, sdt, gioLam, luongGio);
-                        themNhanVien(pt);
                     }
                     case "FULL_TIME" -> {
                         int ngayCong = (p.length > 5) ? Integer.parseInt(p[5].trim()) : 26;
@@ -330,13 +377,19 @@ public class DuLieuHeThong {
                         NhanVienFullTime ft = new NhanVienFullTime(ma, ten, diaChi, sdt, ngayCong, heSo);
                         themNhanVien(ft);
                     }
+                    case "PART_TIME" -> {
+                        int soGio = (p.length > 5) ? Integer.parseInt(p[5].trim()) : 0;
+                        double luongGio = (p.length > 6) ? Double.parseDouble(p[6].trim()) : 30000;
+                        NhanVienPartTime pt = new NhanVienPartTime(ma, ten, diaChi, sdt, soGio, luongGio);
+                        themNhanVien(pt);
+                    }
                 }
             }
         }
     }
 
     private void docCaLam() {
-        List<String> lines = docTatCaDong(FILE_CA_LAM);
+        String[] lines = docTatCaDong(FILE_CA_LAM);
         for (String line : lines) {
             String[] p = line.split("\\|", -1);
             if (p.length >= 4) {
@@ -359,58 +412,55 @@ public class DuLieuHeThong {
     }
 
     private void docNhaCungCap() {
-        List<String> lines = docTatCaDong(FILE_NHA_CUNG_CAP);
+        String[] lines = docTatCaDong(FILE_NHA_CUNG_CAP);
         for (String line : lines) {
             String[] p = line.split("\\|", -1);
             if (p.length >= 4) {
-                NhaCungCap ncc = new NhaCungCap(p[0].trim(), p[1].trim(), p[2].trim(), p[3].trim());
-                themNhaCungCap(ncc);
+                String ma = p[0].trim();
+                String ten = p[1].trim();
+                String sdt = p[2].trim();
+                String diaChi = p[3].trim();
+                themNhaCungCap(new NhaCungCap(ma, ten, sdt, diaChi));
             }
         }
     }
 
     private void docSanPham() {
-        List<String> lines = docTatCaDong(FILE_SAN_PHAM);
+        String[] lines = docTatCaDong(FILE_SAN_PHAM);
         for (String line : lines) {
             String[] p = line.split("\\|", -1);
             if (p.length >= 8) {
                 String loai = p[0].trim().toUpperCase();
                 String ma = p[1].trim();
                 String ten = p[2].trim();
-                String nuocSX = p[3].trim();
-                int namSX = Integer.parseInt(p[4].trim());
-                String hangSX = p[5].trim();
+                String nuoc = p[3].trim();
+                int nam = Integer.parseInt(p[4].trim());
+                String hang = p[5].trim();
                 int tonKho = Integer.parseInt(p[6].trim());
-                double giaGoc = Double.parseDouble(p[7].trim());
+                double gia = Double.parseDouble(p[7].trim());
 
-                SanPham sp = null;
                 switch (loai) {
                     case "THUC_PHAM" -> {
-                        LocalDate hsd = (p.length > 8 && !p[8].trim().isEmpty())
-                                ? LocalDate.parse(p[8].trim()) : LocalDate.now().plusMonths(6);
-                        sp = new ThucPham(ma, ten, nuocSX, namSX, hangSX, tonKho, giaGoc, hsd);
+                        LocalDate hsd = (p.length > 8 && !p[8].trim().isEmpty()) ? LocalDate.parse(p[8].trim()) : LocalDate.now().plusMonths(6);
+                        quanLy.quanLySanPham().them(new ThucPham(ma, ten, nuoc, nam, hang, tonKho, gia, hsd));
                     }
                     case "DO_UONG" -> {
-                        int dungTich = (p.length > 8 && !p[8].trim().isEmpty()) ? Integer.parseInt(p[8].trim()) : 500;
-                        LocalDate hsd = (p.length > 9 && !p[9].trim().isEmpty())
-                                ? LocalDate.parse(p[9].trim()) : LocalDate.now().plusMonths(12);
-                        sp = new DoUong(ma, ten, nuocSX, namSX, hangSX, tonKho, giaGoc, dungTich, hsd);
+                        int ml = (p.length > 8 && !p[8].trim().isEmpty()) ? Integer.parseInt(p[8].trim()) : 500;
+                        LocalDate hsd = (p.length > 9 && !p[9].trim().isEmpty()) ? LocalDate.parse(p[9].trim()) : LocalDate.now().plusMonths(12);
+                        quanLy.quanLySanPham().them(new DoUong(ma, ten, nuoc, nam, hang, tonKho, gia, ml, hsd));
                     }
                     case "DO_DUNG" -> {
                         String chatLieu = (p.length > 8 && !p[8].trim().isEmpty()) ? p[8].trim() : "Inox";
-                        int bhThang = (p.length > 9 && !p[9].trim().isEmpty()) ? Integer.parseInt(p[9].trim()) : 12;
-                        sp = new DoDung(ma, ten, nuocSX, namSX, hangSX, tonKho, giaGoc, chatLieu, bhThang);
+                        int bh = (p.length > 9 && !p[9].trim().isEmpty()) ? Integer.parseInt(p[9].trim()) : 12;
+                        quanLy.quanLySanPham().them(new DoDung(ma, ten, nuoc, nam, hang, tonKho, gia, chatLieu, bh));
                     }
-                }
-                if (sp != null) {
-                    quanLy.quanLySanPham().them(sp);
                 }
             }
         }
     }
 
     private void docKhuyenMai() {
-        List<String> lines = docTatCaDong(FILE_KHUYEN_MAI);
+        String[] lines = docTatCaDong(FILE_KHUYEN_MAI);
         for (String line : lines) {
             String[] p = line.split("\\|", -1);
             if (p.length >= 4) {
@@ -418,29 +468,28 @@ public class DuLieuHeThong {
                 double tiLe = Double.parseDouble(p[1].trim());
                 LocalDate bd = LocalDate.parse(p[2].trim());
                 LocalDate kt = LocalDate.parse(p[3].trim());
-                KhuyenMai km = new KhuyenMai(ma, tiLe, bd, kt);
-                themKhuyenMai(km);
+                themKhuyenMai(new KhuyenMai(ma, tiLe, bd, kt));
             }
         }
     }
 
     private void docNhapHang() {
-        List<String> lines = docTatCaDong(FILE_NHAP_HANG);
+        String[] lines = docTatCaDong(FILE_NHAP_HANG);
         for (String line : lines) {
             String[] p = line.split("\\|", -1);
             if (p.length >= 5) {
                 String maNH = p[0].trim();
-                LocalDate ngayNhap = LocalDate.parse(p[1].trim());
+                LocalDate ngay = LocalDate.parse(p[1].trim());
                 String maNCC = p[2].trim();
                 String maNguoiLap = p[3].trim();
                 String dsChiTietStr = p[4].trim();
 
                 NhaCungCap ncc = timNhaCungCap(maNCC);
                 NhanVien nguoiLap = timNhanVien(maNguoiLap);
-                if (ncc == null) ncc = new NhaCungCap(maNCC, "Nha cung cap " + maNCC, "", "");
                 if (nguoiLap == null) nguoiLap = quanLy;
+                if (ncc == null) ncc = new NhaCungCap(maNCC, "Nha cung cap " + maNCC, "", "");
 
-                NhapHang nh = new NhapHang(maNH, ngayNhap, ncc, nguoiLap);
+                NhapHang nh = new NhapHang(maNH, ngay, ncc, nguoiLap);
                 if (!dsChiTietStr.isEmpty()) {
                     String[] items = dsChiTietStr.split(";");
                     for (String item : items) {
@@ -462,7 +511,7 @@ public class DuLieuHeThong {
     }
 
     private void docHoaDon() {
-        List<String> lines = docTatCaDong(FILE_HOA_DON);
+        String[] lines = docTatCaDong(FILE_HOA_DON);
         for (String line : lines) {
             String[] p = line.split("\\|", -1);
             if (p.length >= 9) {
@@ -499,7 +548,6 @@ public class DuLieuHeThong {
                     }
                 }
 
-                // Xử lý phương thức thanh toán & thu ngân
                 NhanVien nvTN = timNhanVien(maTN);
                 ThuNgan tn = (nvTN instanceof ThuNgan thuNgan) ? thuNgan : new ThuNgan(maTN, "Thu ngan " + maTN, "", "", 26, 1.0, "Q01");
 
@@ -521,7 +569,7 @@ public class DuLieuHeThong {
     }
 
     private void docPhieuBaoHanh() {
-        List<String> lines = docTatCaDong(FILE_PHIEU_BAO_HANH);
+        String[] lines = docTatCaDong(FILE_PHIEU_BAO_HANH);
         for (String line : lines) {
             String[] p = line.split("\\|", -1);
             if (p.length >= 8) {
@@ -562,22 +610,23 @@ public class DuLieuHeThong {
     }
 
     public void luuKhachHang() {
-        List<String> lines = new ArrayList<>();
-        for (KhachHang kh : quanLy.quanLyKhachHang().getDsKhachHang()) {
-            lines.add(String.join("|",
+        KhachHang[] ds = quanLy.quanLyKhachHang().getDsKhachHang();
+        String[] lines = new String[ds.length];
+        for (int i = 0; i < ds.length; i++) {
+            KhachHang kh = ds[i];
+            lines[i] = String.join("|",
                     kh.getMaKhachHang(),
                     kh.getHoTen(),
                     kh.getDiaChi(),
                     kh.getSoDienThoai(),
-                    String.valueOf(kh.getDiemTichLuy())));
+                    String.valueOf(kh.getDiemTichLuy()));
         }
         ghiTatCaDong(FILE_KHACH_HANG, lines);
     }
 
     public void luuNhanVien() {
-        List<String> lines = new ArrayList<>();
-        // Lưu Quản lý
-        lines.add(String.join("|",
+        String[] lines = new String[soNhanVien + 1];
+        lines[0] = String.join("|",
                 "QUAN_LY",
                 quanLy.getMaNhanVien(),
                 quanLy.getHoTen(),
@@ -585,12 +634,14 @@ public class DuLieuHeThong {
                 quanLy.getSoDienThoai(),
                 String.valueOf(quanLy.getSoNgayCong()),
                 String.valueOf(quanLy.getHeSoLuong()),
-                String.valueOf(quanLy.getPhuCap())));
+                String.valueOf(quanLy.getPhuCap()));
 
-        for (NhanVien nv : dsNhanVien) {
+        int count = 1;
+        for (int i = 0; i < soNhanVien; i++) {
+            NhanVien nv = dsNhanVien[i];
             if (nv.getMaNhanVien().equalsIgnoreCase(quanLy.getMaNhanVien())) continue;
             if (nv instanceof ThuNgan tn) {
-                lines.add(String.join("|",
+                lines[count++] = String.join("|",
                         "THU_NGAN",
                         tn.getMaNhanVien(),
                         tn.getHoTen(),
@@ -598,9 +649,9 @@ public class DuLieuHeThong {
                         tn.getSoDienThoai(),
                         String.valueOf(tn.getSoNgayCong()),
                         String.valueOf(tn.getHeSoLuong()),
-                        tn.getMaQuay()));
+                        tn.getMaQuay());
             } else if (nv instanceof NhanVienPartTime pt) {
-                lines.add(String.join("|",
+                lines[count++] = String.join("|",
                         "PART_TIME",
                         pt.getMaNhanVien(),
                         pt.getHoTen(),
@@ -608,9 +659,9 @@ public class DuLieuHeThong {
                         pt.getSoDienThoai(),
                         String.valueOf(pt.getSoGioLam()),
                         String.valueOf(pt.getLuongTheoGio()),
-                        "0.0"));
+                        "0.0");
             } else if (nv instanceof NhanVienFullTime ft) {
-                lines.add(String.join("|",
+                lines[count++] = String.join("|",
                         "FULL_TIME",
                         ft.getMaNhanVien(),
                         ft.getHoTen(),
@@ -618,161 +669,187 @@ public class DuLieuHeThong {
                         ft.getSoDienThoai(),
                         String.valueOf(ft.getSoNgayCong()),
                         String.valueOf(ft.getHeSoLuong()),
-                        "0.0"));
+                        "0.0");
             }
         }
-        ghiTatCaDong(FILE_NHAN_VIEN, lines);
+        String[] actualLines = new String[count];
+        System.arraycopy(lines, 0, actualLines, 0, count);
+        ghiTatCaDong(FILE_NHAN_VIEN, actualLines);
     }
 
     public void luuCaLam() {
-        List<String> lines = new ArrayList<>();
-        for (CaLam ca : dsCaLam) {
+        String[] lines = new String[soCaLam];
+        for (int i = 0; i < soCaLam; i++) {
+            CaLam ca = dsCaLam[i];
             String maNV = "";
-            for (NhanVien nv : dsNhanVien) {
-                if (nv.getDsCaLam().contains(ca)) {
-                    maNV = nv.getMaNhanVien();
+            for (int j = 0; j < soNhanVien; j++) {
+                if (dsNhanVien[j].coCaLam(ca)) {
+                    maNV = dsNhanVien[j].getMaNhanVien();
                     break;
                 }
             }
-            if (maNV.isEmpty() && quanLy.getDsCaLam().contains(ca)) {
+            if (maNV.isEmpty() && quanLy != null && quanLy.coCaLam(ca)) {
                 maNV = quanLy.getMaNhanVien();
             }
-            lines.add(String.join("|",
+            lines[i] = String.join("|",
                     ca.getMaCa(),
                     ca.getNgayLam().toString(),
                     ca.getGioBatDau().toString(),
                     ca.getGioKetThuc().toString(),
-                    maNV));
+                    maNV);
         }
         ghiTatCaDong(FILE_CA_LAM, lines);
     }
 
     public void luuNhaCungCap() {
-        List<String> lines = new ArrayList<>();
-        for (NhaCungCap ncc : dsNhaCungCap) {
-            lines.add(String.join("|",
+        String[] lines = new String[soNhaCungCap];
+        for (int i = 0; i < soNhaCungCap; i++) {
+            NhaCungCap ncc = dsNhaCungCap[i];
+            lines[i] = String.join("|",
                     ncc.getMaNhaCungCap(),
                     ncc.getTenNhaCungCap(),
                     ncc.getSoDienThoai(),
-                    ncc.getDiaChi()));
+                    ncc.getDiaChi());
         }
         ghiTatCaDong(FILE_NHA_CUNG_CAP, lines);
     }
 
     public void luuSanPham() {
-        List<String> lines = new ArrayList<>();
-        for (SanPham sp : quanLy.quanLySanPham().getDsSanPham()) {
-            String loai = "SAN_PHAM";
-            String t1 = "";
-            String t2 = "";
+        SanPham[] ds = quanLy.quanLySanPham().getDsSanPham();
+        String[] lines = new String[ds.length];
+        for (int i = 0; i < ds.length; i++) {
+            SanPham sp = ds[i];
             if (sp instanceof ThucPham tp) {
-                loai = "THUC_PHAM";
-                t1 = tp.getHanSuDung().toString();
+                lines[i] = String.join("|",
+                        "THUC_PHAM",
+                        tp.getMaSanPham(),
+                        tp.getTenSanPham(),
+                        tp.getNuocSanXuat(),
+                        String.valueOf(tp.getNamSanXuat()),
+                        tp.getHangSanXuat(),
+                        String.valueOf(tp.getSoLuongTonKho()),
+                        String.valueOf(tp.getGiaGoc()),
+                        (tp.getHanSuDung() != null ? tp.getHanSuDung().toString() : ""),
+                        "");
             } else if (sp instanceof DoUong du) {
-                loai = "DO_UONG";
-                t1 = String.valueOf(du.getDungTichMl());
-                t2 = du.getHanSuDung().toString();
+                lines[i] = String.join("|",
+                        "DO_UONG",
+                        du.getMaSanPham(),
+                        du.getTenSanPham(),
+                        du.getNuocSanXuat(),
+                        String.valueOf(du.getNamSanXuat()),
+                        du.getHangSanXuat(),
+                        String.valueOf(du.getSoLuongTonKho()),
+                        String.valueOf(du.getGiaGoc()),
+                        String.valueOf(du.getDungTichMl()),
+                        (du.getHanSuDung() != null ? du.getHanSuDung().toString() : ""));
             } else if (sp instanceof DoDung dd) {
-                loai = "DO_DUNG";
-                t1 = dd.getChatLieu();
-                t2 = String.valueOf(dd.layThoiHanBaoHanh());
+                lines[i] = String.join("|",
+                        "DO_DUNG",
+                        dd.getMaSanPham(),
+                        dd.getTenSanPham(),
+                        dd.getNuocSanXuat(),
+                        String.valueOf(dd.getNamSanXuat()),
+                        dd.getHangSanXuat(),
+                        String.valueOf(dd.getSoLuongTonKho()),
+                        String.valueOf(dd.getGiaGoc()),
+                        dd.getChatLieu(),
+                        String.valueOf(dd.layThoiHanBaoHanh()));
             }
-            lines.add(String.join("|",
-                    loai,
-                    sp.getMaSanPham(),
-                    sp.getTenSanPham(),
-                    sp.getNuocSanXuat(),
-                    String.valueOf(sp.getNamSanXuat()),
-                    sp.getHangSanXuat(),
-                    String.valueOf(sp.getSoLuongTonKho()),
-                    String.valueOf(sp.getGiaGoc()),
-                    t1,
-                    t2));
         }
         ghiTatCaDong(FILE_SAN_PHAM, lines);
     }
 
     public void luuKhuyenMai() {
-        List<String> lines = new ArrayList<>();
-        for (KhuyenMai km : dsKhuyenMai) {
-            lines.add(String.join("|",
+        String[] lines = new String[soKhuyenMai];
+        for (int i = 0; i < soKhuyenMai; i++) {
+            KhuyenMai km = dsKhuyenMai[i];
+            lines[i] = String.join("|",
                     km.getMaKhuyenMai(),
                     String.valueOf(km.getTiLeGiam()),
                     km.getNgayBatDau().toString(),
-                    km.getNgayKetThuc().toString()));
+                    km.getNgayKetThuc().toString());
         }
         ghiTatCaDong(FILE_KHUYEN_MAI, lines);
     }
 
     public void luuNhapHang() {
-        List<String> lines = new ArrayList<>();
-        for (NhapHang nh : quanLy.quanLyNhapHang().getDsNhapHang()) {
+        NhapHang[] ds = quanLy.quanLyNhapHang().getDsNhapHang();
+        String[] lines = new String[ds.length];
+        for (int i = 0; i < ds.length; i++) {
+            NhapHang nh = ds[i];
             StringBuilder sb = new StringBuilder();
-            for (ChiTietNhapHang ct : nh.getDsChiTiet()) {
-                if (sb.length() > 0) sb.append(";");
+            ChiTietNhapHang[] ctArr = nh.getDsChiTiet();
+            for (int j = 0; j < ctArr.length; j++) {
+                ChiTietNhapHang ct = ctArr[j];
                 sb.append(ct.getSanPham().getMaSanPham())
                         .append(":")
                         .append(ct.getSoLuong())
                         .append(":")
                         .append(ct.getDonGiaNhap());
+                if (j < ctArr.length - 1) sb.append(";");
             }
-            String maNCC = (nh.getNhaCungCap() != null) ? nh.getNhaCungCap().getMaNhaCungCap() : "";
-            String maNV = (nh.getNguoiLap() != null) ? nh.getNguoiLap().getMaNhanVien() : "";
-            lines.add(String.join("|",
+
+            lines[i] = String.join("|",
                     nh.getMaNhapHang(),
                     nh.getNgayNhap().toString(),
-                    maNCC,
-                    maNV,
-                    sb.toString()));
+                    (nh.getNhaCungCap() != null ? nh.getNhaCungCap().getMaNhaCungCap() : ""),
+                    (nh.getNguoiLap() != null ? nh.getNguoiLap().getMaNhanVien() : ""),
+                    sb.toString());
         }
         ghiTatCaDong(FILE_NHAP_HANG, lines);
     }
 
     public void luuHoaDon() {
-        List<String> lines = new ArrayList<>();
-        for (HoaDon hd : quanLy.quanLyDonHang().getDsDonHang()) {
+        HoaDon[] ds = quanLy.quanLyDonHang().getDsDonHang();
+        String[] lines = new String[ds.length];
+        for (int i = 0; i < ds.length; i++) {
+            HoaDon hd = ds[i];
+            String maKH = (hd.getKhachHang() != null) ? hd.getKhachHang().getMaKhachHang() : "";
+            String maKM = (hd.getKhuyenMai() != null) ? hd.getKhuyenMai().getMaKhuyenMai() : "";
+            String maTN = (hd.getNguoiThanhToan() != null) ? hd.getNguoiThanhToan().getMaNhanVien() : "";
+
+            String ptStr = "TienMat";
+            if (hd.getPhuongThucThanhToan() instanceof ChuyenKhoan ck) {
+                ptStr = "ChuyenKhoan:" + ck.getMaGiaoDich();
+            } else if (hd.getPhuongThucThanhToan() instanceof TheNganHang tnh) {
+                ptStr = "TheNganHang:" + tnh.getSoThe();
+            }
+
             StringBuilder sb = new StringBuilder();
-            for (ChiTietHoaDon ct : hd.getDsChiTiet()) {
-                if (sb.length() > 0) sb.append(";");
+            ChiTietHoaDon[] ctArr = hd.getDsChiTiet();
+            for (int j = 0; j < ctArr.length; j++) {
+                ChiTietHoaDon ct = ctArr[j];
                 sb.append(ct.getSanPham().getMaSanPham())
                         .append(":")
                         .append(ct.getSoLuong())
                         .append(":")
                         .append(ct.getDonGia());
+                if (j < ctArr.length - 1) sb.append(";");
             }
 
-            String maNL = (hd.getNguoiLap() != null) ? hd.getNguoiLap().getMaNhanVien() : "";
-            String maKH = (hd.getKhachHang() != null) ? hd.getKhachHang().getMaKhachHang() : "";
-            String maKM = (hd.getKhuyenMai() != null) ? hd.getKhuyenMai().getMaKhuyenMai() : "";
-            String ptStr = "TienMat";
-            if (hd.getPhuongThucThanhToan() instanceof ChuyenKhoan ck) {
-                ptStr = "ChuyenKhoan:" + ck.getMaGiaoDich();
-            } else if (hd.getPhuongThucThanhToan() instanceof TheNganHang tg) {
-                ptStr = "TheNganHang:" + tg.getSoThe();
-            }
-            String maTN = (hd.getNguoiThanhToan() != null) ? hd.getNguoiThanhToan().getMaNhanVien() : "";
-
-            lines.add(String.join("|",
+            lines[i] = String.join("|",
                     hd.getMaHoaDon(),
                     hd.getNgayLap().toString(),
-                    maNL,
+                    hd.getNguoiLap().getMaNhanVien(),
                     maKH,
                     maKM,
                     String.valueOf(hd.isDaThanhToan()),
                     ptStr,
                     maTN,
-                    sb.toString()));
+                    sb.toString());
         }
         ghiTatCaDong(FILE_HOA_DON, lines);
     }
 
     public void luuPhieuBaoHanh() {
-        List<String> lines = new ArrayList<>();
-        for (PhieuBaoHanh pbh : dsPhieuBaoHanh) {
+        String[] lines = new String[soPhieuBaoHanh];
+        for (int i = 0; i < soPhieuBaoHanh; i++) {
+            PhieuBaoHanh pbh = dsPhieuBaoHanh[i];
             String maHD = (pbh.getHoaDon() != null) ? pbh.getHoaDon().getMaHoaDon() : "";
             String maSP = (pbh.getSanPham() != null) ? pbh.getSanPham().getMaSanPham() : "";
             String maKH = (pbh.getKhachHang() != null) ? pbh.getKhachHang().getMaKhachHang() : "";
-            lines.add(String.join("|",
+            lines[i] = String.join("|",
                     pbh.getMaPhieuBH(),
                     maHD,
                     maSP,
@@ -780,7 +857,7 @@ public class DuLieuHeThong {
                     pbh.getNgayBatDau().toString(),
                     pbh.getNgayKetThuc().toString(),
                     pbh.getMoTaLoi(),
-                    pbh.getTrangThai()));
+                    pbh.getTrangThai());
         }
         ghiTatCaDong(FILE_PHIEU_BAO_HANH, lines);
     }
@@ -788,34 +865,44 @@ public class DuLieuHeThong {
     // =========================================================================
     // HELPER ĐỌC / GHI FILE VĂN BẢN UTF-8
     // =========================================================================
-    private List<String> docTatCaDong(String duongDan) {
-        List<String> lines = new ArrayList<>();
+    private String[] docTatCaDong(String duongDan) {
+        String[] lines = new String[16];
+        int count = 0;
         File file = new File(duongDan);
-        if (!file.exists()) return lines;
+        if (!file.exists()) return new String[0];
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
             String line;
             while ((line = br.readLine()) != null) {
                 line = line.trim();
                 if (!line.isEmpty() && !line.startsWith("#")) {
-                    lines.add(line);
+                    if (count >= lines.length) {
+                        String[] moi = new String[lines.length * 2];
+                        System.arraycopy(lines, 0, moi, 0, count);
+                        lines = moi;
+                    }
+                    lines[count++] = line;
                 }
             }
         } catch (Exception e) {
             System.err.println("Loi doc file " + duongDan + ": " + e.getMessage());
         }
-        return lines;
+        String[] ketQua = new String[count];
+        System.arraycopy(lines, 0, ketQua, 0, count);
+        return ketQua;
     }
 
-    private void ghiTatCaDong(String duongDan, List<String> lines) {
+    private void ghiTatCaDong(String duongDan, String[] lines) {
         File file = new File(duongDan);
         File parent = file.getParentFile();
         if (parent != null && !parent.exists()) {
             parent.mkdirs();
         }
         try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, false), StandardCharsets.UTF_8))) {
-            for (String line : lines) {
-                bw.write(line);
-                bw.newLine();
+            if (lines != null) {
+                for (String line : lines) {
+                    bw.write(line);
+                    bw.newLine();
+                }
             }
         } catch (Exception e) {
             System.err.println("Loi ghi file " + duongDan + ": " + e.getMessage());

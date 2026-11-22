@@ -1,48 +1,53 @@
 package sieuthi.manage;
 
 /**
- * Interface định nghĩa các nghiệp vụ quản lý cơ bản (CRUD) cho một đối tượng kiểu T.
- * Cài đặt chuẩn theo sơ đồ lớp Class_Structure.drawio của thành viên Vinh.
+ * Interface dinh nghia cac nghiep vu quan ly co ban (CRUD) cho mot doi tuong kieu T.
+ * Cai dat chuan theo so do lop Class_Structure.drawio.
  *
- * @param <T> Kiểu thực thể cần quản lý (KhachHang, SanPham, HoaDon, NhapHang,...)
+ * @param <T> Kieu thuc the can quan ly (KhachHang, SanPham, HoaDon, NhapHang,...)
  */
 public interface IQuanLy<T> {
 
     /**
-     * Thêm một đối tượng mới vào danh sách quản lý.
+     * Them mot doi tuong moi vao danh sach quan ly.
      *
-     * @param doiTuong Đối tượng cần thêm
-     * @return true nếu thêm thành công, false nếu thất bại (trùng mã, null,...)
+     * @param doiTuong Doi tuong can them
+     * @return true neu them thanh cong, false neu that bai (trung ma, null,...)
      */
     boolean them(T doiTuong);
 
     /**
-     * Sửa (cập nhật) thông tin đối tượng theo mã định danh.
+     * Sua (cap nhat) thong tin doi tuong theo ma dinh danh.
      *
-     * @param ma       Mã định danh của đối tượng cần sửa
-     * @param doiTuong Thông tin đối tượng mới để cập nhật
-     * @return true nếu sửa thành công, false nếu không tìm thấy mã
+     * @param ma       Ma dinh danh cua doi tuong can sua
+     * @param doiTuong Thong tin doi tuong moi de cap nhat
+     * @return true neu sua thanh cong, false neu khong tim thay ma
      */
     boolean sua(String ma, T doiTuong);
 
     /**
-     * Xóa một đối tượng khỏi danh sách theo mã định danh.
+     * Xoa mot doi tuong khoi danh sach theo ma dinh danh.
      *
-     * @param ma Mã định danh của đối tượng cần xóa
-     * @return true nếu xóa thành công, false nếu không tìm thấy mã
+     * @param ma Ma dinh danh cua doi tuong can xoa
+     * @return true neu xoa thanh cong, false neu khong tim thay ma
      */
     boolean xoa(String ma);
 
     /**
-     * Tìm kiếm đối tượng theo mã định danh.
+     * Tim kiem doi tuong theo ma dinh danh.
      *
-     * @param ma Mã định danh cần tìm kiếm
-     * @return Đối tượng tìm thấy hoặc null nếu không tồn tại
+     * @param ma Ma dinh danh can tim kiem
+     * @return Doi tuong tim thay hoac null neu khong ton tai
      */
     T timKiemTheoMa(String ma);
 
     /**
-     * Hiển thị toàn bộ danh sách đối tượng đang quản lý ra console.
+     * Hien thi toan bo danh sach doi tuong dang quan ly ra console.
      */
     void hienThiDanhSach();
+
+    /**
+     * Lay so luong doi tuong hien co trong danh sach.
+     */
+    int getSoLuong();
 }

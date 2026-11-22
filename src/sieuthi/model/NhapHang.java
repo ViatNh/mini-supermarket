@@ -1,27 +1,27 @@
 package sieuthi.model;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
- * Lớp đại diện cho Đơn nhập hàng từ Nhà cung cấp vào kho của siêu thị.
- * Cài đặt theo sơ đồ Class_Structure.drawio.
- * Nghiệp vụ quan trọng: Số lượng tồn kho (stock) của sản phẩm CHỈ ĐƯỢC TĂNG
- * thông qua việc nhập hàng hợp lệ từ phiếu này.
+ * Lop dai dien cho Don nhap hang tu Nha cung cap vao kho cua sieu thi.
+ * Quan ly mang cac ChiTietNhapHang theo chuan mang doi tuong OOP.
+ * Nghiep vu: So luong ton kho (stock) cua san pham CHI DUOC TANG thong qua viec nhap hang hop le tu phieu nay.
  */
 public class NhapHang {
+    private static final int SUC_CHUA_MAC_DINH = 10;
+
     private String maNhapHang;
     private LocalDate ngayNhap;
     private NhaCungCap nhaCungCap;
     private NhanVien nguoiLap;
-    private final List<ChiTietNhapHang> dsChiTiet;
+    private ChiTietNhapHang[] dsChiTiet;
+    private int soLuongChiTiet;
 
     public NhapHang() {
         this.maNhapHang = "";
         this.ngayNhap = LocalDate.now();
-        this.dsChiTiet = new ArrayList<>();
+        this.dsChiTiet = new ChiTietNhapHang[SUC_CHUA_MAC_DINH];
+        this.soLuongChiTiet = 0;
     }
 
     public NhapHang(String maNhapHang, LocalDate ngayNhap, NhaCungCap nhaCungCap, NhanVien nguoiLap) {
@@ -38,7 +38,8 @@ public class NhapHang {
         this.ngayNhap = (ngayNhap != null) ? ngayNhap : LocalDate.now();
         this.nhaCungCap = nhaCungCap;
         this.nguoiLap = nguoiLap;
-        this.dsChiTiet = new ArrayList<>();
+        this.dsChiTiet = new ChiTietNhapHang[SUC_CHUA_MAC_DINH];
+        this.soLuongChiTiet = 0;
     }
 
     public String getMaNhapHang() {
@@ -73,17 +74,29 @@ public class NhapHang {
         this.nguoiLap = nguoiLap;
     }
 
-    public List<ChiTietNhapHang> getDsChiTiet() {
-        return Collections.unmodifiableList(dsChiTiet);
+    public ChiTietNhapHang[] getDsChiTiet() {
+        ChiTietNhapHang[] ketQua = new ChiTietNhapHang[soLuongChiTiet];
+        System.arraycopy(dsChiTiet, 0, ketQua, 0, soLuongChiTiet);
+        return ketQua;
+    }
+
+    public int getSoLuongChiTiet() {
+        return soLuongChiTiet;
+    }
+
+    private void tangKichThuocMang() {
+        ChiTietNhapHang[] moi = new ChiTietNhapHang[dsChiTiet.length * 2];
+        System.arraycopy(dsChiTiet, 0, moi, 0, soLuongChiTiet);
+        dsChiTiet = moi;
     }
 
     /**
-     * Thêm sản phẩm vào phiếu nhập hàng và TỰ ĐỘNG CẬP NHẬT TĂNG TỒN KHO cho sản phẩm.
-     * Đây là cách duy nhất hợp lệ để gia tăng số lượng tồn kho (stock) trong siêu thị.
+     * Them san pham vao phieu nhap hang va TU DONG CAP NHAT TANG TON KHO cho san pham.
+     * Day la cach duy nhat hop le de gia tang so luong ton kho (stock) trong sieu thi.
      *
-     * @param sp         Sản phẩm nhập
-     * @param soLuong    Số lượng nhập (> 0)
-     * @param donGiaNhap Đơn giá nhập hàng (>= 0)
+     * @param sp         San pham nhap
+     * @param soLuong    So luong nhap (> 0)
+     * @param donGiaNhap Don gia nhap hang (>= 0)
      */
     public void themChiTietVaCapNhatTonKho(SanPham sp, int soLuong, double donGiaNhap) {
         if (sp == null) {
@@ -96,21 +109,24 @@ public class NhapHang {
             throw new IllegalArgumentException("Don gia nhap khong duoc am");
         }
 
-        // Tăng tồn kho của sản phẩm
+        // Tang ton kho cua san pham
         sp.tangTonKho(soLuong);
 
-        // Lưu vào chi tiết nhập hàng
+        // Luu vao chi tiet nhap hang
         ChiTietNhapHang daCo = timChiTiet(sp);
         if (daCo != null) {
             daCo.tangSoLuong(soLuong);
             daCo.setDonGiaNhap(donGiaNhap);
         } else {
-            dsChiTiet.add(new ChiTietNhapHang(sp, soLuong, donGiaNhap));
+            if (soLuongChiTiet >= dsChiTiet.length) {
+                tangKichThuocMang();
+            }
+            dsChiTiet[soLuongChiTiet++] = new ChiTietNhapHang(sp, soLuong, donGiaNhap);
         }
     }
 
     /**
-     * Dùng khi khôi phục dữ liệu từ file lưu trữ (đã có sẵn tồn kho trong file sản phẩm).
+     * Dung khi khoi phuc du lieu tu file luu tru (da co san ton kho trong file san pham).
      */
     public void themChiTietLuuTru(SanPham sp, int soLuong, double donGiaNhap) {
         if (sp == null || soLuong <= 0 || donGiaNhap < 0) {
@@ -121,28 +137,31 @@ public class NhapHang {
             daCo.tangSoLuong(soLuong);
             daCo.setDonGiaNhap(donGiaNhap);
         } else {
-            dsChiTiet.add(new ChiTietNhapHang(sp, soLuong, donGiaNhap));
+            if (soLuongChiTiet >= dsChiTiet.length) {
+                tangKichThuocMang();
+            }
+            dsChiTiet[soLuongChiTiet++] = new ChiTietNhapHang(sp, soLuong, donGiaNhap);
         }
     }
 
     private ChiTietNhapHang timChiTiet(SanPham sp) {
-        for (ChiTietNhapHang ct : dsChiTiet) {
-            if (ct.getSanPham().getMaSanPham().equalsIgnoreCase(sp.getMaSanPham())) {
-                return ct;
+        for (int i = 0; i < soLuongChiTiet; i++) {
+            if (dsChiTiet[i].getSanPham().getMaSanPham().equalsIgnoreCase(sp.getMaSanPham())) {
+                return dsChiTiet[i];
             }
         }
         return null;
     }
 
     /**
-     * Tính tổng tiền chi phí nhập của cả phiếu nhập hàng.
+     * Tinh tong tien chi phi nhap cua ca phieu nhap hang.
      *
-     * @return Tổng tiền (VNĐ)
+     * @return Tong tien (VND)
      */
     public double tinhTongTien() {
         double tong = 0;
-        for (ChiTietNhapHang ct : dsChiTiet) {
-            tong += ct.tinhThanhTien();
+        for (int i = 0; i < soLuongChiTiet; i++) {
+            tong += dsChiTiet[i].tinhThanhTien();
         }
         return tong;
     }
@@ -157,7 +176,8 @@ public class NhapHang {
                 "STT", "Ma SP", "Ten san pham", "SL nhap", "Gia nhap", "Thanh tien");
         System.out.println("----------------------------------------------------------------------");
         int stt = 1;
-        for (ChiTietNhapHang ct : dsChiTiet) {
+        for (int i = 0; i < soLuongChiTiet; i++) {
+            ChiTietNhapHang ct = dsChiTiet[i];
             System.out.printf("%-5d | %-10s | %-25s | %-8d | %-14s | %-14s%n",
                     stt++,
                     ct.getSanPham().getMaSanPham(),

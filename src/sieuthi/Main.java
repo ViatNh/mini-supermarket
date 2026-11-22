@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.List;
 import java.util.Scanner;
 
 import sieuthi.data.DuLieuHeThong;
@@ -268,8 +267,8 @@ public class Main {
                     if (sp != null) {
                         sp.hienThiThongTin();
                     } else {
-                        List<SanPham> list = quanLy.quanLySanPham().timKiemTheoTen(kw);
-                        if (list.isEmpty()) {
+                        SanPham[] list = quanLy.quanLySanPham().timKiemTheoTen(kw);
+                        if (list.length == 0) {
                             System.out.println("Khong tim thay san pham!");
                         } else {
                             for (SanPham s : list) s.hienThiThongTin();
@@ -543,7 +542,7 @@ public class Main {
             System.out.println("Da them " + slNhap + " cai. Ton kho moi: " + sp.getSoLuongTonKho());
         }
 
-        if (phieuNhap.getDsChiTiet().isEmpty()) {
+        if (phieuNhap.getDsChiTiet().length == 0) {
             System.out.println("Phieu nhap rong, huy thao tac.");
             return;
         }
@@ -602,7 +601,7 @@ public class Main {
             switch (c) {
                 case "1" -> {
                     System.out.println("============================================ DANH SACH PHIEU BAO HANH ============================================");
-                    if (storage.getDsPhieuBaoHanh().isEmpty()) {
+                    if (storage.getDsPhieuBaoHanh().length == 0) {
                         System.out.println("  (Chua co phieu bao hanh nao)");
                     } else {
                         for (PhieuBaoHanh pbh : storage.getDsPhieuBaoHanh()) {
@@ -728,7 +727,7 @@ public class Main {
             }
         }
 
-        if (hd.getDsChiTiet().isEmpty()) {
+        if (hd.getDsChiTiet().length == 0) {
             System.out.println("Hoa don trong, huy thao tac.");
             return;
         }
@@ -782,7 +781,7 @@ public class Main {
             for (ChiTietHoaDon ct : hd.getDsChiTiet()) {
                 SanPham sp = ct.getSanPham();
                 if (sp instanceof DoDung dd) {
-                    String maPBH = "PBH" + String.format("%03d", storage.getDsPhieuBaoHanh().size() + 1);
+                    String maPBH = "PBH" + String.format("%03d", storage.getDsPhieuBaoHanh().length + 1);
                     PhieuBaoHanh pbh = new PhieuBaoHanh(maPBH, hd, dd, kh, "Bao hanh tieu chuan");
                     storage.themPhieuBaoHanh(pbh);
                     System.out.println("Da xuat phieu bao hanh: " + maPBH + " (" + dd.layThoiHanBaoHanh() + " thang)");
@@ -844,12 +843,12 @@ public class Main {
         for (CaLam ca : storage.getDsCaLam()) {
             String tenNV = "Chua phan cong";
             for (NhanVien nv : storage.getDsNhanVien()) {
-                if (nv.getDsCaLam().contains(ca)) {
+                if (nv.coCaLam(ca)) {
                     tenNV = nv.getHoTen() + " (" + nv.getMaNhanVien() + ")";
                     break;
                 }
             }
-            if (quanLy.getDsCaLam().contains(ca)) {
+            if (quanLy.coCaLam(ca)) {
                 tenNV = quanLy.getHoTen() + " (" + quanLy.getMaNhanVien() + ")";
             }
             System.out.printf("%-8s | %-12s | %-15s | %s%n",

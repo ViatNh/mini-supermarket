@@ -1,24 +1,32 @@
 package sieuthi;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
-
 import sieuthi.manage.QuanLy;
 import sieuthi.model.*;
 
 /**
  * Menu quan ly nhan su tuong tac qua ban phim (CLI).
- * Ke thua va hoan thien tu nhanh Person cua ban Hoang.
+ * Quan ly mang cac doi tuong Person[] tu co gian, khong dung Collection.
  */
 public class MenuNhanSu {
-    private final List<Person> dsNhanSu = new ArrayList<>();
+    private Person[] dsNhanSu = new Person[10];
+    private int soLuong = 0;
 
     public MenuNhanSu() {
         // Du lieu mau ban dau (khong dau)
-        dsNhanSu.add(new NhanVienPartTime("NV_PT01", "Nguyen Van An", "Ha Noi", "0901112233", 40, 30000));
-        dsNhanSu.add(new ThuNgan("NV_TN01", "Tran Thi Binh", "TP.HCM", "0912223344", 26, 1.2, "Q01"));
-        dsNhanSu.add(new QuanLy("NV_QL01", "Le Van Cuong", "Da Nang", "0923334455", 26, 2.0, 3000000));
+        themVaoMang(new NhanVienPartTime("NV_PT01", "Nguyen Van An", "Ha Noi", "0901112233", 40, 30000));
+        themVaoMang(new ThuNgan("NV_TN01", "Tran Thi Binh", "TP.HCM", "0912223344", 26, 1.2, "Q01"));
+        themVaoMang(new QuanLy("NV_QL01", "Le Van Cuong", "Da Nang", "0923334455", 26, 2.0, 3000000));
+    }
+
+    private void themVaoMang(Person ps) {
+        if (ps == null) return;
+        if (soLuong >= dsNhanSu.length) {
+            Person[] moi = new Person[dsNhanSu.length * 2];
+            System.arraycopy(dsNhanSu, 0, moi, 0, soLuong);
+            dsNhanSu = moi;
+        }
+        dsNhanSu[soLuong++] = ps;
     }
 
     public void themNhanSu(Scanner sc) {
@@ -82,19 +90,19 @@ public class MenuNhanSu {
         }
 
         if (ps != null) {
-            dsNhanSu.add(ps);
+            themVaoMang(ps);
             System.out.println("-> Them nhan su thanh cong!");
         }
     }
 
     public void inDanhSach() {
         System.out.println("\n============= DANH SACH NHAN SU HIEN CO =============");
-        if (dsNhanSu.isEmpty()) {
+        if (soLuong == 0) {
             System.out.println("  (Danh sach nhan su dang trong)");
             return;
         }
-        for (Person p : dsNhanSu) {
-            p.hienThiThongTin();
+        for (int i = 0; i < soLuong; i++) {
+            dsNhanSu[i].hienThiThongTin();
             System.out.println("-----------------------------------------------------");
         }
     }

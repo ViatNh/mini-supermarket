@@ -42,14 +42,14 @@ public class KiemThuHeThongVaLuuTru {
         storage.docTatCaDuLieu();
 
         int soKH = ql.quanLyKhachHang().getSoLuong();
-        int soNV = storage.getDsNhanVien().size() + 1; // gom ca quan ly
-        int soCa = storage.getDsCaLam().size();
-        int soNCC = storage.getDsNhaCungCap().size();
+        int soNV = storage.getDsNhanVien().length + 1; // gom ca quan ly
+        int soCa = storage.getDsCaLam().length;
+        int soNCC = storage.getDsNhaCungCap().length;
         int soSP = ql.quanLySanPham().getSoLuong();
-        int soKM = storage.getDsKhuyenMai().size();
+        int soKM = storage.getDsKhuyenMai().length;
         int soNH = ql.quanLyNhapHang().getSoLuong();
         int soHD = ql.quanLyDonHang().getSoLuong();
-        int soPBH = storage.getDsPhieuBaoHanh().size();
+        int soPBH = storage.getDsPhieuBaoHanh().length;
 
         kiemTra("khach hang >= 5 (thuc te: " + soKH + ")", soKH >= 5);
         kiemTra("nhan vien >= 5 (thuc te: " + soNV + ")", soNV >= 5);

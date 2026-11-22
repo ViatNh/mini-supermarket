@@ -38,7 +38,7 @@ public class ThuNgan extends NhanVienFullTime {
      */
     public boolean thanhToanHoaDon(HoaDon hd, IPhuongThucThanhToan phuongThuc) {
         if (hd == null || phuongThuc == null) return false;
-        if (hd.isDaThanhToan() || hd.getDsChiTiet().isEmpty()) return false;
+        if (hd.isDaThanhToan() || hd.getDsChiTiet().length == 0) return false;
 
         double soTien = hd.tinhTienPhaiTra();
         if (!phuongThuc.thanhToan(soTien)) return false;

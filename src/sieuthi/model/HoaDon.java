@@ -2,21 +2,21 @@ package sieuthi.model;
 
 import java.text.NumberFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
 
 /**
- * Hóa đơn bán hàng. Lưu riêng nguoiLap (NhanVien) và nguoiThanhToan (ThuNgan).
- * Chi tiết hóa đơn là composition: sống/chết cùng hóa đơn.
+ * Hoa don ban hang. Quan ly mang cac ChiTietHoaDon theo chuan mang doi tuong OOP.
+ * Khong dung bat ky Collection nao (ArrayList, Vector, LinkedList).
  */
 public class HoaDon {
+    private static final int SUC_CHUA_MAC_DINH = 10;
+
     private final String maHoaDon;
     private final LocalDate ngayLap;
-    private final List<ChiTietHoaDon> dsChiTiet = new ArrayList<>();
-    private final KhuyenMai khuyenMai;      // có thể null
-    private final KhachHang khachHang;      // có thể null (khách vãng lai)
+    private ChiTietHoaDon[] dsChiTiet;
+    private int soLuongChiTiet;
+    private final KhuyenMai khuyenMai;      // co the null
+    private final KhachHang khachHang;      // co the null (khach vang lai)
     private final NhanVien nguoiLap;
     private ThuNgan nguoiThanhToan;
     private IPhuongThucThanhToan phuongThucThanhToan;
@@ -30,6 +30,8 @@ public class HoaDon {
         this.nguoiLap = nguoiLap;
         this.khachHang = khachHang;
         this.khuyenMai = khuyenMai;
+        this.dsChiTiet = new ChiTietHoaDon[SUC_CHUA_MAC_DINH];
+        this.soLuongChiTiet = 0;
     }
 
     public String getMaHoaDon() { return maHoaDon; }
@@ -41,11 +43,23 @@ public class HoaDon {
     public IPhuongThucThanhToan getPhuongThucThanhToan() { return phuongThucThanhToan; }
     public boolean isDaThanhToan() { return daThanhToan; }
 
-    public List<ChiTietHoaDon> getDsChiTiet() {
-        return Collections.unmodifiableList(dsChiTiet);
+    public ChiTietHoaDon[] getDsChiTiet() {
+        ChiTietHoaDon[] ketQua = new ChiTietHoaDon[soLuongChiTiet];
+        System.arraycopy(dsChiTiet, 0, ketQua, 0, soLuongChiTiet);
+        return ketQua;
     }
 
-    /** Thêm sản phẩm vào hóa đơn; nếu đã có thì cộng dồn số lượng. */
+    public int getSoLuongChiTiet() {
+        return soLuongChiTiet;
+    }
+
+    private void tangKichThuocMang() {
+        ChiTietHoaDon[] moi = new ChiTietHoaDon[dsChiTiet.length * 2];
+        System.arraycopy(dsChiTiet, 0, moi, 0, soLuongChiTiet);
+        dsChiTiet = moi;
+    }
+
+    /** Them san pham vao hoa don; neu da co thi cong don so luong. */
     public void themChiTiet(SanPham sp, int soLuong) {
         if (daThanhToan) throw new IllegalStateException("Hoa don da thanh toan, khong the sua");
         if (sp == null) throw new IllegalArgumentException("San pham khong duoc null");
@@ -64,27 +78,33 @@ public class HoaDon {
         if (daCo != null) {
             daCo.tangSoLuong(soLuong);
         } else {
-            dsChiTiet.add(new ChiTietHoaDon(sp, soLuong));
+            if (soLuongChiTiet >= dsChiTiet.length) {
+                tangKichThuocMang();
+            }
+            dsChiTiet[soLuongChiTiet++] = new ChiTietHoaDon(sp, soLuong);
         }
     }
 
     private ChiTietHoaDon timChiTiet(SanPham sp) {
-        for (ChiTietHoaDon ct : dsChiTiet) {
-            if (ct.getSanPham() == sp) return ct;
+        for (int i = 0; i < soLuongChiTiet; i++) {
+            if (dsChiTiet[i].getSanPham() == sp) return dsChiTiet[i];
         }
         return null;
     }
 
     /**
-     * Dùng khi khôi phục hóa đơn đã lưu từ file lưu trữ (không kiểm tra tồn kho và không trừ tồn kho lại).
+     * Dung khi khoi phuc hoa don da luu tu file luu tru.
      */
     public void themChiTietLuuTru(SanPham sp, int soLuong, double donGia) {
         if (sp == null || soLuong <= 0) return;
-        dsChiTiet.add(new ChiTietHoaDon(sp, soLuong, donGia));
+        if (soLuongChiTiet >= dsChiTiet.length) {
+            tangKichThuocMang();
+        }
+        dsChiTiet[soLuongChiTiet++] = new ChiTietHoaDon(sp, soLuong, donGia);
     }
 
     /**
-     * Dùng khi khôi phục trạng thái thanh toán từ file lưu trữ.
+     * Dung khi khoi phuc trang thai thanh toan tu file luu tru.
      */
     public void thietLapTrangThaiThanhToan(ThuNgan thuNgan, IPhuongThucThanhToan phuongThuc, boolean daThanhToan) {
         this.nguoiThanhToan = thuNgan;
@@ -96,33 +116,35 @@ public class HoaDon {
         return timChiTiet(sp) != null;
     }
 
-    /** Tổng tiền hàng, CHƯA trừ khuyến mãi. */
+    /** Tong tien hang, CHUA tru khuyen mai. */
     public double tinhTongTien() {
         double tong = 0;
-        for (ChiTietHoaDon ct : dsChiTiet) tong += ct.tinhThanhTien();
+        for (int i = 0; i < soLuongChiTiet; i++) {
+            tong += dsChiTiet[i].tinhThanhTien();
+        }
         return tong;
     }
 
-    /** Tổng tiền được giảm nhờ khuyến mãi (0 nếu không có hoặc hết hiệu lực tại ngày lập). */
+    /** Tong tien duoc giam nho khuyen mai (0 neu khong co hoac het hieu luc tai ngay lap). */
     public double tinhTienGiam() {
         if (khuyenMai == null || !khuyenMai.conHieuLuc(ngayLap)) return 0;
         double giam = 0;
-        for (ChiTietHoaDon ct : dsChiTiet) {
-            giam += khuyenMai.apDung(ct.getSanPham()) * ct.getSoLuong();
+        for (int i = 0; i < soLuongChiTiet; i++) {
+            giam += khuyenMai.apDung(dsChiTiet[i].getSanPham()) * dsChiTiet[i].getSoLuong();
         }
         return giam;
     }
 
-    /** Số tiền khách phải trả = tổng tiền - tiền giảm. */
+    /** So tien khach phai tra = tong tien - tien giam. */
     public double tinhTienPhaiTra() {
         return tinhTongTien() - tinhTienGiam();
     }
 
-    /** Được ThuNgan gọi sau khi phương thức thanh toán đã chấp nhận. */
+    /** Duoc ThuNgan goi sau khi phuong thuc thanh toan da chap nhan. */
     public void hoanTatThanhToan(ThuNgan thuNgan, IPhuongThucThanhToan phuongThuc) {
         if (daThanhToan) throw new IllegalStateException("Hoa don da thanh toan");
-        for (ChiTietHoaDon ct : dsChiTiet) {
-            ct.getSanPham().giamTonKho(ct.getSoLuong());
+        for (int i = 0; i < soLuongChiTiet; i++) {
+            dsChiTiet[i].getSanPham().giamTonKho(dsChiTiet[i].getSoLuong());
         }
         this.nguoiThanhToan = thuNgan;
         this.phuongThucThanhToan = phuongThuc;
@@ -143,7 +165,8 @@ public class HoaDon {
         System.out.println("Khach hang : " + (khachHang == null ? "Khach vang lai" : khachHang.getHoTen()));
         System.out.println("---------------------------------------------------");
         int stt = 1;
-        for (ChiTietHoaDon ct : dsChiTiet) {
+        for (int i = 0; i < soLuongChiTiet; i++) {
+            ChiTietHoaDon ct = dsChiTiet[i];
             System.out.println(stt++ + ". " + ct.getSanPham().getTenSanPham()
                     + "  x" + ct.getSoLuong()
                     + "  @" + dinhDangTien(ct.getDonGia())

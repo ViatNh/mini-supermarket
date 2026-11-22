@@ -1,4 +1,4 @@
-THUC_PHAM|SP01|Mi Hao Hao Tom Chua Cay|Viet Nam|2026|Acecook|225|6000.0|2027-05-15|
+THUC_PHAM|SP01|Mi Hao Hao Tom Chua Cay|Viet Nam|2026|Acecook|240|6000.0|2027-05-15|
 THUC_PHAM|SP02|Sua tuoi tiet trung Vinamilk 1L|Viet Nam|2026|Vinamilk|80|32000.0|2027-02-28|
 DO_UONG|SP03|Nuoc tinh khiet Aquafina 500ml|Viet Nam|2026|PepsiCo|200|10000.0|500|2027-11-10
 DO_UONG|SP04|Tra xanh Khong Do 455ml|Viet Nam|2026|Tan Hiep Phat|120|12000.0|455|2027-08-20

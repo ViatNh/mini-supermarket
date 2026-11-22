@@ -1,32 +1,47 @@
 package sieuthi.manage;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import sieuthi.model.KhachHang;
 
 /**
- * Lớp quản lý danh sách Khách hàng trong siêu thị mini.
- * Thực thi interface IQuanLy<KhachHang> theo sơ đồ Class_Structure.drawio của thành viên Vinh.
+ * Lop quan ly danh sach Khach hang trong sieu thi mini.
+ * Cai dat bang mang doi tuong dong (KhachHang[]) khong dung Collection.
  */
 public class QuanLyKhachHang implements IQuanLy<KhachHang> {
-    private final List<KhachHang> dsKhachHang;
+    private static final int SUC_CHUA_MAC_DINH = 10;
+    private KhachHang[] dsKhachHang;
+    private int soLuong;
 
     public QuanLyKhachHang() {
-        this.dsKhachHang = new ArrayList<>();
+        this.dsKhachHang = new KhachHang[SUC_CHUA_MAC_DINH];
+        this.soLuong = 0;
     }
 
-    public QuanLyKhachHang(List<KhachHang> dsKhachHang) {
-        this.dsKhachHang = (dsKhachHang != null) ? new ArrayList<>(dsKhachHang) : new ArrayList<>();
+    public QuanLyKhachHang(KhachHang[] dsKhachHang) {
+        if (dsKhachHang != null) {
+            this.dsKhachHang = new KhachHang[Math.max(dsKhachHang.length, SUC_CHUA_MAC_DINH)];
+            this.soLuong = dsKhachHang.length;
+            System.arraycopy(dsKhachHang, 0, this.dsKhachHang, 0, dsKhachHang.length);
+        } else {
+            this.dsKhachHang = new KhachHang[SUC_CHUA_MAC_DINH];
+            this.soLuong = 0;
+        }
     }
 
-    public List<KhachHang> getDsKhachHang() {
-        return Collections.unmodifiableList(dsKhachHang);
+    public KhachHang[] getDsKhachHang() {
+        KhachHang[] res = new KhachHang[soLuong];
+        System.arraycopy(dsKhachHang, 0, res, 0, soLuong);
+        return res;
     }
 
+    @Override
     public int getSoLuong() {
-        return dsKhachHang.size();
+        return soLuong;
+    }
+
+    private void tangKichThuocMang() {
+        KhachHang[] moi = new KhachHang[dsKhachHang.length * 2];
+        System.arraycopy(dsKhachHang, 0, moi, 0, soLuong);
+        dsKhachHang = moi;
     }
 
     @Override
@@ -34,11 +49,14 @@ public class QuanLyKhachHang implements IQuanLy<KhachHang> {
         if (kh == null || kh.getMaKhachHang() == null || kh.getMaKhachHang().trim().isEmpty()) {
             return false;
         }
-        // Kiểm tra trùng mã khách hàng
         if (timKiemTheoMa(kh.getMaKhachHang()) != null) {
             return false;
         }
-        return dsKhachHang.add(kh);
+        if (soLuong >= dsKhachHang.length) {
+            tangKichThuocMang();
+        }
+        dsKhachHang[soLuong++] = kh;
+        return true;
     }
 
     @Override
@@ -46,14 +64,13 @@ public class QuanLyKhachHang implements IQuanLy<KhachHang> {
         if (maKH == null || kh == null) {
             return false;
         }
-        for (int i = 0; i < dsKhachHang.size(); i++) {
-            KhachHang current = dsKhachHang.get(i);
+        for (int i = 0; i < soLuong; i++) {
+            KhachHang current = dsKhachHang[i];
             if (current.getMaKhachHang().equalsIgnoreCase(maKH.trim())) {
-                // Bảo lưu điểm tích lũy nếu đối tượng mới chưa có hoặc muốn giữ nguyên
                 if (kh.getDiemTichLuy() == 0 && current.getDiemTichLuy() > 0) {
                     kh.setDiemTichLuy(current.getDiemTichLuy());
                 }
-                dsKhachHang.set(i, kh);
+                dsKhachHang[i] = kh;
                 return true;
             }
         }
@@ -65,9 +82,14 @@ public class QuanLyKhachHang implements IQuanLy<KhachHang> {
         if (maKH == null) {
             return false;
         }
-        KhachHang kh = timKiemTheoMa(maKH);
-        if (kh != null) {
-            return dsKhachHang.remove(kh);
+        for (int i = 0; i < soLuong; i++) {
+            if (dsKhachHang[i].getMaKhachHang().equalsIgnoreCase(maKH.trim())) {
+                for (int j = i; j < soLuong - 1; j++) {
+                    dsKhachHang[j] = dsKhachHang[j + 1];
+                }
+                dsKhachHang[--soLuong] = null;
+                return true;
+            }
         }
         return false;
     }
@@ -77,29 +99,24 @@ public class QuanLyKhachHang implements IQuanLy<KhachHang> {
         if (maKH == null) {
             return null;
         }
-        for (KhachHang kh : dsKhachHang) {
-            if (kh.getMaKhachHang() != null && kh.getMaKhachHang().equalsIgnoreCase(maKH.trim())) {
-                return kh;
+        for (int i = 0; i < soLuong; i++) {
+            if (dsKhachHang[i].getMaKhachHang() != null && dsKhachHang[i].getMaKhachHang().equalsIgnoreCase(maKH.trim())) {
+                return dsKhachHang[i];
             }
         }
         return null;
     }
 
-    /**
-     * Tìm kiếm khách hàng theo số điện thoại.
-     *
-     * @param sdt Số điện thoại cần tìm
-     * @return KhachHang nếu tìm thấy, ngược lại null
-     */
     public KhachHang timKiemTheoSDT(String sdt) {
         if (sdt == null || sdt.trim().isEmpty()) {
             return null;
         }
         String target = sdt.trim().replaceAll("\\s+", "");
-        for (KhachHang kh : dsKhachHang) {
+        for (int i = 0; i < soLuong; i++) {
+            KhachHang kh = dsKhachHang[i];
             if (kh.getSoDienThoai() != null) {
-                String sdtKH = kh.getSoDienThoai().trim().replaceAll("\\s+", "");
-                if (sdtKH.equals(target)) {
+                String cleanPhone = kh.getSoDienThoai().trim().replaceAll("\\s+", "");
+                if (cleanPhone.equals(target)) {
                     return kh;
                 }
             }
@@ -110,18 +127,18 @@ public class QuanLyKhachHang implements IQuanLy<KhachHang> {
     @Override
     public void hienThiDanhSach() {
         System.out.println("======================================== DANH SACH KHACH HANG ========================================");
-        if (dsKhachHang.isEmpty()) {
+        if (soLuong == 0) {
             System.out.println("  (Danh sach khach hang dang trong)");
             System.out.println("======================================================================================================");
             return;
         }
-        System.out.printf("%-5s | %-10s | %-25s | %-12s | %-12s | %s%n",
-                "STT", "Ma KH", "Ho ten", "So DT", "Diem tich luy", "Dia chi");
+        System.out.printf("%-5s | %-10s | %-25s | %-12s | %-8s | %s%n",
+                "STT", "Ma KH", "Ho va ten", "So DT", "Diem TL", "Dia chi");
         System.out.println("------------------------------------------------------------------------------------------------------");
-        int stt = 1;
-        for (KhachHang kh : dsKhachHang) {
-            System.out.printf("%-5d | %-10s | %-25s | %-12s | %-13d | %s%n",
-                    stt++,
+        for (int i = 0; i < soLuong; i++) {
+            KhachHang kh = dsKhachHang[i];
+            System.out.printf("%-5d | %-10s | %-25s | %-12s | %-8d | %s%n",
+                    (i + 1),
                     kh.getMaKhachHang(),
                     kh.getHoTen(),
                     kh.getSoDienThoai(),

@@ -4,7 +4,6 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 
 import sieuthi.manage.*;
 import sieuthi.model.*;
@@ -89,8 +88,8 @@ public class KiemThuQuanLy {
         SanPham timSP = qlsp.timKiemTheoMa("sp03");
         kiemTra("tim kiem san pham theo ma SP03", timSP != null && timSP.getTenSanPham().equals("Am sieu toc Inox"));
 
-        List<SanPham> timTheoTen = qlsp.timKiemTheoTen("mi");
-        kiemTra("tim theo ten 'mi' ra dung 2 san pham", timTheoTen.size() == 2);
+        SanPham[] timTheoTen = qlsp.timKiemTheoTen("mi");
+        kiemTra("tim theo ten 'mi' ra dung 2 san pham", timTheoTen.length == 2);
 
         SanPham sp1Moi = new ThucPham("SP01", "Mi Hao Hao Sa Te", "Viet Nam", 2026, "Acecook", 120, 5500, homNay.plusMonths(6));
         kiemTra("sua san pham SP01 thanh cong", qlsp.sua("SP01", sp1Moi));
@@ -135,8 +134,8 @@ public class KiemThuQuanLy {
         double doanhThuHomNay = qldh.thongKeDoanhThu(homNay, homNay);
         kiemTra("doanh thu hom nay = 0 VND vi don hom nay chua thanh toan", doanhThuHomNay == 0);
 
-        List<HoaDon> dsHDTheoKH1 = qldh.locDonHangTheoKhachHang("KH01");
-        kiemTra("loc don hang cua KH01 ra dung 2 hoa don", dsHDTheoKH1.size() == 2);
+        HoaDon[] dsHDTheoKH1 = qldh.locDonHangTheoKhachHang("KH01");
+        kiemTra("loc don hang cua KH01 ra dung 2 hoa don", dsHDTheoKH1.length == 2);
 
         kiemTra("xoa don hang HD03 thanh cong", qldh.xoa("HD03"));
         kiemTra("sau xoa so luong don = 2", qldh.getSoLuong() == 2);
@@ -165,13 +164,13 @@ public class KiemThuQuanLy {
         kiemTra("ca trung va ca sang co giao nhau ve gio", caSang.kiemTraTrungCa(caTrung));
 
         quanLy.phanCongCa(thuNgan, caSang);
-        kiemTra("nhan vien nhan ca sang thanh cong (dsCaLam = 1)", thuNgan.getDsCaLam().size() == 1);
+        kiemTra("nhan vien nhan ca sang thanh cong (dsCaLam = 1)", thuNgan.getDsCaLam().length == 1);
 
         quanLy.phanCongCa(thuNgan, caTrung);
-        kiemTra("nhan vien bi trung ca thi khong duoc nhan them (dsCaLam van = 1)", thuNgan.getDsCaLam().size() == 1);
+        kiemTra("nhan vien bi trung ca thi khong duoc nhan them (dsCaLam van = 1)", thuNgan.getDsCaLam().length == 1);
 
         quanLy.phanCongCa(thuNgan, caChieu);
-        kiemTra("nhan vien nhan ca chieu hop le (dsCaLam = 2)", thuNgan.getDsCaLam().size() == 2);
+        kiemTra("nhan vien nhan ca chieu hop le (dsCaLam = 2)", thuNgan.getDsCaLam().length == 2);
 
         System.out.println("\n--------------------------------------------------");
         System.out.println("KET QUA KIEM THU: " + dat + " dat, " + loi + " loi");

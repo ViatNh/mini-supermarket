@@ -42,7 +42,7 @@ public class KiemThuHoaDon {
 
         System.out.println("Cong don & rang buoc:");
         hd.themChiTiet(mi, 5);
-        kiemTra("them cung san pham thi cong don (van 3 dong)", hd.getDsChiTiet().size() == 3);
+        kiemTra("them cung san pham thi cong don (van 3 dong)", hd.getDsChiTiet().length == 3);
         kiemTra("vuot ton kho bi tu choi", nem(() -> hd.themChiTiet(am, 99), IllegalStateException.class));
         kiemTra("so luong <= 0 bi tu choi", nem(() -> hd.themChiTiet(nuoc, 0), IllegalArgumentException.class));
         SanPham het = new ThucPham("SP09", "Sua het han", "VN", 2025, "X", 5, 20_000, homNay.minusDays(1));
