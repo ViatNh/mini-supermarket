@@ -1,4 +1,4 @@
-KH01|Nguyen Van An|123 Le Loi, Q.1, TP.HCM|0901234567|186
+KH01|Nguyen Van An|123 Le Loi, Q.1, TP.HCM|0901234567|204
 KH02|Tran Thi Binh|456 Hai Ba Trung, Ha Noi|0912345678|320
 KH03|Le Hoang Cuong|789 Nguyen Hue, Da Nang|0987654321|50
 KH04|Pham Thi Dung|12 Tran Hung Dao, Can Tho|0934567890|0

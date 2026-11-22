@@ -38,6 +38,13 @@ public class QuanLyKhachHang implements IQuanLy<KhachHang> {
         return soLuong;
     }
 
+    public void xoaTatCa() {
+        for (int i = 0; i < soLuong; i++) {
+            dsKhachHang[i] = null;
+        }
+        soLuong = 0;
+    }
+
     private void tangKichThuocMang() {
         KhachHang[] moi = new KhachHang[dsKhachHang.length * 2];
         System.arraycopy(dsKhachHang, 0, moi, 0, soLuong);

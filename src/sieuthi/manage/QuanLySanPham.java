@@ -48,6 +48,13 @@ public class QuanLySanPham implements IQuanLy<SanPham> {
         return soLuong;
     }
 
+    public void xoaTatCa() {
+        for (int i = 0; i < soLuong; i++) {
+            dsSanPham[i] = null;
+        }
+        soLuong = 0;
+    }
+
     private void tangKichThuocMang() {
         SanPham[] moi = new SanPham[dsSanPham.length * 2];
         System.arraycopy(dsSanPham, 0, moi, 0, soLuong);

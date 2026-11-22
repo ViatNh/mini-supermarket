@@ -38,7 +38,11 @@ public class Main {
 
     private static String docDong() {
         if (scanner != null && scanner.hasNextLine()) {
-            return scanner.nextLine().trim();
+            String s = scanner.nextLine().trim();
+            if (storage != null) {
+                storage.dongBoTatCaTuFile();
+            }
+            return s;
         }
         return "";
     }
@@ -99,6 +103,7 @@ public class Main {
     // =========================================================================
     private static void chayMenuChinh() {
         while (true) {
+            if (storage != null) storage.dongBoTatCaTuFile();
             System.out.println("\n==================== HE THONG QUAN LY SIEU THI MINI ====================");
             System.out.println("  1. Quan ly khach hang");
             System.out.println("  2. Quan ly san pham");
@@ -139,6 +144,7 @@ public class Main {
     // =========================================================================
     private static void menuKhachHang() {
         while (true) {
+            if (storage != null) storage.dongBoTatCaTuFile();
             System.out.println("\n--- QUAN LY KHACH HANG ---");
             System.out.println("1. Danh sach khach hang");
             System.out.println("2. Them khach hang");
@@ -235,6 +241,7 @@ public class Main {
     // =========================================================================
     private static void menuSanPham() {
         while (true) {
+            if (storage != null) storage.dongBoTatCaTuFile();
             System.out.println("\n--- QUAN LY SAN PHAM ---");
             System.out.println("1. Danh sach san pham");
             System.out.println("2. Them san pham moi");
@@ -440,6 +447,7 @@ public class Main {
     // =========================================================================
     private static void menuNhapHang() {
         while (true) {
+            if (storage != null) storage.dongBoTatCaTuFile();
             System.out.println("\n--- QUAN LY NHA CUNG CAP & NHAP HANG ---");
             System.out.println("1. Danh sach nha cung cap");
             System.out.println("2. Them nha cung cap");
@@ -560,6 +568,7 @@ public class Main {
     // =========================================================================
     private static void menuBanHang() {
         while (true) {
+            if (storage != null) storage.dongBoTatCaTuFile();
             System.out.println("\n--- QUAN LY BAN HANG & HOA DON ---");
             System.out.println("1. Danh sach hoa don");
             System.out.println("2. Lap hoa don ban hang");
@@ -591,6 +600,7 @@ public class Main {
 
     private static void menuQuanLyBaoHanh() {
         while (true) {
+            if (storage != null) storage.dongBoTatCaTuFile();
             System.out.println("\n--- QUAN LY PHIEU BAO HANH ---");
             System.out.println("1. Danh sach phieu bao hanh");
             System.out.println("2. Cap nhat trang thai phieu bao hanh");
@@ -807,6 +817,7 @@ public class Main {
     // =========================================================================
     private static void menuNhanSu() {
         while (true) {
+            if (storage != null) storage.dongBoTatCaTuFile();
             System.out.println("\n--- QUAN LY NHAN SU & CA LAM ---");
             System.out.println("1. Danh sach nhan vien & bang luong");
             System.out.println("2. Them nhan vien moi");
@@ -1031,6 +1042,7 @@ public class Main {
     // =========================================================================
     private static void menuBaoCao() {
         while (true) {
+            if (storage != null) storage.dongBoTatCaTuFile();
             System.out.println("\n--- THONG KE & BAO CAO ---");
             System.out.println("1. Thong ke doanh thu theo khoang ngay");
             System.out.println("2. Thong ke chi phi nhap hang");

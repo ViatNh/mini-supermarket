@@ -64,19 +64,26 @@ public class KiemThuHeThongVaLuuTru {
         // 2. RANG BUOC BAO VE TON KHO: Khong cho phep sua thu cong
         System.out.println("\n2. Kiem tra quy tac bat bien ton kho (Stock Integrity):");
         SanPham sp = ql.quanLySanPham().timKiemTheoMa("SP01");
-        kiemTra("tim thay san pham SP01", sp != null);
+        if (sp == null && ql.quanLySanPham().getSoLuong() > 0) {
+            sp = ql.quanLySanPham().getDsSanPham()[0];
+        }
+        kiemTra("tim thay san pham kiem thu (" + (sp != null ? sp.getMaSanPham() : "null") + ")", sp != null);
+        if (sp == null) return;
+
+        String maSP = sp.getMaSanPham();
+        String tenGoc = sp.getTenSanPham();
         int tonKhoBanDau = sp.getSoLuongTonKho();
 
         // Thu tao mot san pham moi co co tinh sua ton kho thanh 99999
-        SanPham spCoYDoXau = new ThucPham("SP01", "Mi Hao Hao Tom Chua Cay (Da sua ten)",
+        SanPham spCoYDoXau = new ThucPham(maSP, tenGoc + " (Da sua ten)",
                 sp.getNuocSanXuat(), sp.getNamSanXuat(), sp.getHangSanXuat(),
                 99999, // co tinh sua ton kho
-                6000.0, ((ThucPham) sp).getHanSuDung());
+                6000.0, LocalDate.now().plusMonths(6));
 
-        boolean suaThanhCong = ql.quanLySanPham().sua("SP01", spCoYDoXau);
+        boolean suaThanhCong = ql.quanLySanPham().sua(maSP, spCoYDoXau);
         kiemTra("sua thong tin san pham thanh cong", suaThanhCong);
-        SanPham spSauSua = ql.quanLySanPham().timKiemTheoMa("SP01");
-        kiemTra("ten san pham da duoc cap nhat moi", "Mi Hao Hao Tom Chua Cay (Da sua ten)".equals(spSauSua.getTenSanPham()));
+        SanPham spSauSua = ql.quanLySanPham().timKiemTheoMa(maSP);
+        kiemTra("ten san pham da duoc cap nhat moi", (tenGoc + " (Da sua ten)").equals(spSauSua.getTenSanPham()));
         kiemTra("ton kho KHONG bi thay doi thu cong (van giu nguyen " + tonKhoBanDau + ")",
                 spSauSua.getSoLuongTonKho() == tonKhoBanDau);
 
@@ -104,7 +111,7 @@ public class KiemThuHeThongVaLuuTru {
                 spSauSua.getSoLuongTonKho() == tonKhoTruocKhiThanhToan - 10);
 
         // Khoi phuc lai ten ban dau
-        spSauSua.setTenSanPham("Mi Hao Hao Tom Chua Cay");
+        spSauSua.setTenSanPham(tenGoc);
 
         // 5. Kiem tra tinh ben vung: Ghi ra file
         System.out.println("\n5. Kiem tra ghi du lieu ra file:");

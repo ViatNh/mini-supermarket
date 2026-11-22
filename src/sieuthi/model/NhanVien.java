@@ -87,6 +87,11 @@ public abstract class NhanVien extends Person {
         return false;
     }
 
+    public void xoaTatCaCaLam() {
+        soLuongCaLam = 0;
+        dsCaLam = new CaLam[5];
+    }
+
     public abstract double tinhLuong();
 
     @Override

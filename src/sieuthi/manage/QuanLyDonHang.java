@@ -39,6 +39,13 @@ public class QuanLyDonHang implements IQuanLy<HoaDon> {
         return soLuong;
     }
 
+    public void xoaTatCa() {
+        for (int i = 0; i < soLuong; i++) {
+            dsDonHang[i] = null;
+        }
+        soLuong = 0;
+    }
+
     private void tangKichThuocMang() {
         HoaDon[] moi = new HoaDon[dsDonHang.length * 2];
         System.arraycopy(dsDonHang, 0, moi, 0, soLuong);

@@ -49,6 +49,16 @@ public class DuLieuHeThong {
 
     private final KhoHang khoHang = new KhoHang("KHO01", "Kho Tong Sieu Thi Mini");
 
+    private long thoiGianSuaFileKhachHang = 0;
+    private long thoiGianSuaFileNhanVien = 0;
+    private long thoiGianSuaFileCaLam = 0;
+    private long thoiGianSuaFileNhaCungCap = 0;
+    private long thoiGianSuaFileSanPham = 0;
+    private long thoiGianSuaFileKhuyenMai = 0;
+    private long thoiGianSuaFileNhapHang = 0;
+    private long thoiGianSuaFileHoaDon = 0;
+    private long thoiGianSuaFilePhieuBaoHanh = 0;
+
     public DuLieuHeThong(QuanLy quanLy) {
         this.quanLy = (quanLy != null) ? quanLy : new QuanLy("QL01", "Pham Van Quan Ly", "Ha Noi", "0988888888", 26, 2.0, 3_000_000);
     }
@@ -209,6 +219,39 @@ public class DuLieuHeThong {
         return null;
     }
 
+    public void xoaTatCaNhanVien() {
+        soNhanVien = 0;
+        dsNhanVien = new NhanVien[10];
+    }
+
+    public void xoaTatCaCaLam() {
+        soCaLam = 0;
+        dsCaLam = new CaLam[10];
+        if (quanLy != null) {
+            quanLy.xoaTatCaCaLam();
+        }
+        for (int i = 0; i < soNhanVien; i++) {
+            if (dsNhanVien[i] != null) {
+                dsNhanVien[i].xoaTatCaCaLam();
+            }
+        }
+    }
+
+    public void xoaTatCaNhaCungCap() {
+        soNhaCungCap = 0;
+        dsNhaCungCap = new NhaCungCap[10];
+    }
+
+    public void xoaTatCaKhuyenMai() {
+        soKhuyenMai = 0;
+        dsKhuyenMai = new KhuyenMai[10];
+    }
+
+    public void xoaTatCaPhieuBaoHanh() {
+        soPhieuBaoHanh = 0;
+        dsPhieuBaoHanh = new PhieuBaoHanh[10];
+    }
+
     /**
      * Khoi tao thu muc data va cac file mau neu chua ton tai.
      */
@@ -316,7 +359,10 @@ public class DuLieuHeThong {
         docPhieuBaoHanh();
     }
 
-    private void docKhachHang() {
+    public synchronized void docKhachHang() {
+        File f = new File(FILE_KHACH_HANG);
+        thoiGianSuaFileKhachHang = f.lastModified();
+        quanLy.quanLyKhachHang().xoaTatCa();
         String[] lines = docTatCaDong(FILE_KHACH_HANG);
         for (String line : lines) {
             String[] p = line.split("\\|", -1);
@@ -336,7 +382,10 @@ public class DuLieuHeThong {
         }
     }
 
-    private void docNhanVien() {
+    public synchronized void docNhanVien() {
+        File f = new File(FILE_NHAN_VIEN);
+        thoiGianSuaFileNhanVien = f.lastModified();
+        xoaTatCaNhanVien();
         String[] lines = docTatCaDong(FILE_NHAN_VIEN);
         for (String line : lines) {
             String[] p = line.split("\\|", -1);
@@ -388,7 +437,10 @@ public class DuLieuHeThong {
         }
     }
 
-    private void docCaLam() {
+    public synchronized void docCaLam() {
+        File f = new File(FILE_CA_LAM);
+        thoiGianSuaFileCaLam = f.lastModified();
+        xoaTatCaCaLam();
         String[] lines = docTatCaDong(FILE_CA_LAM);
         for (String line : lines) {
             String[] p = line.split("\\|", -1);
@@ -411,7 +463,10 @@ public class DuLieuHeThong {
         }
     }
 
-    private void docNhaCungCap() {
+    public synchronized void docNhaCungCap() {
+        File f = new File(FILE_NHA_CUNG_CAP);
+        thoiGianSuaFileNhaCungCap = f.lastModified();
+        xoaTatCaNhaCungCap();
         String[] lines = docTatCaDong(FILE_NHA_CUNG_CAP);
         for (String line : lines) {
             String[] p = line.split("\\|", -1);
@@ -425,7 +480,10 @@ public class DuLieuHeThong {
         }
     }
 
-    private void docSanPham() {
+    public synchronized void docSanPham() {
+        File f = new File(FILE_SAN_PHAM);
+        thoiGianSuaFileSanPham = f.lastModified();
+        quanLy.quanLySanPham().xoaTatCa();
         String[] lines = docTatCaDong(FILE_SAN_PHAM);
         for (String line : lines) {
             String[] p = line.split("\\|", -1);
@@ -459,7 +517,10 @@ public class DuLieuHeThong {
         }
     }
 
-    private void docKhuyenMai() {
+    public synchronized void docKhuyenMai() {
+        File f = new File(FILE_KHUYEN_MAI);
+        thoiGianSuaFileKhuyenMai = f.lastModified();
+        xoaTatCaKhuyenMai();
         String[] lines = docTatCaDong(FILE_KHUYEN_MAI);
         for (String line : lines) {
             String[] p = line.split("\\|", -1);
@@ -473,7 +534,10 @@ public class DuLieuHeThong {
         }
     }
 
-    private void docNhapHang() {
+    public synchronized void docNhapHang() {
+        File f = new File(FILE_NHAP_HANG);
+        thoiGianSuaFileNhapHang = f.lastModified();
+        quanLy.quanLyNhapHang().xoaTatCa();
         String[] lines = docTatCaDong(FILE_NHAP_HANG);
         for (String line : lines) {
             String[] p = line.split("\\|", -1);
@@ -510,7 +574,10 @@ public class DuLieuHeThong {
         }
     }
 
-    private void docHoaDon() {
+    public synchronized void docHoaDon() {
+        File f = new File(FILE_HOA_DON);
+        thoiGianSuaFileHoaDon = f.lastModified();
+        quanLy.quanLyDonHang().xoaTatCa();
         String[] lines = docTatCaDong(FILE_HOA_DON);
         for (String line : lines) {
             String[] p = line.split("\\|", -1);
@@ -568,7 +635,10 @@ public class DuLieuHeThong {
         }
     }
 
-    private void docPhieuBaoHanh() {
+    public synchronized void docPhieuBaoHanh() {
+        File f = new File(FILE_PHIEU_BAO_HANH);
+        thoiGianSuaFilePhieuBaoHanh = f.lastModified();
+        xoaTatCaPhieuBaoHanh();
         String[] lines = docTatCaDong(FILE_PHIEU_BAO_HANH);
         for (String line : lines) {
             String[] p = line.split("\\|", -1);
@@ -592,6 +662,56 @@ public class DuLieuHeThong {
                 }
             }
         }
+    }
+
+    // =========================================================================
+    // DONG BO THOI GIAN THUC CHO DA TIEN TRINH (MULTI-TERMINAL CONCURRENCY)
+    // =========================================================================
+    private boolean canDongBo(String duongDan, long thoiGianCu) {
+        File f = new File(duongDan);
+        if (!f.exists()) return false;
+        return f.lastModified() != thoiGianCu;
+    }
+
+    /**
+     * Kiem tra su thay doi tren disk cua ca 9 file txt. Neu co tien trinh / terminal khac
+     * vua sua doi hoac xoa du lieu trong file, tien trinh hien tai se tu dong cap nhat lai
+     * bo nho mang dong de dam bao tinh dong nhat du lieu thoi gian thuc.
+     */
+    public synchronized void dongBoTatCaTuFile() {
+        boolean khChanged = canDongBo(FILE_KHACH_HANG, thoiGianSuaFileKhachHang);
+        boolean nvChanged = canDongBo(FILE_NHAN_VIEN, thoiGianSuaFileNhanVien);
+        boolean caChanged = canDongBo(FILE_CA_LAM, thoiGianSuaFileCaLam);
+        boolean nccChanged = canDongBo(FILE_NHA_CUNG_CAP, thoiGianSuaFileNhaCungCap);
+        boolean spChanged = canDongBo(FILE_SAN_PHAM, thoiGianSuaFileSanPham);
+        boolean kmChanged = canDongBo(FILE_KHUYEN_MAI, thoiGianSuaFileKhuyenMai);
+        boolean nhChanged = canDongBo(FILE_NHAP_HANG, thoiGianSuaFileNhapHang);
+        boolean hdChanged = canDongBo(FILE_HOA_DON, thoiGianSuaFileHoaDon);
+        boolean pbhChanged = canDongBo(FILE_PHIEU_BAO_HANH, thoiGianSuaFilePhieuBaoHanh);
+
+        if (!khChanged && !nvChanged && !caChanged && !nccChanged && !spChanged && !kmChanged && !nhChanged && !hdChanged && !pbhChanged) {
+            return;
+        }
+
+        // Neu co san pham hoac doi tac thay doi, reload ca don hang va phieu bao hanh de dong bo con tro
+        if (spChanged || khChanged || nvChanged || kmChanged) {
+            nhChanged = true;
+            hdChanged = true;
+            pbhChanged = true;
+        }
+        if (nvChanged) {
+            caChanged = true;
+        }
+
+        if (khChanged) docKhachHang();
+        if (nvChanged) docNhanVien();
+        if (caChanged) docCaLam();
+        if (nccChanged) docNhaCungCap();
+        if (spChanged) docSanPham();
+        if (kmChanged) docKhuyenMai();
+        if (nhChanged) docNhapHang();
+        if (hdChanged) docHoaDon();
+        if (pbhChanged) docPhieuBaoHanh();
     }
 
     // =========================================================================
@@ -622,9 +742,10 @@ public class DuLieuHeThong {
                     String.valueOf(kh.getDiemTichLuy()));
         }
         ghiTatCaDong(FILE_KHACH_HANG, lines);
+        thoiGianSuaFileKhachHang = new File(FILE_KHACH_HANG).lastModified();
     }
 
-    public void luuNhanVien() {
+    public synchronized void luuNhanVien() {
         String[] lines = new String[soNhanVien + 1];
         lines[0] = String.join("|",
                 "QUAN_LY",
@@ -675,9 +796,10 @@ public class DuLieuHeThong {
         String[] actualLines = new String[count];
         System.arraycopy(lines, 0, actualLines, 0, count);
         ghiTatCaDong(FILE_NHAN_VIEN, actualLines);
+        thoiGianSuaFileNhanVien = new File(FILE_NHAN_VIEN).lastModified();
     }
 
-    public void luuCaLam() {
+    public synchronized void luuCaLam() {
         String[] lines = new String[soCaLam];
         for (int i = 0; i < soCaLam; i++) {
             CaLam ca = dsCaLam[i];
@@ -699,9 +821,10 @@ public class DuLieuHeThong {
                     maNV);
         }
         ghiTatCaDong(FILE_CA_LAM, lines);
+        thoiGianSuaFileCaLam = new File(FILE_CA_LAM).lastModified();
     }
 
-    public void luuNhaCungCap() {
+    public synchronized void luuNhaCungCap() {
         String[] lines = new String[soNhaCungCap];
         for (int i = 0; i < soNhaCungCap; i++) {
             NhaCungCap ncc = dsNhaCungCap[i];
@@ -712,9 +835,10 @@ public class DuLieuHeThong {
                     ncc.getDiaChi());
         }
         ghiTatCaDong(FILE_NHA_CUNG_CAP, lines);
+        thoiGianSuaFileNhaCungCap = new File(FILE_NHA_CUNG_CAP).lastModified();
     }
 
-    public void luuSanPham() {
+    public synchronized void luuSanPham() {
         SanPham[] ds = quanLy.quanLySanPham().getDsSanPham();
         String[] lines = new String[ds.length];
         for (int i = 0; i < ds.length; i++) {
@@ -758,9 +882,10 @@ public class DuLieuHeThong {
             }
         }
         ghiTatCaDong(FILE_SAN_PHAM, lines);
+        thoiGianSuaFileSanPham = new File(FILE_SAN_PHAM).lastModified();
     }
 
-    public void luuKhuyenMai() {
+    public synchronized void luuKhuyenMai() {
         String[] lines = new String[soKhuyenMai];
         for (int i = 0; i < soKhuyenMai; i++) {
             KhuyenMai km = dsKhuyenMai[i];
@@ -771,9 +896,10 @@ public class DuLieuHeThong {
                     km.getNgayKetThuc().toString());
         }
         ghiTatCaDong(FILE_KHUYEN_MAI, lines);
+        thoiGianSuaFileKhuyenMai = new File(FILE_KHUYEN_MAI).lastModified();
     }
 
-    public void luuNhapHang() {
+    public synchronized void luuNhapHang() {
         NhapHang[] ds = quanLy.quanLyNhapHang().getDsNhapHang();
         String[] lines = new String[ds.length];
         for (int i = 0; i < ds.length; i++) {
@@ -798,9 +924,10 @@ public class DuLieuHeThong {
                     sb.toString());
         }
         ghiTatCaDong(FILE_NHAP_HANG, lines);
+        thoiGianSuaFileNhapHang = new File(FILE_NHAP_HANG).lastModified();
     }
 
-    public void luuHoaDon() {
+    public synchronized void luuHoaDon() {
         HoaDon[] ds = quanLy.quanLyDonHang().getDsDonHang();
         String[] lines = new String[ds.length];
         for (int i = 0; i < ds.length; i++) {
@@ -840,9 +967,10 @@ public class DuLieuHeThong {
                     sb.toString());
         }
         ghiTatCaDong(FILE_HOA_DON, lines);
+        thoiGianSuaFileHoaDon = new File(FILE_HOA_DON).lastModified();
     }
 
-    public void luuPhieuBaoHanh() {
+    public synchronized void luuPhieuBaoHanh() {
         String[] lines = new String[soPhieuBaoHanh];
         for (int i = 0; i < soPhieuBaoHanh; i++) {
             PhieuBaoHanh pbh = dsPhieuBaoHanh[i];
@@ -860,6 +988,7 @@ public class DuLieuHeThong {
                     pbh.getTrangThai());
         }
         ghiTatCaDong(FILE_PHIEU_BAO_HANH, lines);
+        thoiGianSuaFilePhieuBaoHanh = new File(FILE_PHIEU_BAO_HANH).lastModified();
     }
 
     // =========================================================================

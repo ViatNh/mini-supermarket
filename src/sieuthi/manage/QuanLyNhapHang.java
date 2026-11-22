@@ -40,6 +40,13 @@ public class QuanLyNhapHang implements IQuanLy<NhapHang> {
         return soLuong;
     }
 
+    public void xoaTatCa() {
+        for (int i = 0; i < soLuong; i++) {
+            dsNhapHang[i] = null;
+        }
+        soLuong = 0;
+    }
+
     private void tangKichThuocMang() {
         NhapHang[] moi = new NhapHang[dsNhapHang.length * 2];
         System.arraycopy(dsNhapHang, 0, moi, 0, soLuong);
